@@ -18,6 +18,7 @@ What outcome should be true after this ships?
 - Keep JSON-backed architecture (no Prisma / DB)
 - Preserve existing quiz gameplay unless explicitly requested
 - Keep scraper + import workflow working
+- Minimize Codex runtime usage: no local test/build unless explicitly requested
 
 ## Acceptance Criteria
 - [ ] Criterion 1
@@ -29,10 +30,9 @@ What outcome should be true after this ships?
 - `scripts/...`
 - `data/...`
 
-## Verification Steps
-1. `npm run test`
-2. `npm run build`
-3. (Optional) `npm run scrape:rikishi && npm run import:rikishi`
+## Verification & Merge Policy
+- CI is the source of truth: `npm run test` and `npm run build`
+- If CI fails, request follow-up fixes via `@codex` in the PR
 
 ## Delegation Comment (paste into issue)
 ```md
@@ -44,9 +44,10 @@ Requirements:
 - Keep architecture JSON-backed (no DB).
 - Keep changes focused and minimal.
 - Add/adjust tests where relevant.
+- Do not run local test/build commands unless explicitly requested.
 
 Definition of done:
-- `npm run test` passes
-- `npm run build` passes
-- PR includes concise change summary and risks
+- Open a PR with concise change summary and risks.
+- CI (`npm run test`, `npm run build`) is the merge gate.
+- If CI fails, I will call @codex in PR comments to fix failures.
 ```

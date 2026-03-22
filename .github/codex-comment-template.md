@@ -6,8 +6,9 @@ Requirements:
 - Keep architecture JSON-backed (no DB).
 - Keep changes focused and minimal.
 - Add/adjust tests where relevant.
+- Do not run local test/build commands unless explicitly requested.
 
 Definition of done:
-- `npm run test` passes
-- `npm run build` passes
-- PR includes concise change summary and risks
+- Open a PR with concise change summary and risks.
+- CI (`npm run test`, `npm run build`) is the merge gate.
+- If CI fails, I will call @codex in PR comments to fix failures.

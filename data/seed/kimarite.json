@@ -1,0 +1,62 @@
+[
+  {
+    "term": "Yorikiri",
+    "definition": "Force out your opponent while maintaining a grip on their mawashi.",
+    "japanese": "寄り切り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Oshidashi",
+    "definition": "Push out your opponent without gripping the mawashi.",
+    "japanese": "押し出し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Hatakikomi",
+    "definition": "Slap down an opponent as they move forward.",
+    "japanese": "叩き込み",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Uwatenage",
+    "definition": "Overarm throw using an outside grip.",
+    "japanese": "上手投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Shitatenage",
+    "definition": "Underarm throw using an inside grip.",
+    "japanese": "下手投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Tsukiotoshi",
+    "definition": "Thrust down an opponent to the clay.",
+    "japanese": "突き落とし",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Okuridashi",
+    "definition": "Push out an opponent from behind.",
+    "japanese": "送り出し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Kotenage",
+    "definition": "Arm lock throw, often from an outside arm position.",
+    "japanese": "小手投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Sukuinage",
+    "definition": "Beltless arm throw using a scooping motion.",
+    "japanese": "掬い投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Yoritaoshi",
+    "definition": "Force out and down while staying chest-to-chest.",
+    "japanese": "寄り倒し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  }
+]

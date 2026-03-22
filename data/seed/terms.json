@@ -1,0 +1,62 @@
+[
+  {
+    "term": "Basho",
+    "definition": "A professional sumo tournament, held six times each year.",
+    "japanese": "場所",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Dohyo",
+    "definition": "The ring where sumo bouts are held.",
+    "japanese": "土俵",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Mawashi",
+    "definition": "The heavy silk belt wrestlers wear during bouts.",
+    "japanese": "廻し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Shikona",
+    "definition": "A wrestler's ring name.",
+    "japanese": "四股名",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kachi-koshi",
+    "definition": "A winning record in a basho, usually 8+ wins.",
+    "japanese": "勝ち越し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Make-koshi",
+    "definition": "A losing record in a basho, usually 8+ losses.",
+    "japanese": "負け越し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Yusho",
+    "definition": "A tournament championship.",
+    "japanese": "優勝",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Hoshitori",
+    "definition": "A wrestler's win-loss score chart during a tournament.",
+    "japanese": "星取",
+    "sourceUrl": "https://sumowrestling.fandom.com/wiki/Glossary_of_Sumo_Terms"
+  },
+  {
+    "term": "Henka",
+    "definition": "A sidestep at the tachiai to evade the opponent's charge.",
+    "japanese": "変化",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Tachiai",
+    "definition": "The initial charge at the start of a bout.",
+    "japanese": "立合い",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  }
+]

@@ -47,3 +47,21 @@ Outputs:
 ```bash
 npm run test
 ```
+
+## Codex Cloud GitHub Setup
+Use repo-versioned scripts for Codex Cloud environment lifecycle:
+
+- Setup command:
+```bash
+bash scripts/codex/setup-github.sh
+```
+- Maintenance command:
+```bash
+bash scripts/codex/maintenance-github.sh
+```
+
+Set one secret in Codex Cloud:
+- `GH_TOKEN` (preferred) or `GITHUB_TOKEN`
+
+Default remote enforced by scripts:
+- `https://github.com/adaviscourt/sumo.git`

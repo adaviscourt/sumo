@@ -15,6 +15,10 @@ require_cmd() {
   fi
 }
 
+has_cmd() {
+  command -v "$1" >/dev/null 2>&1
+}
+
 setup_remote() {
   if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     if git remote get-url origin >/dev/null 2>&1; then
@@ -67,11 +71,41 @@ setup_gh_auth() {
   log "Authenticated gh and configured git credential helper"
 }
 
+setup_git_https_auth_without_gh() {
+  local token=""
+
+  if [[ -n "${GH_TOKEN:-}" ]]; then
+    token="$GH_TOKEN"
+  elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
+    token="$GITHUB_TOKEN"
+  fi
+
+  unset GH_TOKEN || true
+  unset GITHUB_TOKEN || true
+
+  if [[ -z "$token" ]]; then
+    log "gh not installed and no GH_TOKEN/GITHUB_TOKEN provided"
+    log "Cannot configure git auth for GitHub"
+    exit 1
+  fi
+
+  git config --global credential.helper store
+  {
+    echo "https://x-access-token:${token}@github.com"
+  } >> "${HOME}/.git-credentials"
+  chmod 600 "${HOME}/.git-credentials"
+  log "Configured git HTTPS credentials without gh"
+}
+
 main() {
   require_cmd git
-  require_cmd gh
 
-  setup_gh_auth
+  if has_cmd gh; then
+    setup_gh_auth
+  else
+    log "gh not found; using git credential fallback"
+    setup_git_https_auth_without_gh
+  fi
   setup_remote
 
   log "Done"

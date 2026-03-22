@@ -15,6 +15,10 @@ require_cmd() {
   fi
 }
 
+has_cmd() {
+  command -v "$1" >/dev/null 2>&1
+}
+
 ensure_remote() {
   if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     if git remote get-url origin >/dev/null 2>&1; then
@@ -35,6 +39,11 @@ ensure_remote() {
 }
 
 check_gh_auth() {
+  if ! has_cmd gh; then
+    log "gh not installed; skipping gh auth status check"
+    return
+  fi
+
   if gh auth status >/dev/null 2>&1; then
     log "gh auth OK"
   else
@@ -45,16 +54,25 @@ check_gh_auth() {
 }
 
 probe_github() {
-  if ! gh api user >/dev/null 2>&1; then
-    log "GitHub API probe failed (possible network/proxy restriction)"
+  if has_cmd gh; then
+    if ! gh api user >/dev/null 2>&1; then
+      log "GitHub API probe failed (possible network/proxy restriction)"
+      exit 1
+    fi
+    log "GitHub API probe OK"
+    return
+  fi
+
+  # Fallback probe without gh.
+  if ! git ls-remote --heads "$REPO_URL" >/dev/null 2>&1; then
+    log "git remote probe failed (possible auth/network/proxy issue)"
     exit 1
   fi
-  log "GitHub API probe OK"
+  log "git remote probe OK"
 }
 
 main() {
   require_cmd git
-  require_cmd gh
 
   ensure_remote
   check_gh_auth

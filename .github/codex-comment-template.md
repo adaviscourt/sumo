@@ -9,6 +9,9 @@ Requirements:
 - Do not run local test/build commands unless explicitly requested.
 - Work must be published to GitHub remote (local-only commits are not sufficient).
 - Create a branch, push it to origin, and open a PR from that branch.
+- If automated PR creation tools fail, fall back to:
+  - Browser URL: `https://github.com/adaviscourt/sumo/pull/new/<branch>`
+  - Or (if available) `gh pr create --base main --head <branch> --title \"...\" --body \"...\"`
 
 Definition of done:
 - Open a PR with concise change summary and risks.
@@ -19,4 +22,5 @@ Definition of done:
   - `Commit:` `<full-sha>`
   - `Pushed to origin:` `yes/no`
   - `PR URL:` `<url>`
-- If push or PR creation fails, stop and include exact command output/error text.
+- Do not mark done without a valid PR URL.
+- If push or PR creation fails, stop and include exact command output/error text plus fallback PR URL.

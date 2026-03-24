@@ -42,6 +42,7 @@ jobs:
               `- Issue: ${issueTitle}`,
               `- URL: ${issueUrl}`,
               '- Environment check first: run `bash scripts/codex/maintenance-github.sh` and include output if it fails.',
+              '- If PR API/tool creation fails (e.g., 404), use fallback URL: `https://github.com/adaviscourt/sumo/pull/new/<branch>` and report that URL.',
               '',
               '_Triggered by `/codex-generate-pr` command._'
             ].join('\n');

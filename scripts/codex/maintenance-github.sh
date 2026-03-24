@@ -9,6 +9,13 @@ log() {
   printf '[maintenance-github] %s\n' "$*"
 }
 
+sanitize_log() {
+  # Mask common GitHub token shapes if they appear in stderr/stdout.
+  sed -E \
+    -e 's/(ghp|gho|ghu|ghs|ghr|github_pat)_[A-Za-z0-9_]+/***REDACTED_TOKEN***/g' \
+    -e 's#(https?://)(oauth2|x-access-token):[^@]+@#\1\2:***REDACTED***@#g'
+}
+
 require_cmd() {
   if ! command -v "$1" >/dev/null 2>&1; then
     log "Missing required command: $1"
@@ -94,7 +101,7 @@ probe_push_permission() {
   probe_ref="refs/heads/${branch}"
   if ! git push --dry-run origin "HEAD:${probe_ref}" >/tmp/codex-push-probe.log 2>&1; then
     log "push dry-run probe failed (write permission likely missing)"
-    cat /tmp/codex-push-probe.log
+    sanitize_log < /tmp/codex-push-probe.log
     exit 1
   fi
   log "push dry-run probe OK"

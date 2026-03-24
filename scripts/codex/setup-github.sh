@@ -82,20 +82,34 @@ setup_git_https_auth_without_gh() {
     exit 1
   fi
 
-  git config --global credential.helper store
+  # Safer fallback than credential store: use askpass script with restrictive perms.
+  local codex_dir askpass_script
+  codex_dir="${HOME}/.config/codex"
+  askpass_script="${codex_dir}/github-askpass.sh"
 
-  local cred_file="${HOME}/.git-credentials"
-  local tmp_file
-  tmp_file="$(mktemp)"
+  mkdir -p "$codex_dir"
+  umask 077
+  cat > "$askpass_script" <<EOF_ASKPASS
+#!/usr/bin/env bash
+case "\${1:-}" in
+  *Username*) printf '%s\n' 'x-access-token' ;;
+  *Password*) printf '%s\n' '$token' ;;
+  *) printf '%s\n' '' ;;
+esac
+EOF_ASKPASS
+  chmod 700 "$askpass_script"
 
-  # Remove any stale github.com credentials to avoid token drift between runs.
-  if [[ -f "$cred_file" ]]; then
-    grep -v 'github\.com' "$cred_file" > "$tmp_file" || true
-  fi
-  echo "https://x-access-token:${token}@github.com" >> "$tmp_file"
-  mv "$tmp_file" "$cred_file"
-  chmod 600 "${HOME}/.git-credentials"
-  log "Configured git HTTPS credentials without gh (stale github credentials removed)"
+  # Remove previous credential-store config if present.
+  git config --global --unset-all credential.helper >/dev/null 2>&1 || true
+  git config --global --unset-all credential.useHttpPath >/dev/null 2>&1 || true
+  git config --global --unset core.askPass >/dev/null 2>&1 || true
+
+  git config --global core.askPass "$askpass_script"
+
+  # Remove stale plaintext store file if it exists from older runs.
+  rm -f "${HOME}/.git-credentials"
+
+  log "Configured git HTTPS auth fallback without plaintext credential store"
 }
 
 main() {
@@ -104,7 +118,7 @@ main() {
   if has_cmd gh; then
     setup_gh_auth
   else
-    log "gh not found; using git credential fallback"
+    log "gh not found; using git auth fallback"
     setup_git_https_auth_without_gh
   fi
   setup_remote

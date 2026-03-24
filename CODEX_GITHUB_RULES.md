@@ -2,6 +2,15 @@
 
 Use these rules for Codex Cloud tasks in this repository.
 
+## Mandatory startup confirmation
+Before doing any implementation work, read this file and include this block in the first response:
+
+- `Loaded CODEX_GITHUB_RULES.md`
+- `Version heading:` `# Codex GitHub Execution Contract`
+- `Enforced rules:` three bullet points summarizing the branch/push/PR requirements you will follow
+
+If this file cannot be read, stop and report the blocker. Do not proceed with implementation.
+
 ## Branch and commit policy
 1. Work on the currently checked-out branch unless explicitly instructed to create/switch branches.
 2. Do not claim success for commit, push, or PR creation unless verified with commands and included in output.

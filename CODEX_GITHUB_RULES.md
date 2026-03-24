@@ -16,6 +16,14 @@ If this file cannot be read, stop and report the blocker. Do not proceed with im
 2. Do not claim success for commit, push, or PR creation unless verified with commands and included in output.
 3. Never report completion for local-only commits.
 
+## PR comment mode (existing PR follow-up)
+When the task is requested from an existing pull request comment/review thread:
+1. Do not create a new branch.
+2. Do not open a new PR.
+3. Commit directly to the current branch associated with that PR and push to `origin/<current-branch>`.
+4. Treat this as done only when the new commit is visible on the existing PR branch.
+5. If branch detection is ambiguous, stop and report the exact blocker instead of creating a new branch/PR.
+
 ## Required command sequence before final response
 Run and verify in this order:
 
@@ -29,6 +37,7 @@ git ls-remote --heads origin <current-branch>
 ```
 
 ## PR creation policy
+Applies only when starting from an issue (no PR yet):
 1. Preferred: create PR via API/CLI tool.
 2. If PR tool fails or returns no URL, treat PR as **not created**.
 3. Mandatory fallback URL format:

@@ -41,6 +41,20 @@ export type QuizCard = {
 
 const ROOT = process.cwd();
 
+const BASHO_BY_MONTH: Record<number, string> = {
+  1: "Hatsu Basho",
+  3: "Haru Basho",
+  5: "Natsu Basho",
+  7: "Nagoya Basho",
+  9: "Aki Basho",
+  11: "Kyushu Basho"
+};
+
+function bashoName(fetchedAt: string): string {
+  const month = new Date(fetchedAt).getMonth() + 1;
+  return BASHO_BY_MONTH[month] ?? "Current Basho";
+}
+
 function normalizeId(prefix: string, value: string): string {
   return `${prefix}:${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 }
@@ -69,7 +83,8 @@ export async function getDeckSummary() {
       slug: "rikishi",
       name: "Makuuchi Rikishi",
       description: "Identify current top-division rikishi by photo and rank",
-      cardCount: rikishi.rikishi.length
+      cardCount: rikishi.rikishi.length,
+      banzuke: bashoName(rikishi.fetchedAt)
     }
   ] as const;
 }

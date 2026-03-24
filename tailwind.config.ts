@@ -13,6 +13,7 @@ const config: Config = {
         rice: "#f8f1de",
         clay: "#b55233",
         pine: "#1f5c4d",
+        navy: "#27386e",
         gold: "#d4a017"
       }
     }

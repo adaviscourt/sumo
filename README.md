@@ -68,3 +68,12 @@ Default remote enforced by scripts:
 
 Codex execution/push/PR policy:
 - See [CODEX_GITHUB_RULES.md](CODEX_GITHUB_RULES.md)
+
+## Codex PR Follow-up Comments
+When asking Codex to update an already-open PR, use the template in:
+- `.github/codex-pr-comment-template.md`
+
+This enforces:
+- same branch updates only
+- no new branch creation
+- no new PR creation

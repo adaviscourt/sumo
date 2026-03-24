@@ -51,6 +51,7 @@ bash scripts/codex/create-pr.sh <issue_number>
 ```
 
 This script uses GitHub REST API directly with `GH_TOKEN`/`GITHUB_TOKEN` and prints the PR URL on success.
+If env vars are unavailable at runtime, it also falls back to the configured `git` `core.askPass` token.
 If API creation fails, use manual fallback:
 
 ```text

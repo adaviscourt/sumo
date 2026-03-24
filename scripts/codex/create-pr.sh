@@ -28,6 +28,21 @@ token_from_env() {
   printf ''
 }
 
+token_from_askpass() {
+  local askpass=""
+  askpass="$(git config --global --get core.askPass 2>/dev/null || true)"
+  if [[ -z "$askpass" || ! -x "$askpass" ]]; then
+    printf ''
+    return
+  fi
+
+  # Reuse the configured askpass helper so PR creation works even when
+  # GH_TOKEN/GITHUB_TOKEN are not exported in the runtime environment.
+  local token=""
+  token="$("$askpass" "Password for 'https://github.com':" 2>/dev/null || true)"
+  printf '%s' "$token"
+}
+
 json_escape() {
   python3 - <<'PY' "$1"
 import json,sys
@@ -43,7 +58,10 @@ main() {
   local token
   token="$(token_from_env)"
   if [[ -z "$token" ]]; then
-    log "Missing GH_TOKEN/GITHUB_TOKEN"
+    token="$(token_from_askpass)"
+  fi
+  if [[ -z "$token" ]]; then
+    log "Missing GH_TOKEN/GITHUB_TOKEN and no usable git core.askPass token"
     exit 1
   fi
 

@@ -16,7 +16,7 @@ body {
 }
 
 .button-primary {
-  @apply rounded-lg bg-pine px-4 py-2 font-medium text-white transition hover:bg-pine/90;
+  @apply rounded-lg bg-navy px-4 py-2 font-medium text-white transition hover:bg-navy/90;
 }
 
 .button-secondary {
@@ -24,5 +24,5 @@ body {
 }
 
 .quiz-choice {
-  @apply w-full rounded-lg border border-ink/20 bg-white px-4 py-3 text-left transition hover:border-pine hover:bg-pine/5;
+  @apply w-full rounded-lg border border-ink/20 bg-white px-4 py-3 text-left transition hover:border-navy hover:bg-navy/5;
 }

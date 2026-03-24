@@ -23,6 +23,7 @@ What outcome should be true after this ships?
 - If automated PR creation fails, use fallback:
   - `https://github.com/adaviscourt/sumo/pull/new/<branch>`
   - or `gh pr create --base main --head <branch> --title \"...\" --body \"...\"` (if `gh` is available)
+- PR body must include issue linkage keyword: `Closes #<issue_number>` (or `Fixes` / `Resolves`)
 
 ## Acceptance Criteria
 - [ ] Criterion 1
@@ -39,6 +40,7 @@ What outcome should be true after this ships?
 - If CI fails, request follow-up fixes via `@codex` in the PR
 - Codex must report: branch name, commit SHA, pushed-to-origin status, and PR URL
 - Codex must not mark done without a valid PR URL
+- Codex must report the exact issue-closing line used in the PR body
 
 ## Delegation Comment (paste into issue)
 ```md
@@ -56,6 +58,8 @@ Requirements:
 - If automated PR creation tools fail, fall back to:
   - Browser URL: `https://github.com/adaviscourt/sumo/pull/new/<branch>`
   - Or (if available) `gh pr create --base main --head <branch> --title \"...\" --body \"...\"`
+- PR body must include an issue-closing keyword:
+  - `Closes #<issue_number>` (or `Fixes` / `Resolves`)
 
 Definition of done:
 - Open a PR with concise change summary and risks.
@@ -66,6 +70,7 @@ Definition of done:
   - `Commit:` `<full-sha>`
   - `Pushed to origin:` `yes/no`
   - `PR URL:` `<url>`
+  - `Issue linkage line in PR body:` `Closes #<issue_number>`
 - Do not mark done without a valid PR URL.
 - If push or PR creation fails, stop and include exact command output/error text plus fallback PR URL.
 ```

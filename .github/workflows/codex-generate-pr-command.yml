@@ -34,6 +34,7 @@ jobs:
             const issue = context.payload.issue;
             const issueUrl = issue.html_url;
             const issueTitle = issue.title;
+            const issueNumber = issue.number;
 
             const body = [
               template,
@@ -41,6 +42,7 @@ jobs:
               `Context:`,
               `- Issue: ${issueTitle}`,
               `- URL: ${issueUrl}`,
+              `- Required PR linkage line: \\`Closes #${issueNumber}\\``,
               '- Environment check first: run `bash scripts/codex/maintenance-github.sh` and include output if it fails.',
               '- If PR API/tool creation fails (e.g., 404), use fallback URL: `https://github.com/adaviscourt/sumo/pull/new/<branch>` and report that URL.',
               '',

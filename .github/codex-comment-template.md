@@ -12,6 +12,8 @@ Requirements:
 - If automated PR creation tools fail, fall back to:
   - Browser URL: `https://github.com/adaviscourt/sumo/pull/new/<branch>`
   - Or (if available) `gh pr create --base main --head <branch> --title \"...\" --body \"...\"`
+- PR body must include an issue-closing keyword:
+  - `Closes #<issue_number>` (or `Fixes` / `Resolves`)
 
 Definition of done:
 - Open a PR with concise change summary and risks.
@@ -22,5 +24,6 @@ Definition of done:
   - `Commit:` `<full-sha>`
   - `Pushed to origin:` `yes/no`
   - `PR URL:` `<url>`
+  - `Issue linkage line in PR body:` `Closes #<issue_number>`
 - Do not mark done without a valid PR URL.
 - If push or PR creation fails, stop and include exact command output/error text plus fallback PR URL.

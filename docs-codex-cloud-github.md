@@ -57,3 +57,12 @@ If API creation fails, use manual fallback:
 ```text
 https://github.com/adaviscourt/sumo/pull/new/<branch>
 ```
+
+## Existing PR Follow-up (same branch only)
+When triggering Codex from an existing PR comment, first align workspace branch to PR head:
+
+```bash
+bash scripts/codex/checkout-pr-branch.sh <pr_number>
+```
+
+This prevents edits from being committed to the default `work` branch in Codex Cloud sessions.

@@ -64,3 +64,14 @@ export function shuffle<T>(items: T[]): T[] {
 
   return result;
 }
+
+export function selectNextCard<T extends { id: string }>(cards: T[], excludedIds: string[]): T | null {
+  if (cards.length === 0) {
+    return null;
+  }
+
+  const excluded = new Set(excludedIds);
+  const available = cards.filter((card) => !excluded.has(card.id));
+  const source = available.length > 0 ? available : cards;
+  return shuffle(source)[0] ?? null;
+}

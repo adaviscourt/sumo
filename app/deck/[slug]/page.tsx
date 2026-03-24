@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
 type Choice = { id: string; label: string };
@@ -39,6 +39,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [bonusCorrect, setBonusCorrect] = useState(false);
   const [asked, setAsked] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+  const seenCardIdsRef = useRef<string[]>([]);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = asked >= MAX_QUESTIONS && !bonusPending;
@@ -51,7 +52,9 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     setBonusResolved(false);
     setBonusCorrect(false);
 
-    const response = await fetch(`/api/decks/${params.slug}/next-card`, { method: "GET" });
+    const query = new URLSearchParams();
+    seenCardIdsRef.current.forEach((id) => query.append("exclude", id));
+    const response = await fetch(`/api/decks/${params.slug}/next-card?${query.toString()}`, { method: "GET" });
 
     if (!response.ok) {
       setLoading(false);
@@ -60,10 +63,14 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
 
     const payload = (await response.json()) as CardPayload;
     setCard(payload);
+    if (!seenCardIdsRef.current.includes(payload.cardId)) {
+      seenCardIdsRef.current = [...seenCardIdsRef.current, payload.cardId];
+    }
     setLoading(false);
   }, [params.slug]);
 
   useEffect(() => {
+    seenCardIdsRef.current = [];
     loadNextCard();
   }, [loadNextCard]);
 

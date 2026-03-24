@@ -17,14 +17,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/" className="text-2xl font-semibold tracking-tight">
                 Sumo Trainer
               </Link>
-              <nav className="flex items-center gap-2 text-sm font-medium">
-                <Link href="/" className="rounded-md px-3 py-1.5 hover:bg-ink/5">
-                  Decks
-                </Link>
-                <Link href="/data-status" className="rounded-md px-3 py-1.5 hover:bg-ink/5">
-                  Data Status
-                </Link>
-              </nav>
             </div>
           </header>
           {children}

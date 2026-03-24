@@ -9,6 +9,7 @@ type DeckSummary = {
   name: string;
   description: string;
   cardCount: number;
+  banzuke?: string;
 };
 
 type LocalSession = {
@@ -54,6 +55,7 @@ export default function HomePage() {
             <p className="text-sm text-ink/75">{deck.description}</p>
             <p className="text-sm text-ink/60">Questions: {QUESTIONS_PER_QUIZ}</p>
             <p className="text-sm text-ink/60">Total Cards in Deck: {deck.cardCount}</p>
+            {deck.banzuke && <p className="text-sm text-ink/60">Banzuke: {deck.banzuke}</p>}
             <Link href={`/deck/${deck.slug}`} className="button-primary mt-auto inline-block text-center">
               Play Deck
             </Link>

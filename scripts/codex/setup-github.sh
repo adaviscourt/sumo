@@ -42,11 +42,7 @@ setup_gh_auth() {
     token="$GITHUB_TOKEN"
   fi
 
-  # Avoid accidental reliance on inherited env token behavior.
-  unset GH_TOKEN || true
-  unset GITHUB_TOKEN || true
-
-  if gh auth status >/dev/null 2>&1; then
+  if env -u GH_TOKEN -u GITHUB_TOKEN gh auth status >/dev/null 2>&1; then
     log "gh already authenticated"
     return
   fi
@@ -57,13 +53,13 @@ setup_gh_auth() {
     return
   fi
 
-  if ! printf '%s' "$token" | gh auth login --hostname github.com --with-token >/dev/null 2>&1; then
+  if ! printf '%s' "$token" | env -u GH_TOKEN -u GITHUB_TOKEN gh auth login --hostname github.com --with-token >/dev/null 2>&1; then
     log "gh auth login failed"
     log "Check token scope (repo) and network access to github.com"
     exit 1
   fi
 
-  if ! gh auth setup-git >/dev/null 2>&1; then
+  if ! env -u GH_TOKEN -u GITHUB_TOKEN gh auth setup-git >/dev/null 2>&1; then
     log "gh auth setup-git failed"
     exit 1
   fi
@@ -79,9 +75,6 @@ setup_git_https_auth_without_gh() {
   elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
     token="$GITHUB_TOKEN"
   fi
-
-  unset GH_TOKEN || true
-  unset GITHUB_TOKEN || true
 
   if [[ -z "$token" ]]; then
     log "gh not installed and no GH_TOKEN/GITHUB_TOKEN provided"

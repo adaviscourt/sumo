@@ -90,11 +90,19 @@ setup_git_https_auth_without_gh() {
   fi
 
   git config --global credential.helper store
-  {
-    echo "https://x-access-token:${token}@github.com"
-  } >> "${HOME}/.git-credentials"
+
+  local cred_file="${HOME}/.git-credentials"
+  local tmp_file
+  tmp_file="$(mktemp)"
+
+  # Remove any stale github.com credentials to avoid token drift between runs.
+  if [[ -f "$cred_file" ]]; then
+    grep -v 'github\.com' "$cred_file" > "$tmp_file" || true
+  fi
+  echo "https://x-access-token:${token}@github.com" >> "$tmp_file"
+  mv "$tmp_file" "$cred_file"
   chmod 600 "${HOME}/.git-credentials"
-  log "Configured git HTTPS credentials without gh"
+  log "Configured git HTTPS credentials without gh (stale github credentials removed)"
 }
 
 main() {

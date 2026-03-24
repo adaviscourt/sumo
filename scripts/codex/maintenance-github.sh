@@ -3,6 +3,7 @@ set -euo pipefail
 
 REPO_URL_DEFAULT="https://github.com/adaviscourt/sumo.git"
 REPO_URL="${REPO_URL:-$REPO_URL_DEFAULT}"
+CHECK_PUSH_DRY_RUN="${CHECK_PUSH_DRY_RUN:-1}"
 
 log() {
   printf '[maintenance-github] %s\n' "$*"
@@ -71,12 +72,41 @@ probe_github() {
   log "git remote probe OK"
 }
 
+probe_push_permission() {
+  if [[ "$CHECK_PUSH_DRY_RUN" != "1" ]]; then
+    log "push dry-run probe disabled (CHECK_PUSH_DRY_RUN=$CHECK_PUSH_DRY_RUN)"
+    return
+  fi
+
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    log "Not inside a git repository; skipping push dry-run probe"
+    return
+  fi
+
+  local branch
+  branch="$(git rev-parse --abbrev-ref HEAD)"
+  if [[ -z "$branch" || "$branch" == "HEAD" ]]; then
+    log "Detached HEAD; skipping push dry-run probe"
+    return
+  fi
+
+  local probe_ref
+  probe_ref="refs/heads/${branch}"
+  if ! git push --dry-run origin "HEAD:${probe_ref}" >/tmp/codex-push-probe.log 2>&1; then
+    log "push dry-run probe failed (write permission likely missing)"
+    cat /tmp/codex-push-probe.log
+    exit 1
+  fi
+  log "push dry-run probe OK"
+}
+
 main() {
   require_cmd git
 
   ensure_remote
   check_gh_auth
   probe_github
+  probe_push_permission
 
   log "Done"
 }

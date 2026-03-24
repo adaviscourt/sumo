@@ -34,6 +34,10 @@ Maintenance script:
 - verifies `git` and `gh`
 - enforces expected `origin` URL
 - checks `gh auth status`
-- probes GitHub API with `gh api user`
+- probes GitHub API with `gh api user` (or `git ls-remote` fallback)
+- runs a non-destructive write check: `git push --dry-run origin HEAD:<current-branch>`
+
+Optional env var:
+- `CHECK_PUSH_DRY_RUN=0` to disable write probe (not recommended)
 
 If maintenance fails with network/proxy errors, that indicates environment egress policy issues rather than script logic.

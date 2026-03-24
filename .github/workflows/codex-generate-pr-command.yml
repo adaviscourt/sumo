@@ -41,6 +41,7 @@ jobs:
               `Context:`,
               `- Issue: ${issueTitle}`,
               `- URL: ${issueUrl}`,
+              '- Environment check first: run `bash scripts/codex/maintenance-github.sh` and include output if it fails.',
               '',
               '_Triggered by `/codex-generate-pr` command._'
             ].join('\n');

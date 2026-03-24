@@ -19,6 +19,12 @@ type LocalSession = {
   endedAt: string;
 };
 
+const DECK_EMOJI: Record<string, string> = {
+  terms: "📘",
+  kimarite: "💪",
+  rikishi: "🥋"
+};
+
 export default function HomePage() {
   const [decks, setDecks] = useState<DeckSummary[]>([]);
   const [sessions, setSessions] = useState<LocalSession[]>([]);
@@ -43,6 +49,7 @@ export default function HomePage() {
       <section className="grid gap-4 md:grid-cols-3">
         {decks.map((deck) => (
           <article key={deck.slug} className="card flex flex-col gap-3">
+            <p className="text-4xl leading-none" aria-hidden="true">{DECK_EMOJI[deck.slug] ?? "🃏"}</p>
             <h2 className="text-xl font-semibold">{deck.name}</h2>
             <p className="text-sm text-ink/75">{deck.description}</p>
             <p className="text-sm text-ink/60">Questions: {QUESTIONS_PER_QUIZ}</p>

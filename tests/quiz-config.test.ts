@@ -12,3 +12,10 @@ test("home deck tiles show question and deck card labels", () => {
   assert.match(source, /Questions: \{QUESTIONS_PER_QUIZ\}/);
   assert.match(source, /Total Cards in Deck: \{deck.cardCount\}/);
 });
+
+test("home deck tiles include expected emoji markers", () => {
+  const source = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
+  assert.match(source, /terms: "📘"/);
+  assert.match(source, /kimarite: "💪"/);
+  assert.match(source, /rikishi: "🥋"/);
+});

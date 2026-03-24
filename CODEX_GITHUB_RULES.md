@@ -18,6 +18,7 @@ If this file cannot be read, stop and report the blocker. Do not proceed with im
 
 ## PR comment mode (existing PR follow-up)
 When the task is requested from an existing pull request comment/review thread:
+0. First run: `bash scripts/codex/checkout-pr-branch.sh <pr_number>` to align local branch to PR head branch.
 1. Do not create a new branch.
 2. Do not open a new PR.
 3. Commit directly to the current branch associated with that PR and push to `origin/<current-branch>`.

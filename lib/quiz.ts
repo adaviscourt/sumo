@@ -49,9 +49,7 @@ export function rankFamily(rank: string): string {
 export function buildRankChoices(correctRank: string): string[] {
   const correctFamily = rankFamily(correctRank);
   const distractors = RANK_ORDER.filter((rank) => rank !== correctFamily);
-  const options = [correctFamily, ...distractors];
-
-  return shuffle(options);
+  return [correctFamily, ...distractors].sort((a, b) => RANK_ORDER.indexOf(a) - RANK_ORDER.indexOf(b));
 }
 
 export function shuffle<T>(items: T[]): T[] {

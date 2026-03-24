@@ -65,3 +65,6 @@ Set one secret in Codex Cloud:
 
 Default remote enforced by scripts:
 - `https://github.com/adaviscourt/sumo.git`
+
+Codex execution/push/PR policy:
+- See [CODEX_GITHUB_RULES.md](CODEX_GITHUB_RULES.md)

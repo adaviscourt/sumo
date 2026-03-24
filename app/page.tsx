@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { QUESTIONS_PER_QUIZ } from "@/lib/config";
 
 type DeckSummary = {
   slug: string;
@@ -44,7 +45,8 @@ export default function HomePage() {
           <article key={deck.slug} className="card flex flex-col gap-3">
             <h2 className="text-xl font-semibold">{deck.name}</h2>
             <p className="text-sm text-ink/75">{deck.description}</p>
-            <p className="text-sm text-ink/60">{deck.cardCount} cards</p>
+            <p className="text-sm text-ink/60">Questions: {QUESTIONS_PER_QUIZ}</p>
+            <p className="text-sm text-ink/60">Total Cards in Deck: {deck.cardCount}</p>
             <Link href={`/deck/${deck.slug}`} className="button-primary mt-auto inline-block text-center">
               Play Deck
             </Link>

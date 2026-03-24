@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { QUESTIONS_PER_QUIZ } from "@/lib/config";
 
 type Choice = { id: string; label: string };
 type CardPayload = {
@@ -27,8 +28,6 @@ type AnswerResponse = {
   bonusEligible: boolean;
 };
 
-const MAX_QUESTIONS = 20;
-
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [card, setCard] = useState<CardPayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,7 +41,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const seenCardIdsRef = useRef<string[]>([]);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
-  const done = asked >= MAX_QUESTIONS && !bonusPending;
+  const done = asked >= QUESTIONS_PER_QUIZ && !bonusPending;
 
   const loadNextCard = useCallback(async () => {
     setLoading(true);
@@ -208,7 +207,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         <div className="mb-4 flex items-center justify-between text-sm text-ink/70">
           <span>Deck: {params.slug}</span>
           <span>
-            Question {asked + 1} / {MAX_QUESTIONS}
+            Question {asked + 1} / {QUESTIONS_PER_QUIZ}
           </span>
         </div>
 

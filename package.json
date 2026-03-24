@@ -7,12 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --import tsx --test tests/**/*.test.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
     "import:rikishi": "node --import tsx scripts/import_rikishi.ts",
     "scrape:rikishi": "python scripts/scrape_rikishi.py"
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "graceful-fs": "^4.2.11",
     "next": "14.2.15",
     "react": "18.3.1",
     "react-dom": "18.3.1"

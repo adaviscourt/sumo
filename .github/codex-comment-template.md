@@ -9,9 +9,9 @@ Requirements:
 - Do not run local test/build commands unless explicitly requested.
 - Work must be published to GitHub remote (local-only commits are not sufficient).
 - Create a branch, push it to origin, and open a PR from that branch.
-- If automated PR creation tools fail, fall back to:
-  - Browser URL: `https://github.com/adaviscourt/sumo/pull/new/<branch>`
-  - Or (if available) `gh pr create --base main --head <branch> --title \"...\" --body \"...\"`
+- PR creation order:
+  - First: `bash scripts/codex/create-pr.sh <issue_number>`
+  - Fallback if script fails: `https://github.com/adaviscourt/sumo/pull/new/<branch>`
 - PR body must include an issue-closing keyword:
   - `Closes #<issue_number>` (or `Fixes` / `Resolves`)
 

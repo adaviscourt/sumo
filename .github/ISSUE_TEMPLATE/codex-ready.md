@@ -20,10 +20,11 @@ What outcome should be true after this ships?
 - Keep scraper + import workflow working
 - Minimize Codex runtime usage: no local test/build unless explicitly requested
 - Work must be pushed to GitHub remote (local-only commits are not acceptable)
+- Use this issue's actual number for all PR linkage and commands (no placeholders).
 - PR creation order:
-  - First: `bash scripts/codex/create-pr.sh <issue_number>`
+  - First: `bash scripts/codex/create-pr.sh <actual_issue_number>`
   - Fallback if script fails: `https://github.com/adaviscourt/sumo/pull/new/<branch>`
-- PR body must include issue linkage keyword: `Closes #<issue_number>` (or `Fixes` / `Resolves`)
+- PR body must include issue linkage keyword: `Closes #<actual_issue_number>` (or `Fixes` / `Resolves`)
 
 ## Acceptance Criteria
 - [ ] Criterion 1

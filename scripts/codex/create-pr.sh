@@ -72,12 +72,20 @@ main() {
     exit 1
   fi
 
-  local issue_number="${1:-}"
+  local issue_number="${1:-${ISSUE_NUMBER:-}}"
   local title="${PR_TITLE:-}"
   local body="${PR_BODY:-}"
 
   if [[ -z "$title" ]]; then
     title="Codex changes for ${head_branch}"
+  fi
+
+  if [[ -n "$issue_number" ]]; then
+    if ! [[ "$issue_number" =~ ^[1-9][0-9]*$ ]]; then
+      log "Invalid issue number: ${issue_number}"
+      log "Pass a positive numeric issue number (example: 123)"
+      exit 1
+    fi
   fi
 
   if [[ -z "$body" ]]; then

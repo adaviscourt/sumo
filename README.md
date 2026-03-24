@@ -77,3 +77,7 @@ This enforces:
 - same branch updates only
 - no new branch creation
 - no new PR creation
+
+## Codex Triggering
+Codex is triggered via user-authored `@codex` comments (manual/saved replies).
+The `/codex-generate-pr` GitHub Actions command workflow is deprecated.

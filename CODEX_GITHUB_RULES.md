@@ -41,13 +41,16 @@ git ls-remote --heads origin <current-branch>
 Applies only when starting from an issue (no PR yet):
 1. Preferred: create PR via API/CLI tool.
 2. If PR tool fails or returns no URL, treat PR as **not created**.
-3. Mandatory fallback URL format:
+3. Use the real issue number from the current issue context when creating PR linkage.
+4. Never use placeholders or invalid values in PR linkage (examples disallowed: `Closes #<issue_number>`, `Closes #0`).
+5. If issue number cannot be determined with confidence, stop and report blocker.
+6. Mandatory fallback URL format:
 
 ```text
 https://github.com/adaviscourt/sumo/pull/new/<current-branch>
 ```
 
-4. Do not mark task done without a valid PR URL.
+7. Do not mark task done without a valid PR URL.
 
 ## Required verification block in final response
 Include all fields:

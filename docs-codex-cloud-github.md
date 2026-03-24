@@ -50,6 +50,9 @@ Use:
 bash scripts/codex/create-pr.sh <issue_number>
 ```
 
+Use the actual issue number from the active issue thread (positive integer only).
+The script rejects invalid values such as `0` or placeholder strings.
+
 This script uses GitHub REST API directly with `GH_TOKEN`/`GITHUB_TOKEN` and prints the PR URL on success.
 If env vars are unavailable at runtime, it also falls back to the configured `git` `core.askPass` token.
 If API creation fails, use manual fallback:

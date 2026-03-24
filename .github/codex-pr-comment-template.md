@@ -3,7 +3,6 @@ Please apply this change on the current PR branch only.
 
 Requirements:
 - This is PR follow-up mode (existing PR), not issue implementation mode.
-- Before editing, run: `bash scripts/codex/checkout-pr-branch.sh <pr_number>` using PR `#<number>` from this thread, then report the checked-out branch name.
 - Do not create a new branch.
 - Do not open a new PR.
 - Commit directly to the currently checked out PR branch and push to `origin/<current-branch>`.

@@ -88,13 +88,32 @@ export default function HomePage() {
         {sessions.length === 0 ? (
           <p className="text-sm text-ink/65">No sessions yet. Start a deck to begin tracking progress.</p>
         ) : (
-          <ul className="space-y-2 text-sm">
-            {sessions.map((session) => (
-              <li key={session.id}>
-                {DECK_NAMES[session.deckSlug] ?? session.deckSlug}: {session.score} / {session.asked} questions ({new Date(session.endedAt).toLocaleString()})
-              </li>
-            ))}
-          </ul>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-ink/10 text-xs tracking-wider text-ink/40">
+                <th className="pb-2 text-left font-medium">Deck</th>
+                <th className="pb-2 text-left font-medium">Score</th>
+                <th className="pb-2 text-left font-medium">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sessions.map((session) => (
+                <tr key={session.id} className="border-b border-ink/[0.06] last:border-0">
+                  <td className="py-3 pr-6">{DECK_NAMES[session.deckSlug] ?? session.deckSlug}</td>
+                  <td className="py-3 pr-6 tabular-nums text-ink/75">{session.score} / {session.asked}</td>
+                  <td className="py-3 tabular-nums text-ink/55">
+                    {new Date(session.endedAt).toLocaleString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </section>
     </div>

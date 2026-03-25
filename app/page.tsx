@@ -26,6 +26,12 @@ const DECK_EMOJI: Record<string, string> = {
   rikishi: "🥋"
 };
 
+const DECK_NAMES: Record<string, string> = {
+  terms: "Sumo Terms",
+  kimarite: "Kimarite",
+  rikishi: "Rikishi Identification"
+};
+
 export default function HomePage() {
   const [decks, setDecks] = useState<DeckSummary[]>([]);
   const [sessions, setSessions] = useState<LocalSession[]>([]);
@@ -64,14 +70,14 @@ export default function HomePage() {
       </section>
 
       <section className="card">
-        <h3 className="mb-3 text-lg font-semibold">Recent Sessions (Local)</h3>
+        <h3 className="mb-3 text-lg font-semibold">Recent Sessions</h3>
         {sessions.length === 0 ? (
           <p className="text-sm text-ink/65">No sessions yet. Start a deck to begin tracking progress.</p>
         ) : (
           <ul className="space-y-2 text-sm">
             {sessions.map((session) => (
               <li key={session.id}>
-                {session.deckSlug}: {session.score} points / {session.asked} prompts ({new Date(session.endedAt).toLocaleString()})
+                {DECK_NAMES[session.deckSlug] ?? session.deckSlug}: {session.score} / {session.asked} questions ({new Date(session.endedAt).toLocaleString()})
               </li>
             ))}
           </ul>

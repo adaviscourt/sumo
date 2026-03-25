@@ -8,21 +8,46 @@
 
 body {
   @apply bg-rice text-ink;
-  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+}
+
+/* Subtle komon-style dot pattern — traditional Japanese small-pattern textile */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(27, 26, 23, 0.07) 1px, transparent 0);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .card {
-  @apply rounded-xl border border-ink/15 bg-white/80 p-5 shadow-sm;
+  @apply rounded-2xl border border-ink/10 bg-white/95 p-6 shadow-sm;
+}
+
+/* Deck cards: uses .card base + top accent border + hover lift */
+.card-deck {
+  @apply card border-t-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
 }
 
 .button-primary {
-  @apply rounded-lg bg-navy px-4 py-2 font-medium text-white transition hover:bg-navy/90;
+  @apply rounded-lg bg-vermillion px-5 py-2.5 font-semibold tracking-wide text-white shadow-sm transition-all duration-150 hover:bg-vermillion/90 hover:shadow-md active:scale-[0.97];
 }
 
 .button-secondary {
-  @apply rounded-lg border border-ink/20 bg-white px-4 py-2 font-medium transition hover:bg-ink/5;
+  @apply rounded-lg border-2 border-ink/20 bg-white px-5 py-2.5 font-medium tracking-wide text-ink transition-all duration-150 hover:border-ink/40 hover:bg-ink/5;
 }
 
 .quiz-choice {
-  @apply w-full rounded-lg border border-ink/20 bg-white px-4 py-3 text-left transition hover:border-navy hover:bg-navy/5;
+  @apply w-full rounded-xl border-2 border-ink/15 bg-white px-5 py-3.5 text-left font-medium transition-all duration-150 hover:border-navy/50 hover:bg-navy/5;
+}
+
+.progress-bar-track {
+  @apply h-1.5 w-full overflow-hidden rounded-full bg-ink/10;
+}
+
+.progress-bar-fill {
+  @apply h-full rounded-full bg-vermillion;
+  transition: width 500ms ease-out;
 }

@@ -26,6 +26,13 @@ const DECK_EMOJI: Record<string, string> = {
   rikishi: "🥋"
 };
 
+/* Accent color for each deck's top border — navy / clay / pine */
+const DECK_TOP_COLOR: Record<string, string> = {
+  terms: "#27386e",
+  kimarite: "#b55233",
+  rikishi: "#1f5c4d"
+};
+
 export default function HomePage() {
   const [decks, setDecks] = useState<DeckSummary[]>([]);
   const [sessions, setSessions] = useState<LocalSession[]>([]);
@@ -46,32 +53,48 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <section className="grid gap-4 md:grid-cols-3">
+    <div className="space-y-8">
+      <section className="py-4 text-center">
+        <h1 className="text-3xl font-bold tracking-tight text-ink">Choose Your Training</h1>
+        <p className="mt-2 text-sm text-ink/55">Master sumo vocabulary, kimarite, and makuuchi rikishi</p>
+      </section>
+
+      <section className="grid gap-5 md:grid-cols-3">
         {decks.map((deck) => (
-          <article key={deck.slug} className="card flex flex-col gap-3">
-            <p className="text-4xl leading-none" aria-hidden="true">{DECK_EMOJI[deck.slug] ?? "🃏"}</p>
-            <h2 className="text-xl font-semibold">{deck.name}</h2>
-            <p className="text-sm text-ink/75">{deck.description}</p>
-            <p className="text-sm text-ink/60">Questions: {QUESTIONS_PER_QUIZ}</p>
-            <p className="text-sm text-ink/60">Total Cards in Deck: {deck.cardCount}</p>
-            {deck.banzuke && <p className="text-sm text-ink/60">Banzuke: {deck.banzuke}</p>}
+          <article
+            key={deck.slug}
+            className="card-deck flex flex-col gap-4"
+            style={{ borderTopColor: DECK_TOP_COLOR[deck.slug] ?? "#d4a017" }}
+          >
+            <p className="text-5xl leading-none" aria-hidden="true">{DECK_EMOJI[deck.slug] ?? "🃏"}</p>
+            <div>
+              <h2 className="text-xl font-bold tracking-tight">{deck.name}</h2>
+              <p className="mt-1 text-sm leading-relaxed text-ink/65">{deck.description}</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-ink/45">
+              <span>{QUESTIONS_PER_QUIZ} questions per round</span>
+              <span aria-hidden="true">·</span>
+              <span>{deck.cardCount} cards</span>
+            </div>
+            {deck.banzuke && <p className="text-xs text-ink/45">Banzuke: {deck.banzuke}</p>}
             <Link href={`/deck/${deck.slug}`} className="button-primary mt-auto inline-block text-center">
-              Play Deck
+              Start Training →
             </Link>
           </article>
         ))}
       </section>
 
       <section className="card">
-        <h3 className="mb-3 text-lg font-semibold">Recent Sessions (Local)</h3>
+        <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-ink/40">Recent Sessions</h3>
         {sessions.length === 0 ? (
-          <p className="text-sm text-ink/65">No sessions yet. Start a deck to begin tracking progress.</p>
+          <p className="text-sm text-ink/55">No sessions yet — start a deck to begin tracking your progress.</p>
         ) : (
-          <ul className="space-y-2 text-sm">
+          <ul className="space-y-2">
             {sessions.map((session) => (
-              <li key={session.id}>
-                {session.deckSlug}: {session.score} points / {session.asked} prompts ({new Date(session.endedAt).toLocaleString()})
+              <li key={session.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-ink/5 px-4 py-2.5 text-sm">
+                <span className="font-semibold capitalize">{session.deckSlug}</span>
+                <span className="text-ink/60">{session.score} pts / {session.asked} prompts</span>
+                <span className="text-xs text-ink/40">{new Date(session.endedAt).toLocaleString()}</span>
               </li>
             ))}
           </ul>

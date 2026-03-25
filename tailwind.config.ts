@@ -10,11 +10,12 @@ const config: Config = {
     extend: {
       colors: {
         ink: "#1b1a17",
-        rice: "#f8f1de",
+        rice: "#f5e9cc",
         clay: "#b55233",
         pine: "#1f5c4d",
         navy: "#27386e",
-        gold: "#d4a017"
+        gold: "#d4a017",
+        vermillion: "#c0311a"
       }
     }
   },

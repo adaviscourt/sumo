@@ -28,6 +28,12 @@ type AnswerResponse = {
   bonusEligible: boolean;
 };
 
+const DECK_LABELS: Record<string, string> = {
+  terms: "Sumo Terms",
+  kimarite: "Kimarite",
+  rikishi: "Makuuchi Rikishi"
+};
+
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [card, setCard] = useState<CardPayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -141,8 +147,10 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     }
 
     return (
-      <div className="space-y-2 rounded-lg border border-ink/15 bg-ink/5 p-4 text-sm">
-        <p className={feedback.correct ? "text-pine" : "text-clay"}>{feedback.correct ? "Correct" : "Not quite"}</p>
+      <div className={`space-y-3 rounded-xl border-2 p-5 text-sm ${feedback.correct ? "border-pine/25 bg-pine/5" : "border-clay/25 bg-clay/5"}`}>
+        <p className={`text-base font-bold ${feedback.correct ? "text-pine" : "text-clay"}`}>
+          {feedback.correct ? "✓ Correct!" : "✗ Not quite"}
+        </p>
         <p>
           Correct answer: <strong>{feedback.correctAnswer}</strong>
         </p>
@@ -190,28 +198,45 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [bonusCorrect, bonusResolved, bonusSelected, card, feedback, submitBonus]);
 
   if (done) {
+    const pct = asked > 0 ? Math.round((correctCount / asked) * 100) : 0;
     return (
-      <section className="card space-y-3">
-        <h1 className="text-2xl font-semibold">Session Complete</h1>
-        <p>
-          Score: {correctCount} points across {asked} prompts
+      <section className="card space-y-6 py-8 text-center">
+        <p className="text-5xl" aria-hidden="true">
+          {pct >= 80 ? "🏆" : pct >= 50 ? "⛩️" : "🥋"}
         </p>
-        <Link className="button-primary inline-block" href="/">Back to Decks</Link>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Session Complete</h1>
+          <p className="mt-1 text-sm text-ink/55">
+            {pct >= 80 ? "Outstanding performance!" : pct >= 50 ? "Good effort — keep training!" : "Practice makes perfect!"}
+          </p>
+        </div>
+        <div className="inline-flex items-baseline gap-2 rounded-xl bg-ink/5 px-8 py-4">
+          <span className="text-5xl font-bold text-vermillion">{correctCount}</span>
+          <span className="text-2xl text-ink/30">/</span>
+          <span className="text-2xl font-medium text-ink/50">{asked}</span>
+          <span className="ml-1 text-sm text-ink/40">points</span>
+        </div>
+        <Link className="button-primary inline-block" href="/">← Back to Decks</Link>
       </section>
     );
   }
 
+  const progress = (asked / QUESTIONS_PER_QUIZ) * 100;
+
   return (
     <div className="space-y-4">
       <section className="card">
-        <div className="mb-4 flex items-center justify-between text-sm text-ink/70">
-          <span>Deck: {params.slug}</span>
-          <span>
-            Question {asked + 1} / {QUESTIONS_PER_QUIZ}
-          </span>
+        <div className="mb-5">
+          <div className="mb-2 flex items-center justify-between text-sm">
+            <span className="font-medium text-ink/60">{DECK_LABELS[params.slug] ?? params.slug}</span>
+            <span className="font-medium text-ink/60">{asked} / {QUESTIONS_PER_QUIZ}</span>
+          </div>
+          <div className="progress-bar-track">
+            <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
+          </div>
         </div>
 
-        {loading || !card ? <p>Loading card...</p> : null}
+        {loading || !card ? <p className="text-ink/50">Loading card…</p> : null}
 
         {!loading && card ? (
           <div className="space-y-4">
@@ -225,19 +250,29 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
             <h2 className="text-xl font-medium">{card.prompt}</h2>
 
             <div className="grid gap-2">
-              {card.choices.map((choice) => (
-                <button
-                  key={choice.id}
-                  className={`quiz-choice ${
-                    selected === choice.id ? "!border-pine !bg-pine/20 ring-2 ring-pine/40" : ""
-                  }`}
-                  onClick={() => setSelected(choice.id)}
-                  type="button"
-                  disabled={Boolean(feedback)}
-                >
-                  {choice.label}
-                </button>
-              ))}
+              {card.choices.map((choice) => {
+                let extra = "";
+                if (!feedback) {
+                  extra = selected === choice.id ? "!border-navy !bg-navy/10 ring-2 ring-navy/25" : "";
+                } else if (choice.label === feedback.correctAnswer) {
+                  extra = "!border-pine !bg-pine/10";
+                } else if (choice.id === selected && !feedback.correct) {
+                  extra = "!border-clay !bg-clay/10";
+                } else {
+                  extra = "opacity-40";
+                }
+                return (
+                  <button
+                    key={choice.id}
+                    className={`quiz-choice ${extra}`}
+                    onClick={() => setSelected(choice.id)}
+                    type="button"
+                    disabled={Boolean(feedback)}
+                  >
+                    {choice.label}
+                  </button>
+                );
+              })}
             </div>
 
             {!feedback ? (
@@ -251,7 +286,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
                 onClick={loadNextCard}
                 disabled={Boolean(feedback.bonusEligible && !bonusResolved)}
               >
-                Next Card
+                Next Card →
               </button>
             )}
           </div>

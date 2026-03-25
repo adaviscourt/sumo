@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDeckCards, getDeckCardsHard } from "@/lib/data";
+import { getDeckCards, getDeckCardsHard } from "@/lib/data"; // test
 import { inferDeckSlug, selectNextCard } from "@/lib/quiz";
 
 export async function GET(request: Request, { params }: { params: { slug: string } }) {

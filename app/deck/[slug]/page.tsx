@@ -116,6 +116,20 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [loadNextCard, devMode]);
 
   useEffect(() => {
+    if (!done || correctCount <= 10) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    void import("canvas-confetti").then(({ default: confetti }) => {
+      void confetti({
+        particleCount: 100,
+        spread: 80,
+        origin: { y: 0.55 },
+        colors: ["#d4a017", "#27386e", "#b55233", "#1f5c4d", "#f8f1de"],
+      });
+    });
+  }, [done, correctCount]);
+
+  useEffect(() => {
     if (!done) {
       return;
     }

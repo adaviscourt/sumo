@@ -12,6 +12,7 @@
     "scrape:rikishi": "python scripts/scrape_rikishi.py"
   },
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "graceful-fs": "^4.2.11",
     "next": "14.2.15",
@@ -19,6 +20,7 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20.16.5",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",

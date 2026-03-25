@@ -32,6 +32,12 @@ const DECK_NAMES: Record<string, string> = {
   rikishi: "Rikishi Identification"
 };
 
+const DECK_KANJI: Record<string, string> = {
+  terms: "用語",
+  kimarite: "決まり手",
+  rikishi: "力士"
+};
+
 export default function HomePage() {
   const [decks, setDecks] = useState<DeckSummary[]>([]);
   const [sessions, setSessions] = useState<LocalSession[]>([]);
@@ -52,16 +58,23 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <section className="grid gap-4 md:grid-cols-3">
+    <div className="space-y-12">
+      <section className="grid gap-6 md:grid-cols-3">
         {decks.map((deck) => (
-          <article key={deck.slug} className="card flex flex-col gap-3">
-            <p className="text-4xl leading-none" aria-hidden="true">{DECK_EMOJI[deck.slug] ?? "🃏"}</p>
-            <h2 className="text-xl font-semibold">{deck.name}</h2>
-            <p className="text-sm text-ink/75">{deck.description}</p>
-            <p className="text-sm text-ink/60">Questions: {QUESTIONS_PER_QUIZ}</p>
-            <p className="text-sm text-ink/60">Total Cards in Deck: {deck.cardCount}</p>
-            {deck.banzuke && <p className="text-sm text-ink/60">Banzuke: {deck.banzuke}</p>}
+          <article key={deck.slug} className="card flex flex-col gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-ink/[0.05] text-2xl" aria-hidden="true">
+              {DECK_EMOJI[deck.slug] ?? "🃏"}
+            </div>
+            <div>
+              {DECK_KANJI[deck.slug] && (
+                <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">{DECK_KANJI[deck.slug]}</p>
+              )}
+              <h2 className="text-xl font-semibold">{deck.name}</h2>
+              <p className="mt-1 text-sm text-ink/70">{deck.description}</p>
+            </div>
+            <p className="text-xs text-ink/45">
+              {QUESTIONS_PER_QUIZ} questions · {deck.cardCount} cards{deck.banzuke ? ` · ${deck.banzuke}` : ""}
+            </p>
             <Link href={`/deck/${deck.slug}`} className="button-primary mt-auto inline-block text-center">
               Play Deck
             </Link>
@@ -70,7 +83,8 @@ export default function HomePage() {
       </section>
 
       <section className="card">
-        <h3 className="mb-3 text-lg font-semibold">Recent Sessions</h3>
+        <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">稽古</p>
+        <h3 className="mb-4 text-lg font-semibold">Recent Sessions</h3>
         {sessions.length === 0 ? (
           <p className="text-sm text-ink/65">No sessions yet. Start a deck to begin tracking progress.</p>
         ) : (

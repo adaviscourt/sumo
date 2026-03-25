@@ -8,21 +8,21 @@
 
 body {
   @apply bg-rice text-ink;
-  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
 }
 
 .card {
-  @apply rounded-xl border border-ink/15 bg-white/80 p-5 shadow-sm;
+  @apply rounded-xl border border-ink/20 bg-parchment p-6 shadow-sm;
 }
 
 .button-primary {
-  @apply rounded-lg bg-navy px-4 py-2 font-medium text-white transition hover:bg-navy/90;
+  @apply rounded-lg bg-navy px-5 py-2.5 font-medium tracking-wide text-white transition hover:bg-navy/90;
 }
 
 .button-secondary {
-  @apply rounded-lg border border-ink/20 bg-white px-4 py-2 font-medium transition hover:bg-ink/5;
+  @apply rounded-lg border border-ink/20 bg-parchment px-5 py-2.5 font-medium tracking-wide transition hover:bg-ink/5;
 }
 
 .quiz-choice {
-  @apply w-full rounded-lg border border-ink/20 bg-white px-4 py-3 text-left transition hover:border-navy hover:bg-navy/5;
+  @apply w-full rounded-lg border border-ink/20 bg-parchment px-4 py-3 text-left transition hover:border-navy hover:bg-navy/5;
 }

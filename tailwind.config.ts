@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         ink: "#1b1a17",
         rice: "#f8f1de",
+        parchment: "#fdf8ef",
         clay: "#b55233",
         pine: "#1f5c4d",
         navy: "#27386e",

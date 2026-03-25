@@ -10,6 +10,12 @@ const DECK_NAMES: Record<string, string> = {
   rikishi: "Rikishi Identification"
 };
 
+const DECK_KANJI: Record<string, string> = {
+  terms: "用語",
+  kimarite: "決まり手",
+  rikishi: "力士"
+};
+
 type Choice = { id: string; label: string };
 type CardPayload = {
   cardId: string;
@@ -263,7 +269,12 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       <section className="card">
         <div className="mb-4 flex items-center justify-between text-sm text-ink/70">
           <Link href="/" className="hover:text-ink transition-colors">← Back to Decks</Link>
-          <span>{DECK_NAMES[params.slug] ?? params.slug} · Question {asked + 1} / {QUESTIONS_PER_QUIZ}</span>
+          <span>
+            {DECK_KANJI[params.slug] && (
+              <span className="mr-2 text-xs tracking-widest text-ink/25" aria-hidden="true">{DECK_KANJI[params.slug]}</span>
+            )}
+            {DECK_NAMES[params.slug] ?? params.slug} · Question {asked + 1} / {QUESTIONS_PER_QUIZ}
+          </span>
         </div>
 
         {loading && !loadError ? (

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { QUESTIONS_PER_QUIZ } from "@/lib/config";
 
 const DECK_NAMES: Record<string, string> = {
@@ -51,24 +52,27 @@ type AnswerResponse = {
 };
 
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
+  const searchParams = useSearchParams();
+  const devMode = searchParams.has("dev");
+
   const supportsHardMode = HARD_MODE_DECKS.has(params.slug);
-  const [mode, setMode] = useState<"easy" | "hard" | null>(supportsHardMode ? null : "easy");
+  const [mode, setMode] = useState<"easy" | "hard" | null>(devMode ? "easy" : supportsHardMode ? null : "easy");
 
   const [card, setCard] = useState<CardPayload | null>(null);
-  const [loading, setLoading] = useState(!supportsHardMode);
+  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<AnswerResponse | null>(null);
   const [bonusSelected, setBonusSelected] = useState<string | null>(null);
   const [bonusResolved, setBonusResolved] = useState(false);
   const [bonusCorrect, setBonusCorrect] = useState(false);
-  const [asked, setAsked] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
+  const [asked, setAsked] = useState(devMode ? QUESTIONS_PER_QUIZ : 0);
+  const [correctCount, setCorrectCount] = useState(devMode ? 11 : 0);
   const [loadError, setLoadError] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const seenCardIdsRef = useRef<string[]>([]);
 
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(devMode);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = showResults;
@@ -106,9 +110,10 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [params.slug, mode]);
 
   useEffect(() => {
+    if (devMode) return;
     seenCardIdsRef.current = [];
     loadNextCard();
-  }, [loadNextCard]);
+  }, [loadNextCard, devMode]);
 
   useEffect(() => {
     if (!done) {

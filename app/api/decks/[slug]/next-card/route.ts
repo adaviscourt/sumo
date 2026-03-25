@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDeckCards } from "@/lib/data";
+import { getDeckCards, getDeckCardsHard } from "@/lib/data";
 import { inferDeckSlug, selectNextCard } from "@/lib/quiz";
 
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
@@ -10,13 +10,22 @@ export async function GET(request: Request, { params }: { params: { slug: string
     return NextResponse.json({ error: "Unsupported deck slug" }, { status: 400 });
   }
 
-  const excluded = new URL(request.url).searchParams
+  const url = new URL(request.url);
+  const excluded = url.searchParams
     .getAll("exclude")
     .flatMap((value) => value.split(","))
     .map((value) => value.trim())
     .filter(Boolean);
 
-  const cards = await getDeckCards(deckSlug);
+  const mode = url.searchParams.get("mode");
+
+  let cards;
+  if (mode === "hard" && (deckSlug === "terms" || deckSlug === "kimarite")) {
+    cards = await getDeckCardsHard(deckSlug);
+  } else {
+    cards = await getDeckCards(deckSlug);
+  }
+
   if (cards.length === 0) {
     return NextResponse.json({ error: "Deck not found or empty" }, { status: 404 });
   }

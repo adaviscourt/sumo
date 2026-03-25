@@ -16,6 +16,8 @@ const DECK_KANJI: Record<string, string> = {
   rikishi: "力士"
 };
 
+const HARD_MODE_DECKS = new Set(["terms", "kimarite"]);
+
 type Choice = { id: string; label: string };
 type CardPayload = {
   cardId: string;
@@ -41,8 +43,11 @@ type AnswerResponse = {
 };
 
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
+  const supportsHardMode = HARD_MODE_DECKS.has(params.slug);
+  const [mode, setMode] = useState<"easy" | "hard" | null>(supportsHardMode ? null : "easy");
+
   const [card, setCard] = useState<CardPayload | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!supportsHardMode);
   const [selected, setSelected] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<AnswerResponse | null>(null);
   const [bonusSelected, setBonusSelected] = useState<string | null>(null);
@@ -51,12 +56,15 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [asked, setAsked] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [loadError, setLoadError] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const seenCardIdsRef = useRef<string[]>([]);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = asked >= QUESTIONS_PER_QUIZ && !bonusPending;
 
   const loadNextCard = useCallback(async () => {
+    if (!mode) return;
     setLoading(true);
     setLoadError(false);
     setSelected(null);
@@ -64,9 +72,12 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     setBonusSelected(null);
     setBonusResolved(false);
     setBonusCorrect(false);
+    setInputValue("");
+    setShowSuggestions(false);
 
     const query = new URLSearchParams();
     seenCardIdsRef.current.forEach((id) => query.append("exclude", id));
+    if (mode === "hard") query.set("mode", "hard");
     const response = await fetch(`/api/decks/${params.slug}/next-card?${query.toString()}`, { method: "GET" });
 
     if (!response.ok) {
@@ -81,7 +92,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       seenCardIdsRef.current = [...seenCardIdsRef.current, payload.cardId];
     }
     setLoading(false);
-  }, [params.slug]);
+  }, [params.slug, mode]);
 
   useEffect(() => {
     seenCardIdsRef.current = [];
@@ -131,6 +142,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
 
     const payload = (await response.json()) as AnswerResponse;
     setFeedback(payload);
+    setShowSuggestions(false);
     setAsked((value) => value + 1);
     if (payload.correct) {
       setCorrectCount((value) => value + 1);
@@ -153,16 +165,19 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (loading || loadError || !card) return;
-      // Ignore when focus is inside an input/button to avoid double-firing
       if (document.activeElement?.tagName === "BUTTON") return;
 
+      const isInputFocused = document.activeElement?.tagName === "INPUT";
       const idx = ["1", "2", "3", "4"].indexOf(e.key);
 
       if (!feedback) {
-        // Pre-submission: 1–4 select a choice, Enter submits
-        if (idx !== -1 && card.choices[idx]) {
-          setSelected(card.choices[idx].id);
-        } else if (e.key === "Enter" && selected) {
+        if (!isInputFocused && mode !== "hard") {
+          // Easy mode pre-submission: 1–4 select a choice
+          if (idx !== -1 && card.choices[idx]) {
+            setSelected(card.choices[idx].id);
+          }
+        }
+        if (e.key === "Enter" && selected && !isInputFocused) {
           void submitAnswer();
         }
       } else if (bonusPending) {
@@ -172,7 +187,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         } else if (e.key === "Enter" && bonusSelected && !bonusResolved) {
           submitBonus();
         }
-      } else if (e.key === "Enter") {
+      } else if (e.key === "Enter" && !isInputFocused) {
         // Post-feedback: Enter advances
         void loadNextCard();
       }
@@ -180,7 +195,14 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, bonusResolved, submitAnswer, submitBonus, loadNextCard]);
+  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, bonusResolved, submitAnswer, submitBonus, loadNextCard, mode]);
+
+  const filteredSuggestions = useMemo(() => {
+    if (!card || mode !== "hard" || !inputValue || selected) return [];
+    return card.choices
+      .filter((choice) => choice.label.toLowerCase().includes(inputValue.toLowerCase()))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [card, mode, inputValue, selected]);
 
   const reveal = useMemo(() => {
     if (!card || !feedback) {
@@ -237,6 +259,40 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     );
   }, [bonusCorrect, bonusResolved, bonusSelected, card, feedback, submitBonus]);
 
+  // Mode selection screen (terms / kimarite only)
+  if (mode === null) {
+    return (
+      <section className="card space-y-6">
+        <Link href="/" className="text-sm text-ink/60 transition-colors hover:text-ink">← Back to Decks</Link>
+        <div>
+          {DECK_KANJI[params.slug] && (
+            <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">{DECK_KANJI[params.slug]}</p>
+          )}
+          <h1 className="text-2xl font-semibold">{DECK_NAMES[params.slug] ?? params.slug}</h1>
+        </div>
+        <p className="text-sm text-ink/65">Choose a mode to begin your session.</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => setMode("easy")}
+            className="rounded-xl border border-ink/20 bg-parchment p-5 text-left transition hover:border-navy hover:bg-navy/5"
+          >
+            <p className="font-semibold">Easy</p>
+            <p className="mt-1 text-sm text-ink/60">See the term — pick the right definition from four choices</p>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("hard")}
+            className="rounded-xl border border-ink/20 bg-parchment p-5 text-left transition hover:border-navy hover:bg-navy/5"
+          >
+            <p className="font-semibold">Hard</p>
+            <p className="mt-1 text-sm text-ink/60">See the definition — type and find the matching term</p>
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   if (done) {
     const pct = asked > 0 ? Math.round((correctCount / asked) * 100) : 0;
     const message =
@@ -274,6 +330,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
               <span className="mr-2 text-xs tracking-widest text-ink/25" aria-hidden="true">{DECK_KANJI[params.slug]}</span>
             )}
             {DECK_NAMES[params.slug] ?? params.slug} · Question {asked + 1} / {QUESTIONS_PER_QUIZ}
+            {mode === "hard" && <span className="ml-2 text-xs text-ink/40">· Hard</span>}
           </span>
         </div>
 
@@ -307,28 +364,85 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
             ) : null}
             <h2 className="text-xl font-medium">{card.prompt}</h2>
 
-            <div className="grid gap-2">
-              {card.choices.map((choice) => (
-                <button
-                  key={choice.id}
-                  className={`quiz-choice ${
-                    selected === choice.id ? "!border-navy !bg-navy/10 ring-2 ring-navy/30" : ""
-                  }`}
-                  onClick={() => setSelected(choice.id)}
-                  type="button"
+            {mode === "hard" ? (
+              <div className="relative">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                    setSelected(null);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => {
+                    if (inputValue && !selected) setShowSuggestions(true);
+                  }}
+                  onBlur={() => {
+                    setTimeout(() => setShowSuggestions(false), 150);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && selected) {
+                      e.preventDefault();
+                      void submitAnswer();
+                    } else if (e.key === "Escape") {
+                      setShowSuggestions(false);
+                    }
+                  }}
+                  placeholder="Type a sumo term…"
+                  className="w-full rounded-lg border border-ink/20 bg-parchment px-3 py-2.5 text-sm focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
                   disabled={Boolean(feedback)}
-                >
-                  {choice.label}
-                </button>
-              ))}
-            </div>
+                  autoComplete="off"
+                />
+                {showSuggestions && filteredSuggestions.length > 0 && !feedback && (
+                  <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-ink/15 bg-parchment shadow-md">
+                    {filteredSuggestions.map((choice) => (
+                      <button
+                        key={choice.id}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setInputValue(choice.label);
+                          setSelected(choice.id);
+                          setShowSuggestions(false);
+                        }}
+                        className="w-full px-3 py-2.5 text-left text-sm transition hover:bg-ink/5"
+                      >
+                        {choice.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {selected && (
+                  <p className="mt-1.5 text-xs text-ink/50">
+                    Selected: <span className="font-medium text-ink/80">{inputValue}</span>
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="grid gap-2">
+                {card.choices.map((choice) => (
+                  <button
+                    key={choice.id}
+                    className={`quiz-choice ${
+                      selected === choice.id ? "!border-navy !bg-navy/10 ring-2 ring-navy/30" : ""
+                    }`}
+                    onClick={() => setSelected(choice.id)}
+                    type="button"
+                    disabled={Boolean(feedback)}
+                  >
+                    {choice.label}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {!feedback ? (
               <div className="flex items-center gap-4">
                 <button type="button" className="button-primary" disabled={!selected} onClick={submitAnswer}>
                   Submit
                 </button>
-                <span className="text-xs text-ink/40">1–4 to pick · Enter to submit</span>
+                {mode !== "hard" && <span className="text-xs text-ink/40">1–4 to pick · Enter to submit</span>}
+                {mode === "hard" && selected && <span className="text-xs text-ink/40">Enter to submit</span>}
               </div>
             ) : (
               <div className="flex items-center gap-4">

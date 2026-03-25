@@ -28,6 +28,13 @@ type AnswerResponse = {
   bonusEligible: boolean;
 };
 
+const KACHI_KOSHI_IMAGE_URLS = [
+  "https://i.imgur.com/6CpGynp.jpg",
+  "https://i.imgur.com/6CpGynp.jpeg",
+  "https://i.imgur.com/6CpGynp.png"
+];
+const KACHI_KOSHI_SOURCE_URL = "https://imgur.com/a/6CpGynp";
+
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [card, setCard] = useState<CardPayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,10 +45,13 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [bonusCorrect, setBonusCorrect] = useState(false);
   const [asked, setAsked] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+  const [kachiKoshiImageIndex, setKachiKoshiImageIndex] = useState(0);
   const seenCardIdsRef = useRef<string[]>([]);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = asked >= QUESTIONS_PER_QUIZ && !bonusPending;
+  const showKachiKoshi = params.slug === "rikishi" && correctCount > 10;
+  const kachiKoshiImageUrl = KACHI_KOSHI_IMAGE_URLS[kachiKoshiImageIndex];
 
   const loadNextCard = useCallback(async () => {
     setLoading(true);
@@ -196,6 +206,22 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         <p>
           Score: {correctCount} points across {asked} prompts
         </p>
+        {showKachiKoshi ? (
+          <div className="space-y-2">
+            <p className="font-medium text-pine">Kachi-Koshi! Great run.</p>
+            <img
+              src={kachiKoshiImageUrl}
+              alt="Kachi-Koshi celebration"
+              onError={() =>
+                setKachiKoshiImageIndex((value) => Math.min(value + 1, KACHI_KOSHI_IMAGE_URLS.length - 1))
+              }
+              className="mx-auto h-auto max-h-[360px] w-full max-w-md rounded-lg border border-ink/10 object-cover"
+            />
+            <p className="text-xs text-ink/70">
+              Source: <a className="underline" href={KACHI_KOSHI_SOURCE_URL} target="_blank" rel="noreferrer">Imgur</a>
+            </p>
+          </div>
+        ) : null}
         <Link className="button-primary inline-block" href="/">Back to Decks</Link>
       </section>
     );

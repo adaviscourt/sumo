@@ -73,7 +73,7 @@ export default function HomePage() {
               <p className="mt-1 text-sm text-ink/70">{deck.description}</p>
             </div>
             <p className="text-xs text-ink/45">
-              {QUESTIONS_PER_QUIZ} questions · {deck.cardCount} cards{deck.banzuke ? ` · ${deck.banzuke}` : ""}
+              Questions: {QUESTIONS_PER_QUIZ} · Total Cards in Deck: {deck.cardCount}{deck.banzuke ? ` · ${deck.banzuke}` : ""}
             </p>
             <Link href={`/deck/${deck.slug}`} className="button-primary mt-auto inline-block text-center">
               Play Deck

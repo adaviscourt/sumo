@@ -60,8 +60,11 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const seenCardIdsRef = useRef<string[]>([]);
 
+  const [showResults, setShowResults] = useState(false);
+
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
-  const done = asked >= QUESTIONS_PER_QUIZ && !bonusPending;
+  const done = showResults;
+  const isLastQuestion = asked >= QUESTIONS_PER_QUIZ && !bonusPending;
 
   const loadNextCard = useCallback(async () => {
     if (!mode) return;
@@ -162,6 +165,18 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     }
   }, [bonusResolved, bonusSelected, card?.meta.bonusAnswer, feedback?.bonusEligible]);
 
+  const handlePlayAgain = useCallback(() => {
+    seenCardIdsRef.current = [];
+    setAsked(0);
+    setCorrectCount(0);
+    setShowResults(false);
+    if (supportsHardMode) {
+      setMode(null);
+    } else {
+      void loadNextCard();
+    }
+  }, [supportsHardMode, loadNextCard]);
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (loading || loadError || !card) return;
@@ -189,13 +204,17 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         }
       } else if (e.key === "Enter" && !isInputFocused) {
         // Post-feedback: Enter advances
-        void loadNextCard();
+        if (asked >= QUESTIONS_PER_QUIZ) {
+          setShowResults(true);
+        } else {
+          void loadNextCard();
+        }
       }
     };
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, bonusResolved, submitAnswer, submitBonus, loadNextCard, mode]);
+  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, bonusResolved, submitAnswer, submitBonus, loadNextCard, mode, asked, setShowResults]);
 
   const filteredSuggestions = useMemo(() => {
     if (!card || mode !== "hard" || !inputValue || selected) return [];
@@ -313,7 +332,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
           <p className="text-ink/70">{correctCount} / {asked} correct — {message}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link className="button-primary inline-block" href={`/deck/${params.slug}`}>Play Again</Link>
+          <button type="button" className="button-primary" onClick={handlePlayAgain}>Play Again</button>
           <Link className="button-secondary inline-block" href="/">Back to Decks</Link>
         </div>
       </section>
@@ -446,14 +465,25 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
               </div>
             ) : (
               <div className="flex items-center gap-4">
-                <button
-                  type="button"
-                  className="button-secondary"
-                  onClick={loadNextCard}
-                  disabled={Boolean(feedback.bonusEligible && !bonusResolved)}
-                >
-                  Next Card
-                </button>
+                {isLastQuestion ? (
+                  <button
+                    type="button"
+                    className="button-primary"
+                    onClick={() => setShowResults(true)}
+                    disabled={bonusPending}
+                  >
+                    See Results
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    onClick={loadNextCard}
+                    disabled={Boolean(feedback.bonusEligible && !bonusResolved)}
+                  >
+                    Next Card
+                  </button>
+                )}
                 {!bonusPending && <span className="text-xs text-ink/40">Enter to continue</span>}
               </div>
             )}

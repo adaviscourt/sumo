@@ -9,8 +9,8 @@ test("quiz session length is fixed at 10 questions", () => {
 
 test("home deck tiles show question and deck card labels", () => {
   const source = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
-  assert.match(source, /Questions: \{QUESTIONS_PER_QUIZ\}/);
-  assert.match(source, /Total Cards in Deck: \{deck.cardCount\}/);
+  assert.match(source, /\{QUESTIONS_PER_QUIZ\} questions/);
+  assert.match(source, /\{deck.cardCount\} cards/);
 });
 
 test("home deck tiles include expected emoji markers", () => {

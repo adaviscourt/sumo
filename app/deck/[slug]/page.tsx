@@ -16,7 +16,15 @@ const DECK_KANJI: Record<string, string> = {
   rikishi: "力士"
 };
 
-const HARD_MODE_DECKS = new Set(["terms", "kimarite"]);
+const HARD_MODE_DECKS = new Set(["terms", "kimarite", "rikishi"]);
+
+const EASY_MODE_DESC: Record<string, string> = {
+  rikishi: "See the image — pick the rikishi's name from four choices"
+};
+
+const HARD_MODE_DESC: Record<string, string> = {
+  rikishi: "See the image — type the rikishi's name"
+};
 
 type Choice = { id: string; label: string };
 type CardPayload = {
@@ -297,7 +305,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
             className="rounded-xl border border-ink/20 bg-parchment p-5 text-left transition hover:border-navy hover:bg-navy/5"
           >
             <p className="font-semibold">Easy</p>
-            <p className="mt-1 text-sm text-ink/60">See the term — pick the right definition from four choices</p>
+            <p className="mt-1 text-sm text-ink/60">{EASY_MODE_DESC[params.slug] ?? "See the term — pick the right definition from four choices"}</p>
           </button>
           <button
             type="button"
@@ -305,7 +313,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
             className="rounded-xl border border-ink/20 bg-parchment p-5 text-left transition hover:border-navy hover:bg-navy/5"
           >
             <p className="font-semibold">Hard</p>
-            <p className="mt-1 text-sm text-ink/60">See the definition — type and find the matching term</p>
+            <p className="mt-1 text-sm text-ink/60">{HARD_MODE_DESC[params.slug] ?? "See the definition — type and find the matching term"}</p>
           </button>
         </div>
       </section>
@@ -407,7 +415,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
                       setShowSuggestions(false);
                     }
                   }}
-                  placeholder="Type a sumo term…"
+                  placeholder={params.slug === "rikishi" ? "Type a rikishi name…" : "Type a sumo term…"}
                   className="w-full rounded-lg border border-ink/20 bg-parchment px-3 py-2.5 text-sm focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
                   disabled={Boolean(feedback)}
                   autoComplete="off"

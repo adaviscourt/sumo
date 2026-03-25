@@ -175,7 +175,29 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
   });
 }
 
-export async function getDeckCardsHard(deckSlug: "terms" | "kimarite"): Promise<QuizCard[]> {
+export async function getDeckCardsHard(deckSlug: "terms" | "kimarite" | "rikishi"): Promise<QuizCard[]> {
+  if (deckSlug === "rikishi") {
+    const rikishi = await getRikishiCurrent();
+    const names = rikishi.rikishi.map((row) => row.shikonaEn);
+    return rikishi.rikishi.map((row) => ({
+      id: `rikishi:${row.sumoAssociationId}`,
+      deckSlug: "rikishi",
+      prompt: "Who is this rikishi?",
+      answer: row.shikonaEn,
+      choices: shuffle([...names]),
+      meta: {
+        imagePath: row.imagePath,
+        rank: row.currentRank,
+        rankFamily: rankFamily(row.currentRank),
+        heya: row.heya,
+        profileUrl: row.profileUrl,
+        bonusPrompt: "What is this rikishi's current rank family?",
+        bonusChoices: buildRankChoices(row.currentRank),
+        bonusAnswer: rankFamily(row.currentRank)
+      }
+    }));
+  }
+
   const seed = await getTermSeed(deckSlug);
   const terms = seed.map((item) => item.term);
   return seed.map((item) => ({

@@ -28,6 +28,9 @@ type AnswerResponse = {
   bonusEligible: boolean;
 };
 
+const KACHI_KOSHI_IMAGE_URL = "/images/achievements/kachi-koshi.png";
+const ZENSHO_YUSHO_IMAGE_URL = "/images/achievements/zensho-yusho.png";
+
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [card, setCard] = useState<CardPayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,6 +45,10 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = asked >= QUESTIONS_PER_QUIZ && !bonusPending;
+  const showKachiKoshi = params.slug === "rikishi" && correctCount > 10;
+  const showZenshoYusho = params.slug === "rikishi" && correctCount === 20;
+  const achievementImageUrl = showZenshoYusho ? ZENSHO_YUSHO_IMAGE_URL : KACHI_KOSHI_IMAGE_URL;
+  const achievementLabel = showZenshoYusho ? "Zensho-Yusho! Perfect score." : "Kachi-Koshi! Great run.";
 
   const loadNextCard = useCallback(async () => {
     setLoading(true);
@@ -196,6 +203,16 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         <p>
           Score: {correctCount} points across {asked} prompts
         </p>
+        {showKachiKoshi ? (
+          <div className="space-y-2">
+            <p className="font-medium text-pine">{achievementLabel}</p>
+            <img
+              src={achievementImageUrl}
+              alt={showZenshoYusho ? "Zensho-Yusho celebration" : "Kachi-Koshi celebration"}
+              className="mx-auto h-auto max-h-[360px] w-full max-w-md rounded-lg border border-ink/10 object-cover"
+            />
+          </div>
+        ) : null}
         <Link className="button-primary inline-block" href="/">Back to Decks</Link>
       </section>
     );

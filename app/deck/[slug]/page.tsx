@@ -332,6 +332,8 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       pct >= 50   ? "text-pine" :
       "text-clay";
 
+    const kachiKoshi = correctCount > 10;
+
     return (
       <section className="card space-y-4">
         <h1 className="text-2xl font-semibold">Session Complete</h1>
@@ -339,6 +341,12 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
           <p className={`text-3xl font-semibold ${scoreColor}`}>{pct}%</p>
           <p className="text-ink/70">{correctCount} / {asked} correct — {message}</p>
         </div>
+        {kachiKoshi && (
+          <div className="border-t border-ink/10 pt-4 text-center">
+            <p className="animate-kachi text-5xl leading-none text-gold" aria-hidden="true">勝ち越し</p>
+            <p className="animate-kachi-delay mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold/70">Kachi-koshi</p>
+          </div>
+        )}
         <div className="flex flex-wrap gap-3">
           <button type="button" className="button-primary" onClick={handlePlayAgain}>Play Again</button>
           <Link className="button-secondary inline-block" href="/">Back to Decks</Link>

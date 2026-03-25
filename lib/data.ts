@@ -175,7 +175,30 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
   });
 }
 
+export async function getDeckCardsHard(deckSlug: "terms" | "kimarite"): Promise<QuizCard[]> {
+  const seed = await getTermSeed(deckSlug);
+  const terms = seed.map((item) => item.term);
+  return seed.map((item) => ({
+    id: normalizeId(`${deckSlug}-hard`, item.term),
+    deckSlug,
+    prompt: item.definition,
+    answer: item.term,
+    choices: shuffle([...terms]),
+    meta: {
+      japanese: item.japanese,
+      sourceUrl: item.sourceUrl
+    }
+  }));
+}
+
 export async function findCardById(cardId: string): Promise<QuizCard | null> {
+  if (cardId.startsWith("terms-hard:") || cardId.startsWith("kimarite-hard:")) {
+    const prefix = cardId.startsWith("terms-hard:") ? "terms" : "kimarite";
+    const cards = await getDeckCardsHard(prefix);
+    const card = cards.find((entry) => entry.id === cardId);
+    if (card) return card;
+  }
+
   const decks: DeckSlug[] = ["terms", "kimarite", "rikishi"];
   for (const deck of decks) {
     const cards = await getDeckCards(deck);

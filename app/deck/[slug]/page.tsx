@@ -105,38 +105,6 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     }
   }, [asked, correctCount, done, params.slug]);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (loading || loadError || !card) return;
-      // Ignore when focus is inside an input/button to avoid double-firing
-      if (document.activeElement?.tagName === "BUTTON") return;
-
-      const idx = ["1", "2", "3", "4"].indexOf(e.key);
-
-      if (!feedback) {
-        // Pre-submission: 1–4 select a choice, Enter submits
-        if (idx !== -1 && card.choices[idx]) {
-          setSelected(card.choices[idx].id);
-        } else if (e.key === "Enter" && selected) {
-          void submitAnswer();
-        }
-      } else if (bonusPending) {
-        // Bonus phase: 1–4 select a bonus choice, Enter submits bonus
-        if (idx !== -1 && card.meta.bonusChoices?.[idx]) {
-          setBonusSelected(card.meta.bonusChoices[idx]);
-        } else if (e.key === "Enter" && bonusSelected && !bonusResolved) {
-          submitBonus();
-        }
-      } else if (e.key === "Enter") {
-        // Post-feedback: Enter advances
-        void loadNextCard();
-      }
-    };
-
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, bonusResolved, submitAnswer, submitBonus, loadNextCard]);
-
   const submitAnswer = useCallback(async () => {
     if (!card || !selected) {
       return;
@@ -175,6 +143,38 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       setCorrectCount((value) => value + 1);
     }
   }, [bonusResolved, bonusSelected, card?.meta.bonusAnswer, feedback?.bonusEligible]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (loading || loadError || !card) return;
+      // Ignore when focus is inside an input/button to avoid double-firing
+      if (document.activeElement?.tagName === "BUTTON") return;
+
+      const idx = ["1", "2", "3", "4"].indexOf(e.key);
+
+      if (!feedback) {
+        // Pre-submission: 1–4 select a choice, Enter submits
+        if (idx !== -1 && card.choices[idx]) {
+          setSelected(card.choices[idx].id);
+        } else if (e.key === "Enter" && selected) {
+          void submitAnswer();
+        }
+      } else if (bonusPending) {
+        // Bonus phase: 1–4 select a bonus choice, Enter submits bonus
+        if (idx !== -1 && card.meta.bonusChoices?.[idx]) {
+          setBonusSelected(card.meta.bonusChoices[idx]);
+        } else if (e.key === "Enter" && bonusSelected && !bonusResolved) {
+          submitBonus();
+        }
+      } else if (e.key === "Enter") {
+        // Post-feedback: Enter advances
+        void loadNextCard();
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, bonusResolved, submitAnswer, submitBonus, loadNextCard]);
 
   const reveal = useMemo(() => {
     if (!card || !feedback) {

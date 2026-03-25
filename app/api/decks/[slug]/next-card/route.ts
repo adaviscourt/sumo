@@ -20,7 +20,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
   const mode = url.searchParams.get("mode");
 
   let cards;
-  if (mode === "hard" && (deckSlug === "terms" || deckSlug === "kimarite")) {
+  if (mode === "hard" && (deckSlug === "terms" || deckSlug === "kimarite" || deckSlug === "rikishi")) {
     cards = await getDeckCardsHard(deckSlug);
   } else {
     cards = await getDeckCards(deckSlug);

@@ -116,18 +116,30 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [loadNextCard, devMode]);
 
   useEffect(() => {
-    if (!done || correctCount <= 10) return;
+    const kachiKoshi = correctCount === 10 || (params.slug === "rikishi" && correctCount > 10 && correctCount < 20);
+    const zenshoYusho = params.slug === "rikishi" && correctCount === 20;
+
+    if (!done || (!kachiKoshi && !zenshoYusho)) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    const palette = ["#d4a017", "#27386e", "#b55233", "#1f5c4d", "#f8f1de"];
+
     void import("canvas-confetti").then(({ default: confetti }) => {
-      void confetti({
-        particleCount: 100,
-        spread: 80,
-        origin: { y: 0.55 },
-        colors: ["#d4a017", "#27386e", "#b55233", "#1f5c4d", "#f8f1de"],
-      });
+      if (zenshoYusho) {
+        // Three-burst celebration: centre, then left and right cannon
+        void confetti({ particleCount: 120, spread: 90, origin: { y: 0.55 }, colors: palette });
+        setTimeout(() => {
+          void confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors: palette });
+          void confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors: palette });
+        }, 350);
+        setTimeout(() => {
+          void confetti({ particleCount: 60, spread: 100, origin: { y: 0.4 }, colors: palette });
+        }, 700);
+      } else {
+        void confetti({ particleCount: 100, spread: 80, origin: { y: 0.55 }, colors: palette });
+      }
     });
-  }, [done, correctCount]);
+  }, [done, correctCount, params.slug]);
 
   useEffect(() => {
     if (!done) {
@@ -351,7 +363,8 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       pct >= 50   ? "text-pine" :
       "text-clay";
 
-    const kachiKoshi = correctCount > 10;
+    const kachiKoshi = correctCount === 10 || (params.slug === "rikishi" && correctCount > 10 && correctCount < 20);
+    const zenshoYusho = params.slug === "rikishi" && correctCount === 20;
 
     return (
       <section className="card space-y-4">
@@ -360,7 +373,13 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
           <p className={`text-3xl font-semibold ${scoreColor}`}>{pct}%</p>
           <p className="text-ink/70">{correctCount} / {asked} correct — {message}</p>
         </div>
-        {kachiKoshi && (
+        {zenshoYusho && (
+          <div className="border-t border-ink/10 pt-4 text-center">
+            <p className="animate-zensho text-6xl leading-none text-gold" aria-hidden="true">全勝優勝</p>
+            <p className="animate-zensho-delay mt-2 text-sm font-bold uppercase tracking-[0.2em] text-gold">Zensho-yusho</p>
+          </div>
+        )}
+        {kachiKoshi && !zenshoYusho && (
           <div className="border-t border-ink/10 pt-4 text-center">
             <p className="animate-kachi text-5xl leading-none text-gold" aria-hidden="true">勝ち越し</p>
             <p className="animate-kachi-delay mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold/70">Kachi-koshi</p>

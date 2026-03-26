@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { QUESTIONS_PER_QUIZ } from "@/lib/config";
+import { celebrationTier } from "@/lib/quiz";
 
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
@@ -117,16 +118,15 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [loadNextCard, devMode]);
 
   useEffect(() => {
-    const kachiKoshi = correctCount === 10 || (params.slug === "rikishi" && correctCount > 10 && correctCount < 20);
-    const zenshoYusho = params.slug === "rikishi" && correctCount === 20;
+    const tier = celebrationTier(correctCount, params.slug);
 
-    if (!done || (!kachiKoshi && !zenshoYusho)) return;
+    if (!done || !tier) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const palette = ["#d4a017", "#27386e", "#b55233", "#1f5c4d", "#f8f1de"];
 
     void import("canvas-confetti").then(({ default: confetti }) => {
-      if (zenshoYusho) {
+      if (tier === "zensho") {
         // Three-burst celebration: centre, then left and right cannon
         void confetti({ particleCount: 120, spread: 90, origin: { y: 0.55 }, colors: palette });
         setTimeout(() => {
@@ -364,8 +364,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       pct >= 50   ? "text-pine" :
       "text-clay";
 
-    const kachiKoshi = correctCount === 10 || (params.slug === "rikishi" && correctCount > 10 && correctCount < 20);
-    const zenshoYusho = params.slug === "rikishi" && correctCount === 20;
+    const tier = celebrationTier(correctCount, params.slug);
 
     return (
       <section className="card space-y-4">
@@ -374,13 +373,13 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
           <p className={`text-3xl font-semibold ${scoreColor}`}>{pct}%</p>
           <p className="text-ink/70">{correctCount} / {asked} correct — {message}</p>
         </div>
-        {zenshoYusho && (
+        {tier === "zensho" && (
           <div className="border-t border-ink/10 pt-4 text-center">
             <p className="animate-zensho text-6xl leading-none text-gold" aria-hidden="true">全勝優勝</p>
             <p className="animate-zensho-delay mt-2 text-sm font-bold uppercase tracking-[0.2em] text-gold">Zensho-yusho</p>
           </div>
         )}
-        {kachiKoshi && !zenshoYusho && (
+        {tier === "kachi" && (
           <div className="border-t border-ink/10 pt-4 text-center">
             <p className="animate-kachi text-5xl leading-none text-gold" aria-hidden="true">勝ち越し</p>
             <p className="animate-kachi-delay mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold/70">Kachi-koshi</p>

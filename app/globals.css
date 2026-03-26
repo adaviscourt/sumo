@@ -26,3 +26,56 @@ body {
 .quiz-choice {
   @apply w-full rounded-lg border border-ink/20 bg-parchment px-4 py-3 text-left transition hover:border-navy hover:bg-navy/5;
 }
+
+@keyframes kachi-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-kachi {
+  animation: kachi-rise 0.65s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-kachi-delay {
+  animation: kachi-rise 0.65s cubic-bezier(0.25, 1, 0.5, 1) 0.3s both;
+}
+
+@keyframes zensho-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes zensho-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+.animate-zensho {
+  animation: zensho-rise 0.8s cubic-bezier(0.25, 1, 0.5, 1) both,
+             zensho-pulse 2s ease-in-out 0.8s infinite;
+}
+
+.animate-zensho-delay {
+  animation: zensho-rise 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.35s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-kachi,
+  .animate-kachi-delay,
+  .animate-zensho,
+  .animate-zensho-delay {
+    animation: none;
+  }
+}

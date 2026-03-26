@@ -63,6 +63,12 @@ export function shuffle<T>(items: T[]): T[] {
   return result;
 }
 
+export function celebrationTier(correctCount: number, deckSlug: string): "zensho" | "kachi" | null {
+  if (deckSlug === "rikishi" && correctCount === 20) return "zensho";
+  if (correctCount === 10 || (deckSlug === "rikishi" && correctCount > 10)) return "kachi";
+  return null;
+}
+
 export function selectNextCard<T extends { id: string }>(cards: T[], excludedIds: string[]): T | null {
   if (cards.length === 0) {
     return null;

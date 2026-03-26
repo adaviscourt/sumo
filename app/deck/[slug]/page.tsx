@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { QUESTIONS_PER_QUIZ } from "@/lib/config";
+import { celebrationTier } from "@/lib/quiz";
 
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
@@ -51,24 +53,28 @@ type AnswerResponse = {
 };
 
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
+  const searchParams = useSearchParams();
+  const devMode = searchParams.has("dev");
+  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? 20 : 11) : 0;
+
   const supportsHardMode = HARD_MODE_DECKS.has(params.slug);
-  const [mode, setMode] = useState<"easy" | "hard" | null>(supportsHardMode ? null : "easy");
+  const [mode, setMode] = useState<"easy" | "hard" | null>(devMode ? "easy" : supportsHardMode ? null : "easy");
 
   const [card, setCard] = useState<CardPayload | null>(null);
-  const [loading, setLoading] = useState(!supportsHardMode);
+  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<AnswerResponse | null>(null);
   const [bonusSelected, setBonusSelected] = useState<string | null>(null);
   const [bonusResolved, setBonusResolved] = useState(false);
   const [bonusCorrect, setBonusCorrect] = useState(false);
-  const [asked, setAsked] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
+  const [asked, setAsked] = useState(devMode ? QUESTIONS_PER_QUIZ : 0);
+  const [correctCount, setCorrectCount] = useState(devScore);
   const [loadError, setLoadError] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const seenCardIdsRef = useRef<string[]>([]);
 
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(devMode);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = showResults;
@@ -106,9 +112,35 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [params.slug, mode]);
 
   useEffect(() => {
+    if (devMode) return;
     seenCardIdsRef.current = [];
     loadNextCard();
-  }, [loadNextCard]);
+  }, [loadNextCard, devMode]);
+
+  useEffect(() => {
+    const tier = celebrationTier(correctCount, params.slug);
+
+    if (!done || !tier) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const palette = ["#d4a017", "#27386e", "#b55233", "#1f5c4d", "#f8f1de"];
+
+    void import("canvas-confetti").then(({ default: confetti }) => {
+      if (tier === "zensho") {
+        // Three-burst celebration: centre, then left and right cannon
+        void confetti({ particleCount: 120, spread: 90, origin: { y: 0.55 }, colors: palette });
+        setTimeout(() => {
+          void confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors: palette });
+          void confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors: palette });
+        }, 350);
+        setTimeout(() => {
+          void confetti({ particleCount: 60, spread: 100, origin: { y: 0.4 }, colors: palette });
+        }, 700);
+      } else {
+        void confetti({ particleCount: 100, spread: 80, origin: { y: 0.55 }, colors: palette });
+      }
+    });
+  }, [done, correctCount, params.slug]);
 
   useEffect(() => {
     if (!done) {
@@ -332,6 +364,8 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       pct >= 50   ? "text-pine" :
       "text-clay";
 
+    const tier = celebrationTier(correctCount, params.slug);
+
     return (
       <section className="card space-y-4">
         <h1 className="text-2xl font-semibold">Session Complete</h1>
@@ -339,6 +373,18 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
           <p className={`text-3xl font-semibold ${scoreColor}`}>{pct}%</p>
           <p className="text-ink/70">{correctCount} / {asked} correct — {message}</p>
         </div>
+        {tier === "zensho" && (
+          <div className="border-t border-ink/10 pt-4 text-center">
+            <p className="animate-zensho text-6xl leading-none text-gold" aria-hidden="true">全勝優勝</p>
+            <p className="animate-zensho-delay mt-2 text-sm font-bold uppercase tracking-[0.2em] text-gold">Zensho-yusho</p>
+          </div>
+        )}
+        {tier === "kachi" && (
+          <div className="border-t border-ink/10 pt-4 text-center">
+            <p className="animate-kachi text-5xl leading-none text-gold" aria-hidden="true">勝ち越し</p>
+            <p className="animate-kachi-delay mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold/70">Kachi-koshi</p>
+          </div>
+        )}
         <div className="flex flex-wrap gap-3">
           <button type="button" className="button-primary" onClick={handlePlayAgain}>Play Again</button>
           <Link className="button-secondary inline-block" href="/">Back to Decks</Link>

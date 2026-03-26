@@ -263,60 +263,6 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [card, mode, inputValue, selected]);
 
-  const reveal = useMemo(() => {
-    if (!card || !feedback) {
-      return null;
-    }
-
-    return (
-      <div className="space-y-2 rounded-lg border border-ink/15 bg-ink/5 p-4 text-sm">
-        <p className={feedback.correct ? "text-pine" : "text-clay"}>{feedback.correct ? "Correct" : "Not quite"}</p>
-        <p>
-          Correct answer: <strong>{feedback.correctAnswer}</strong>
-        </p>
-        {card.meta.japanese ? <p>Japanese: {card.meta.japanese}</p> : null}
-        {card.meta.rank && !(feedback.bonusEligible && !bonusResolved) ? <p>Current rank: {card.meta.rank}</p> : null}
-        {card.meta.heya ? <p>Heya: {card.meta.heya}</p> : null}
-        {card.meta.profileUrl ? (
-          <p>
-            Profile: <a className="underline" href={card.meta.profileUrl} target="_blank" rel="noreferrer">Official profile</a>
-          </p>
-        ) : null}
-        {feedback.bonusEligible && card.meta.bonusPrompt && card.meta.bonusChoices ? (
-          <div className="space-y-2 border-t border-ink/10 pt-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gold">Bonus question</p>
-            <p className="font-medium">{card.meta.bonusPrompt}</p>
-            <div className="grid gap-2">
-              {card.meta.bonusChoices.map((choice) => (
-                <button
-                  key={choice}
-                  type="button"
-                  disabled={bonusResolved}
-                  onClick={() => setBonusSelected(choice)}
-                  className={`quiz-choice ${
-                    bonusSelected === choice ? "!border-gold !bg-gold/20 ring-2 ring-gold/40" : ""
-                  }`}
-                >
-                  {choice}
-                </button>
-              ))}
-            </div>
-            {!bonusResolved ? (
-              <button type="button" className="button-primary" disabled={!bonusSelected} onClick={submitBonus}>
-                Submit Bonus
-              </button>
-            ) : (
-              <p className={bonusCorrect ? "text-pine" : "text-clay"}>
-                {bonusCorrect
-                  ? "Bonus correct (+1 point)."
-                  : `Bonus incorrect. Correct rank family: ${card.meta.bonusAnswer}`}
-              </p>
-            )}
-          </div>
-        ) : null}
-      </div>
-    );
-  }, [bonusCorrect, bonusResolved, bonusSelected, card, feedback, submitBonus]);
 
   // Mode selection screen (terms / kimarite only)
   if (mode === null) {
@@ -394,8 +340,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="space-y-4">
-      <section className="card">
+    <section className="card">
         <div className="mb-4 flex items-center justify-between text-sm text-ink/70">
           <Link href="/" className="hover:text-ink transition-colors">← Back to Decks</Link>
           <span>
@@ -437,114 +382,155 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
             ) : null}
             <h2 className="text-xl font-medium">{card.prompt}</h2>
 
-            {mode === "hard" ? (
-              <div className="relative">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => {
-                    setInputValue(e.target.value);
-                    setSelected(null);
-                    setShowSuggestions(true);
-                  }}
-                  onFocus={() => {
-                    if (inputValue && !selected) setShowSuggestions(true);
-                  }}
-                  onBlur={() => {
-                    setTimeout(() => setShowSuggestions(false), 150);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && selected) {
-                      e.preventDefault();
-                      void submitAnswer();
-                    } else if (e.key === "Escape") {
-                      setShowSuggestions(false);
-                    }
-                  }}
-                  placeholder={params.slug === "rikishi" ? "Type a rikishi name…" : "Type a sumo term…"}
-                  className="w-full rounded-lg border border-ink/20 bg-parchment px-3 py-2.5 text-sm focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
-                  disabled={Boolean(feedback)}
-                  autoComplete="off"
-                />
-                {showSuggestions && filteredSuggestions.length > 0 && !feedback && (
-                  <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-ink/15 bg-parchment shadow-md">
-                    {filteredSuggestions.map((choice) => (
+            {!feedback ? (
+              <>
+                {mode === "hard" ? (
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => {
+                        setInputValue(e.target.value);
+                        setSelected(null);
+                        setShowSuggestions(true);
+                      }}
+                      onFocus={() => {
+                        if (inputValue && !selected) setShowSuggestions(true);
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => setShowSuggestions(false), 150);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && selected) {
+                          e.preventDefault();
+                          void submitAnswer();
+                        } else if (e.key === "Escape") {
+                          setShowSuggestions(false);
+                        }
+                      }}
+                      placeholder={params.slug === "rikishi" ? "Type a rikishi name…" : "Type a sumo term…"}
+                      className="w-full rounded-lg border border-ink/20 bg-parchment px-3 py-2.5 text-base focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
+                      autoComplete="off"
+                    />
+                    {showSuggestions && filteredSuggestions.length > 0 && (
+                      <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-ink/15 bg-parchment shadow-md">
+                        {filteredSuggestions.map((choice) => (
+                          <button
+                            key={choice.id}
+                            type="button"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setInputValue(choice.label);
+                              setSelected(choice.id);
+                              setShowSuggestions(false);
+                            }}
+                            className="w-full px-3 py-2.5 text-left text-sm transition hover:bg-ink/5"
+                          >
+                            {choice.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {selected && (
+                      <p className="mt-1.5 text-xs text-ink/50">
+                        Selected: <span className="font-medium text-ink/80">{inputValue}</span>
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid gap-2">
+                    {card.choices.map((choice) => (
                       <button
                         key={choice.id}
+                        className={`quiz-choice ${
+                          selected === choice.id ? "!border-navy !bg-navy/10 ring-2 ring-navy/30" : ""
+                        }`}
+                        onClick={() => setSelected(choice.id)}
                         type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setInputValue(choice.label);
-                          setSelected(choice.id);
-                          setShowSuggestions(false);
-                        }}
-                        className="w-full px-3 py-2.5 text-left text-sm transition hover:bg-ink/5"
                       >
                         {choice.label}
                       </button>
                     ))}
                   </div>
                 )}
-                {selected && (
-                  <p className="mt-1.5 text-xs text-ink/50">
-                    Selected: <span className="font-medium text-ink/80">{inputValue}</span>
+                <div className="flex items-center gap-4">
+                  <button type="button" className="button-primary" disabled={!selected} onClick={submitAnswer}>
+                    Submit
+                  </button>
+                  {mode !== "hard" && <span className="text-xs text-ink/40">1–4 to pick · Enter to submit</span>}
+                  {mode === "hard" && selected && <span className="text-xs text-ink/40">Enter to submit</span>}
+                </div>
+              </>
+            ) : bonusPending && card.meta.bonusPrompt && card.meta.bonusChoices ? (
+              <>
+                <div className="rounded-lg border border-ink/15 bg-ink/5 px-4 py-3 text-sm">
+                  <p className="text-pine">Correct — {feedback.correctAnswer}</p>
+                </div>
+                <div className="space-y-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gold">Bonus question</p>
+                  <p className="font-medium">{card.meta.bonusPrompt}</p>
+                  <div className="grid gap-2">
+                    {card.meta.bonusChoices.map((choice) => (
+                      <button
+                        key={choice}
+                        type="button"
+                        onClick={() => setBonusSelected(choice)}
+                        className={`quiz-choice ${
+                          bonusSelected === choice ? "!border-gold !bg-gold/20 ring-2 ring-gold/40" : ""
+                        }`}
+                      >
+                        {choice}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button type="button" className="button-primary" disabled={!bonusSelected} onClick={submitBonus}>
+                      Submit Bonus
+                    </button>
+                    {bonusSelected && <span className="text-xs text-ink/40">Enter to submit</span>}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="space-y-1.5 rounded-lg border border-ink/15 bg-ink/5 p-4 text-sm">
+                  <p className={feedback.correct ? "text-pine" : "text-clay"}>
+                    {feedback.correct ? "Correct" : "Not quite"} — {feedback.correctAnswer}
                   </p>
-                )}
-              </div>
-            ) : (
-              <div className="grid gap-2">
-                {card.choices.map((choice) => (
-                  <button
-                    key={choice.id}
-                    className={`quiz-choice ${
-                      selected === choice.id ? "!border-navy !bg-navy/10 ring-2 ring-navy/30" : ""
-                    }`}
-                    onClick={() => setSelected(choice.id)}
-                    type="button"
-                    disabled={Boolean(feedback)}
-                  >
-                    {choice.label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {!feedback ? (
-              <div className="flex items-center gap-4">
-                <button type="button" className="button-primary" disabled={!selected} onClick={submitAnswer}>
-                  Submit
-                </button>
-                {mode !== "hard" && <span className="text-xs text-ink/40">1–4 to pick · Enter to submit</span>}
-                {mode === "hard" && selected && <span className="text-xs text-ink/40">Enter to submit</span>}
-              </div>
-            ) : (
-              <div className="flex items-center gap-4">
-                {isLastQuestion ? (
-                  <button
-                    type="button"
-                    className="button-primary"
-                    onClick={() => setShowResults(true)}
-                    disabled={bonusPending}
-                  >
-                    See Results
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="button-secondary"
-                    onClick={loadNextCard}
-                    disabled={Boolean(feedback.bonusEligible && !bonusResolved)}
-                  >
-                    Next Card
-                  </button>
-                )}
-                {!bonusPending && <span className="text-xs text-ink/40">Enter to continue</span>}
-              </div>
+                  {card.meta.japanese ? <p className="text-ink/70">Japanese: {card.meta.japanese}</p> : null}
+                  {card.meta.rank ? <p className="text-ink/70">Current rank: {card.meta.rank}</p> : null}
+                  {card.meta.heya ? <p className="text-ink/70">Heya: {card.meta.heya}</p> : null}
+                  {card.meta.profileUrl ? (
+                    <p>
+                      <a className="underline text-ink/70" href={card.meta.profileUrl} target="_blank" rel="noreferrer">
+                        Official profile
+                      </a>
+                    </p>
+                  ) : null}
+                  {bonusResolved ? (
+                    <p className={bonusCorrect ? "text-pine" : "text-clay"}>
+                      {bonusCorrect
+                        ? "Bonus correct (+1 point)."
+                        : `Bonus incorrect. Correct rank family: ${card.meta.bonusAnswer}`}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-4">
+                  {isLastQuestion ? (
+                    <button type="button" className="button-primary" onClick={() => setShowResults(true)}>
+                      See Results
+                    </button>
+                  ) : (
+                    <button type="button" className="button-secondary" onClick={loadNextCard}>
+                      Next Card
+                    </button>
+                  )}
+                  <span className="text-xs text-ink/40">Enter to continue</span>
+                </div>
+              </>
             )}
           </div>
         ) : null}
-      </section>
-      {reveal}
-    </div>
+    </section>
   );
 }

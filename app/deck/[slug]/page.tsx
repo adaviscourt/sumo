@@ -54,6 +54,7 @@ type AnswerResponse = {
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
   const devMode = searchParams.has("dev");
+  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? 20 : 11) : 0;
 
   const supportsHardMode = HARD_MODE_DECKS.has(params.slug);
   const [mode, setMode] = useState<"easy" | "hard" | null>(devMode ? "easy" : supportsHardMode ? null : "easy");
@@ -66,7 +67,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [bonusResolved, setBonusResolved] = useState(false);
   const [bonusCorrect, setBonusCorrect] = useState(false);
   const [asked, setAsked] = useState(devMode ? QUESTIONS_PER_QUIZ : 0);
-  const [correctCount, setCorrectCount] = useState(devMode ? 11 : 0);
+  const [correctCount, setCorrectCount] = useState(devScore);
   const [loadError, setLoadError] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);

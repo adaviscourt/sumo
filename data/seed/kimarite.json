@@ -19,13 +19,13 @@
   },
   {
     "term": "Uwatenage",
-    "definition": "Overarm throw using an outside grip.",
+    "definition": "Overarm throw using an outside grip on the mawashi.",
     "japanese": "上手投げ",
     "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
   },
   {
     "term": "Shitatenage",
-    "definition": "Underarm throw using an inside grip.",
+    "definition": "Underarm throw using an inside grip on the mawashi.",
     "japanese": "下手投げ",
     "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
   },
@@ -43,20 +43,200 @@
   },
   {
     "term": "Kotenage",
-    "definition": "Arm lock throw, often from an outside arm position.",
+    "definition": "Arm lock throw, trapping the opponent's arm and rolling them to the ground.",
     "japanese": "小手投げ",
     "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
   },
   {
     "term": "Sukuinage",
-    "definition": "Beltless arm throw using a scooping motion.",
+    "definition": "Beltless arm throw using a scooping motion under the opponent's arm.",
     "japanese": "掬い投げ",
     "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
   },
   {
     "term": "Yoritaoshi",
-    "definition": "Force out and down while staying chest-to-chest.",
+    "definition": "Force out and down while staying chest-to-chest with the opponent.",
     "japanese": "寄り倒し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Tsukidashi",
+    "definition": "Force out using repeated palm thrusts to the chest or face without gripping the mawashi.",
+    "japanese": "突き出し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Tsukitaoshi",
+    "definition": "Thrust down the opponent to the dohyo surface using palm strikes.",
+    "japanese": "突き倒し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Oshitaoshi",
+    "definition": "Push the opponent directly to the ground rather than out of the ring.",
+    "japanese": "押し倒し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Abisetaoshi",
+    "definition": "Lean the full body weight forward onto the opponent, crushing them to the clay.",
+    "japanese": "浴びせ倒し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Tsuridashi",
+    "definition": "Hoist the opponent entirely off the ground by the mawashi and carry them out of the ring.",
+    "japanese": "吊り出し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Hikiotoshi",
+    "definition": "Pull down the opponent by the arm, shoulder, or mawashi, causing them to fall forward.",
+    "japanese": "引き落とし",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Uwatedashinage",
+    "definition": "Pulling overarm throw using an outside mawashi grip to drag the opponent to the ground.",
+    "japanese": "上手出し投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Shitatedashinage",
+    "definition": "Pulling underarm throw using an inside mawashi grip to pull the opponent down.",
+    "japanese": "下手出し投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Kubinage",
+    "definition": "Neck throw wrapping an arm around the opponent's neck or head to throw them to the ground.",
+    "japanese": "首投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Koshinage",
+    "definition": "Hip throw where the attacker bends under the opponent and flips them over their hip.",
+    "japanese": "腰投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Ipponzeoi",
+    "definition": "One-armed shoulder throw where the attacker ducks under and flips the opponent over one shoulder.",
+    "japanese": "一本背負い",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Tottari",
+    "definition": "Arm-bar twist grabbing the opponent's wrist and elbow to force them down sideways.",
+    "japanese": "十手",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Sotogake",
+    "definition": "Outside leg trip wrapping the calf around the outside of the opponent's leg to drive them backward.",
+    "japanese": "外掛け",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Uchigake",
+    "definition": "Inside leg trip hooking a leg around the inside of the opponent's leg to topple them.",
+    "japanese": "内掛け",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Ashitori",
+    "definition": "Leg pick grabbing one of the opponent's legs to strip their footing and force them down.",
+    "japanese": "足取り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Ketaguri",
+    "definition": "Ankle sweep at the tachiai, kicking the opponent's ankle outward while thrusting forward.",
+    "japanese": "蹴手繰り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Kirikaeshi",
+    "definition": "Twisting backward knee trip placing a leg behind the opponent's knee and sweeping them over it.",
+    "japanese": "切り返し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Watashikomi",
+    "definition": "Thigh-grabbing push-down gripping under the opponent's thigh with one hand while shoving with the other.",
+    "japanese": "渡し込み",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Uwatehineri",
+    "definition": "Overarm belt twist-down grabbing the mawashi over the opponent's arm and twisting them to the ground.",
+    "japanese": "上手捻り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Shitatehineri",
+    "definition": "Underarm belt twist-down grabbing the mawashi under the opponent's arm and pulling them forward to the ground.",
+    "japanese": "下手捻り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Makiotoshi",
+    "definition": "Torso twist-down reacting to the opponent's charge and twisting their off-balance body to the surface.",
+    "japanese": "巻き落とし",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Katasukashi",
+    "definition": "Shoulder pull-down wrapping one hand around the opponent's arm and pushing their shoulder to tip them over.",
+    "japanese": "肩透かし",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Utchari",
+    "definition": "Backward pivot counter-throw where a wrestler on the ring's edge bends back and twists a charging opponent out.",
+    "japanese": "うっちゃり",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Okurinage",
+    "definition": "Rear throw-down hurling a behind-facing opponent sideways to the ground.",
+    "japanese": "送り投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Okuritaoshi",
+    "definition": "Rear push-down knocking a behind-facing opponent to the dohyo surface.",
+    "japanese": "送り倒し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Sabaori",
+    "definition": "Forward force-down grabbing the mawashi and pulling sharply outward and down until the opponent's knees touch the clay.",
+    "japanese": "鯖折り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Hikkake",
+    "definition": "Arm-grabbing pull twist hooking the opponent's arm from inside and dragging or twisting them down.",
+    "japanese": "引っ掛け",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Kimedashi",
+    "definition": "Arm-lock force-out immobilizing both of the opponent's arms and driving them out of the ring.",
+    "japanese": "極め出し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Kakenage",
+    "definition": "Hooking inner-thigh throw lifting the opponent's thigh with a leg while grasping their body.",
+    "japanese": "掛け投げ",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
+  },
+  {
+    "term": "Komatasukui",
+    "definition": "Outer-thigh scoop grabbing the opponent's outer thigh after a throw attempt and tipping them backward.",
+    "japanese": "小股掬い",
     "sourceUrl": "https://en.wikipedia.org/wiki/Kimarite"
   }
 ]

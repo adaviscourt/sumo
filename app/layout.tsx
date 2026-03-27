@@ -21,6 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </header>
           {children}
+          <footer className="mt-16 border-t border-ink/10 pt-8 pb-4 text-xs text-ink/40">
+            <Link href="/about" className="hover:text-ink/70 transition-colors">About &amp; Sources</Link>
+          </footer>
         </main>
       </body>
     </html>

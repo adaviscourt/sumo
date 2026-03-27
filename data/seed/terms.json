@@ -58,5 +58,251 @@
     "definition": "The initial charge at the start of a bout.",
     "japanese": "立合い",
     "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Rikishi",
+    "definition": "A professional sumo wrestler, literally meaning 'powerful man.'",
+    "japanese": "力士",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Heya",
+    "definition": "A sumo stable where wrestlers live, train, and are managed under a single stablemaster.",
+    "japanese": "部屋",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Gyoji",
+    "definition": "The referee who officiates sumo bouts, carrying a war fan to signal decisions.",
+    "japanese": "行司",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Banzuke",
+    "definition": "The official ranking document listing all wrestlers in order of rank, hand-written before each tournament.",
+    "japanese": "番付",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Makuuchi",
+    "definition": "The top division in professional sumo, containing a maximum of 42 wrestlers.",
+    "japanese": "幕内",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Sekitori",
+    "definition": "A wrestler ranked in the top two divisions who receives a full salary and special privileges.",
+    "japanese": "関取",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Oyakata",
+    "definition": "A sumo stablemaster, typically a retired senior wrestler, who trains and manages all wrestlers in his stable.",
+    "japanese": "親方",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Honbasho",
+    "definition": "One of the six official grand tournaments held each year in Japan, each lasting 15 days.",
+    "japanese": "本場所",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Keiko",
+    "definition": "Sumo training practice, conducted daily inside the stable's practice ring.",
+    "japanese": "稽古",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Dohyo-iri",
+    "definition": "The formal ring-entering ceremony performed by wrestlers before each day's bouts begin.",
+    "japanese": "土俵入り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kesho-mawashi",
+    "definition": "A heavily embroidered ceremonial apron worn by sekitori during the dohyo-iri ring-entering ceremony.",
+    "japanese": "化粧廻し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kinboshi",
+    "definition": "A 'gold star' award and permanent salary bonus earned by a maegashira who defeats a yokozuna.",
+    "japanese": "金星",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Shimpan",
+    "definition": "The five ringside judges who monitor bouts and may convene a mono-ii if the outcome is disputed.",
+    "japanese": "審判",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Mono-ii",
+    "definition": "A formal deliberation called by the ringside judges to review a close or disputed match decision.",
+    "japanese": "物言い",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Gunbai",
+    "definition": "The wooden war fan carried by the gyoji, used to signal the start of a bout and point to the winner.",
+    "japanese": "軍配",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Tawara",
+    "definition": "The rice-straw bales embedded in the clay that mark the circular boundary of the dohyo.",
+    "japanese": "俵",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kimarite",
+    "definition": "The officially declared winning technique used to end a sumo bout, chosen from 82 recognized moves.",
+    "japanese": "決まり手",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kadoban",
+    "definition": "The probationary status of an ozeki who must win 8+ bouts in the next tournament to avoid demotion.",
+    "japanese": "角番",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kyujo",
+    "definition": "An official absence from a tournament, typically due to injury, which can affect a wrestler's ranking.",
+    "japanese": "休場",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Zensho-yusho",
+    "definition": "A perfect tournament championship won without a single defeat across all 15 bouts.",
+    "japanese": "全勝優勝",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Sansho",
+    "definition": "Three special prizes awarded each tournament for fighting spirit, technique, and outstanding performance.",
+    "japanese": "三賞",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kantosho",
+    "definition": "The 'Fighting Spirit Prize,' awarded to a wrestler showing exceptional tenacity in a tournament.",
+    "japanese": "敢闘賞",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Ginosho",
+    "definition": "The 'Technique Prize,' awarded to a wrestler demonstrating superior technical skill in a tournament.",
+    "japanese": "技能賞",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Shukunsho",
+    "definition": "The 'Outstanding Performance Prize,' awarded to a lower-ranked wrestler who defeats multiple top-ranked opponents.",
+    "japanese": "殊勲賞",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kensho",
+    "definition": "Sponsor banners paraded around the ring before a high-profile bout, representing prize money for the winner.",
+    "japanese": "懸賞",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Chanko-nabe",
+    "definition": "The traditional hot-pot stew eaten by sumo wrestlers in large quantities to build body mass.",
+    "japanese": "ちゃんこ鍋",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Chonmage",
+    "definition": "The traditional topknot hairstyle worn by sumo wrestlers, required by the Japan Sumo Association.",
+    "japanese": "丁髷",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Danpatsu-shiki",
+    "definition": "The retirement ceremony in which a wrestler's topknot is ceremonially cut by invited guests and the stablemaster.",
+    "japanese": "断髪式",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Jungyo",
+    "definition": "An exhibition tour held between official tournaments where wrestlers perform in regional venues across Japan.",
+    "japanese": "巡業",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Tsuppari",
+    "definition": "A rapid, alternating open-palm thrusting attack used to batter an opponent backward.",
+    "japanese": "突っ張り",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Yotsu-zumo",
+    "definition": "A grappling style in which both wrestlers grip each other's mawashi and fight at close range.",
+    "japanese": "四つ相撲",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Oshi-zumo",
+    "definition": "A thrusting and pushing style of sumo that avoids belt grips, relying on palm strikes and body pressure.",
+    "japanese": "押し相撲",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Matta",
+    "definition": "A false start, called when one wrestler charges before both hands are simultaneously on the starting lines.",
+    "japanese": "待った",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Senshuraku",
+    "definition": "The final and most dramatic day of a tournament, when the yusho champion is decided.",
+    "japanese": "千秋楽",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Musubi-no-ichiban",
+    "definition": "The final and most prestigious bout of each tournament day, featuring the highest-ranked wrestlers.",
+    "japanese": "結びの一番",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Torikumi",
+    "definition": "An individual sumo bout scheduled on the day's official program.",
+    "japanese": "取組",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Harite",
+    "definition": "An open-fisted slap to an opponent's face, used as a distraction or to knock them off balance.",
+    "japanese": "張り手",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Tori-naoshi",
+    "definition": "A rematch ordered by the judges when a bout's outcome is too close or unclear to determine a winner.",
+    "japanese": "取り直し",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Zabuton",
+    "definition": "The flat cushion spectators sit on; traditionally thrown into the ring by fans after an upset victory over a yokozuna.",
+    "japanese": "座布団",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Shiko",
+    "definition": "A leg-strengthening training exercise where wrestlers raise each leg high and stamp it powerfully into the ground.",
+    "japanese": "四股",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
+  },
+  {
+    "term": "Kokugikan",
+    "definition": "The main sumo arena in Tokyo's Ryogoku district, hosting three of the six annual grand tournaments.",
+    "japanese": "国技館",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Glossary_of_sumo_terms"
   }
 ]

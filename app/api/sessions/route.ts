@@ -1,23 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { randomUUID } from "node:crypto";
 import { db } from "@/lib/db";
 import { sessions, cardResults } from "@/lib/schema";
+import { createClient } from "@/lib/supabase/server";
 import { eq, desc } from "drizzle-orm";
-
-function getUserId(): string {
-  const store = cookies();
-  const existing = store.get("sumo_uid")?.value;
-  return existing ?? randomUUID();
-}
-
-function setUserIdCookie(response: NextResponse, userId: string): void {
-  response.cookies.set("sumo_uid", userId, {
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 365 * 5 // 5 years
-  });
-}
 
 type CardResult = {
   cardId: string;
@@ -26,6 +11,13 @@ type CardResult = {
 };
 
 export async function POST(request: NextRequest) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json() as {
     deckSlug: string;
     score: number;
@@ -34,12 +26,10 @@ export async function POST(request: NextRequest) {
     cardResults?: CardResult[];
   };
 
-  const userId = getUserId();
-
   const [session] = await db
     .insert(sessions)
     .values({
-      userId,
+      userId: user.id,
       deckSlug: body.deckSlug,
       score: body.score,
       asked: body.asked,
@@ -58,22 +48,21 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const response = NextResponse.json({ id: session.id }, { status: 201 });
-  setUserIdCookie(response, userId);
-  return response;
+  return NextResponse.json({ id: session.id }, { status: 201 });
 }
 
 export async function GET() {
-  const userId = getUserId();
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!cookies().get("sumo_uid")) {
+  if (!user) {
     return NextResponse.json([]);
   }
 
   const rows = await db
     .select()
     .from(sessions)
-    .where(eq(sessions.userId, userId))
+    .where(eq(sessions.userId, user.id))
     .orderBy(desc(sessions.endedAt))
     .limit(20);
 

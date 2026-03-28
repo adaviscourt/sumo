@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AuthProvider } from "./providers";
 
 export const metadata: Metadata = {
   title: "Sumo Trainer",
@@ -11,6 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="bg-white">
+        <AuthProvider>
         <main className="mx-auto min-h-screen w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
           <header className="mb-12 border-b border-ink/15 pb-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -25,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/about" className="hover:text-ink/70 transition-colors">About &amp; Sources</Link>
           </footer>
         </main>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -28,5 +28,8 @@ venv/
 # scraper artifacts and generated rikishi data
 data/rikishi/raw/
 
+# drizzle generated migrations (using push workflow, not migrations)
+drizzle/
+
 # local scratch files
 *.ipynb

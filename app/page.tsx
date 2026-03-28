@@ -48,13 +48,10 @@ export default function HomePage() {
       .then((data: DeckSummary[]) => setDecks(data))
       .catch(() => setDecks([]));
 
-    try {
-      const raw = localStorage.getItem("sumo.sessions");
-      const parsed = raw ? (JSON.parse(raw) as LocalSession[]) : [];
-      setSessions(parsed.slice(0, 5));
-    } catch {
-      setSessions([]);
-    }
+    void fetch("/api/sessions")
+      .then((res) => res.json())
+      .then((data: LocalSession[]) => setSessions(data.slice(0, 5)))
+      .catch(() => setSessions([]));
   }, []);
 
   return (

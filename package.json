@@ -9,13 +9,19 @@
     "lint": "next lint",
     "test": "node --import tsx --test tests/*.test.ts",
     "import:rikishi": "node --import tsx scripts/import_rikishi.ts",
-    "scrape:rikishi": "python scripts/scrape_rikishi.py"
+    "scrape:rikishi": "python scripts/scrape_rikishi.py",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.100.1",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.2",
     "graceful-fs": "^4.2.11",
     "next": "14.2.15",
+    "postgres": "^3.4.8",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
@@ -25,6 +31,7 @@
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
+    "drizzle-kit": "^0.31.10",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
     "tsx": "^4.19.1",

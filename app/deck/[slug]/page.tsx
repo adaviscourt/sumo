@@ -55,7 +55,7 @@ type AnswerResponse = {
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
   const devMode = searchParams.has("dev");
-  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? 20 : 11) : 0;
+  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? 20 : params.slug === "rikishi" ? 11 : 10) : 0;
 
   const supportsHardMode = HARD_MODE_DECKS.has(params.slug);
   const [mode, setMode] = useState<"easy" | "hard" | null>(devMode ? "easy" : supportsHardMode ? null : "easy");
@@ -73,6 +73,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const seenCardIdsRef = useRef<string[]>([]);
+  const cardResultsRef = useRef<Array<{ cardId: string; correct: boolean; respondedAt: string }>>([]);
 
   const [showResults, setShowResults] = useState(devMode);
 
@@ -143,26 +144,19 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [done, correctCount, params.slug]);
 
   useEffect(() => {
-    if (!done) {
-      return;
-    }
+    if (!done) return;
 
-    const entry = {
-      id: crypto.randomUUID(),
-      deckSlug: params.slug,
-      score: correctCount,
-      asked,
-      endedAt: new Date().toISOString()
-    };
-
-    try {
-      const raw = localStorage.getItem("sumo.sessions");
-      const parsed = raw ? (JSON.parse(raw) as typeof entry[]) : [];
-      const next = [entry, ...parsed].slice(0, 20);
-      localStorage.setItem("sumo.sessions", JSON.stringify(next));
-    } catch {
-      // localStorage may be unavailable in restricted contexts.
-    }
+    void fetch("/api/sessions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        deckSlug: params.slug,
+        score: correctCount,
+        asked,
+        endedAt: new Date().toISOString(),
+        cardResults: cardResultsRef.current
+      })
+    });
   }, [asked, correctCount, done, params.slug]);
 
   const submitAnswer = useCallback(async () => {
@@ -190,6 +184,10 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     if (payload.correct) {
       setCorrectCount((value) => value + 1);
     }
+    cardResultsRef.current = [
+      ...cardResultsRef.current,
+      { cardId: card.cardId, correct: payload.correct, respondedAt: new Date().toISOString() }
+    ];
   }, [card, selected]);
 
   const submitBonus = useCallback(() => {
@@ -203,10 +201,15 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     if (isCorrect) {
       setCorrectCount((value) => value + 1);
     }
+    cardResultsRef.current = [
+      ...cardResultsRef.current,
+      { cardId: `${card.cardId}:bonus`, correct: isCorrect, respondedAt: new Date().toISOString() }
+    ];
   }, [bonusResolved, bonusSelected, card?.meta.bonusAnswer, feedback?.bonusEligible]);
 
   const handlePlayAgain = useCallback(() => {
     seenCardIdsRef.current = [];
+    cardResultsRef.current = [];
     setAsked(0);
     setCorrectCount(0);
     setShowResults(false);

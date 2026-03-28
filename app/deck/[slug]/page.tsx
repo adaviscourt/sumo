@@ -55,7 +55,7 @@ type AnswerResponse = {
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
   const devMode = searchParams.has("dev");
-  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? 20 : 11) : 0;
+  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? 20 : params.slug === "rikishi" ? 11 : 10) : 0;
 
   const supportsHardMode = HARD_MODE_DECKS.has(params.slug);
   const [mode, setMode] = useState<"easy" | "hard" | null>(devMode ? "easy" : supportsHardMode ? null : "easy");

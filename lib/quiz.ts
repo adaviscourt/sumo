@@ -69,7 +69,18 @@ export function celebrationTier(correctCount: number, deckSlug: string): "zensho
   return null;
 }
 
-export function selectNextCard<T extends { id: string }>(cards: T[], excludedIds: string[]): T | null {
+// Weight formula: 1.0 - (accuracy * 0.8)
+// Unseen cards default to 1.0. Mastered cards floor at 0.2 so they still appear.
+export function cardWeight(correct: number, total: number): number {
+  if (total === 0) return 1.0;
+  return 1.0 - (correct / total) * 0.8;
+}
+
+export function selectNextCard<T extends { id: string }>(
+  cards: T[],
+  excludedIds: string[],
+  weights?: Map<string, number>
+): T | null {
   if (cards.length === 0) {
     return null;
   }
@@ -77,5 +88,17 @@ export function selectNextCard<T extends { id: string }>(cards: T[], excludedIds
   const excluded = new Set(excludedIds);
   const available = cards.filter((card) => !excluded.has(card.id));
   const source = available.length > 0 ? available : cards;
-  return shuffle(source)[0] ?? null;
+
+  if (!weights || weights.size === 0) {
+    return shuffle(source)[0] ?? null;
+  }
+
+  const DEFAULT_WEIGHT = 1.0;
+  const totalWeight = source.reduce((sum, card) => sum + (weights.get(card.id) ?? DEFAULT_WEIGHT), 0);
+  let rand = Math.random() * totalWeight;
+  for (const card of source) {
+    rand -= weights.get(card.id) ?? DEFAULT_WEIGHT;
+    if (rand <= 0) return card;
+  }
+  return source[source.length - 1] ?? null;
 }

@@ -20,6 +20,11 @@ type LocalSession = {
   endedAt: string;
 };
 
+type DeckProgress = {
+  accuracy: number;
+  totalAnswered: number;
+};
+
 const DECK_EMOJI: Record<string, string> = {
   terms: "📘",
   kimarite: "💪",
@@ -41,6 +46,7 @@ const DECK_KANJI: Record<string, string> = {
 export default function HomePage() {
   const [decks, setDecks] = useState<DeckSummary[]>([]);
   const [sessions, setSessions] = useState<LocalSession[]>([]);
+  const [progress, setProgress] = useState<Record<string, DeckProgress>>({});
 
   useEffect(() => {
     void fetch("/api/decks")
@@ -52,31 +58,55 @@ export default function HomePage() {
       .then((res) => res.json())
       .then((data: LocalSession[]) => setSessions(data.slice(0, 5)))
       .catch(() => setSessions([]));
+
+    void fetch("/api/progress")
+      .then((res) => res.json())
+      .then((data: Record<string, DeckProgress>) => setProgress(data))
+      .catch(() => setProgress({}));
   }, []);
 
   return (
     <div className="space-y-12">
       <section className="grid gap-6 md:grid-cols-3">
-        {decks.map((deck) => (
-          <article key={deck.slug} className="card flex flex-col gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-ink/[0.05] text-2xl" aria-hidden="true">
-              {DECK_EMOJI[deck.slug] ?? "🃏"}
-            </div>
-            <div>
-              {DECK_KANJI[deck.slug] && (
-                <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">{DECK_KANJI[deck.slug]}</p>
-              )}
-              <h2 className="text-xl font-semibold">{deck.name}</h2>
-              <p className="mt-1 text-sm text-ink/70">{deck.description}</p>
-            </div>
-            <p className="text-xs text-ink/45">
-              {QUESTIONS_PER_QUIZ} questions · {deck.cardCount} cards{deck.banzuke ? ` · ${deck.banzuke}` : ""}
-            </p>
-            <Link href={`/deck/${deck.slug}`} className="button-primary mt-auto inline-block text-center">
-              Play Deck
-            </Link>
-          </article>
-        ))}
+        {decks.map((deck) => {
+          const deckProgress = progress[deck.slug];
+          return (
+            <article key={deck.slug} className="card flex flex-col gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-ink/[0.05] text-2xl" aria-hidden="true">
+                {DECK_EMOJI[deck.slug] ?? "🃏"}
+              </div>
+              <div>
+                {DECK_KANJI[deck.slug] && (
+                  <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">{DECK_KANJI[deck.slug]}</p>
+                )}
+                <h2 className="text-xl font-semibold">{deck.name}</h2>
+                <p className="mt-1 text-sm text-ink/70">{deck.description}</p>
+              </div>
+              <div className="space-y-1.5">
+                <p className="text-xs text-ink/45">
+                  {QUESTIONS_PER_QUIZ} questions · {deck.cardCount} cards{deck.banzuke ? ` · ${deck.banzuke}` : ""}
+                </p>
+                {deckProgress && (
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs text-ink/50">
+                      <span>{deckProgress.accuracy}% accuracy</span>
+                      <span className="tabular-nums">{deckProgress.totalAnswered} answered</span>
+                    </div>
+                    <div className="h-1 w-full overflow-hidden rounded-full bg-ink/10">
+                      <div
+                        className="h-full rounded-full bg-navy/50 transition-all"
+                        style={{ width: `${deckProgress.accuracy}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <Link href={`/deck/${deck.slug}`} className="button-primary mt-auto inline-block text-center">
+                Play Deck
+              </Link>
+            </article>
+          );
+        })}
       </section>
 
       <section className="card">

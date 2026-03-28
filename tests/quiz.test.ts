@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildRankChoices, celebrationTier, masteryScore, rankFamily, selectNextCard } from "../lib/quiz";
+import { buildRankChoices, cardWeight, celebrationTier, masteryScore, rankFamily, selectNextCard } from "../lib/quiz";
 
 test("rankFamily normalizes rank names", () => {
   assert.equal(rankFamily("Yokozuna East"), "Yokozuna");
@@ -64,4 +64,31 @@ test("selectNextCard falls back to full deck when all cards are excluded", () =>
   const cards = [{ id: "a" }];
   const selected = selectNextCard(cards, ["a"]);
   assert.equal(selected?.id, "a");
+});
+
+test("cardWeight returns 1.0 for unseen cards (total=0)", () => {
+  assert.equal(cardWeight(0, 0), 1.0);
+});
+
+test("cardWeight returns 0.2 for perfect accuracy", () => {
+  assert.ok(Math.abs(cardWeight(10, 10) - 0.2) < 0.0001);
+});
+
+test("cardWeight returns 1.0 for zero accuracy", () => {
+  assert.equal(cardWeight(0, 10), 1.0);
+});
+
+test("cardWeight is higher for lower accuracy", () => {
+  assert.ok(cardWeight(2, 10) > cardWeight(8, 10));
+});
+
+test("selectNextCard with weights always picks the only high-weight card given enough runs", () => {
+  const cards = [{ id: "weak" }, { id: "strong" }];
+  const weights = new Map([["weak", 1.0], ["strong", 0.001]]);
+  const counts: Record<string, number> = { weak: 0, strong: 0 };
+  for (let i = 0; i < 200; i++) {
+    const picked = selectNextCard(cards, [], weights);
+    if (picked) counts[picked.id] = (counts[picked.id] ?? 0) + 1;
+  }
+  assert.ok(counts.weak > counts.strong, "weak card should appear far more often");
 });

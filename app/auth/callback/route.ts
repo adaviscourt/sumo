@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { sessions } from "@/lib/schema";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -25,8 +28,18 @@ export async function GET(request: Request) {
       }
     );
 
-    await supabase.auth.exchangeCodeForSession(code);
+    const { data: { user } } = await supabase.auth.exchangeCodeForSession(code);
+    const migrateFrom = cookieStore.get("sumo_migrate")?.value;
+
+    if (user && migrateFrom && migrateFrom !== user.id) {
+      await db
+        .update(sessions)
+        .set({ userId: user.id })
+        .where(eq(sessions.userId, migrateFrom));
+    }
   }
 
-  return NextResponse.redirect(origin);
+  const response = NextResponse.redirect(origin);
+  response.cookies.delete("sumo_migrate");
+  return response;
 }

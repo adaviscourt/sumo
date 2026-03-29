@@ -63,6 +63,7 @@ export default function AccountPage() {
 
     const { data: { user } } = await supabase.auth.getUser();
     if (user?.is_anonymous) {
+      document.cookie = `sumo_migrate=${user.id}; path=/; max-age=300; samesite=lax`;
       const { error } = await supabase.auth.linkIdentity({ provider, options: { redirectTo } });
       if (!error) return;
     }

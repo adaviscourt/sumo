@@ -6,7 +6,8 @@ export const sessions = pgTable("sessions", {
   deckSlug: text("deck_slug").notNull(),
   score: integer("score").notNull(),
   asked: integer("asked").notNull(),
-  endedAt: timestamp("ended_at", { withTimezone: true }).notNull()
+  endedAt: timestamp("ended_at", { withTimezone: true }).notNull(),
+  environment: text("environment")
 });
 
 export const cardResults = pgTable("card_results", {

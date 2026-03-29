@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { QUESTIONS_PER_QUIZ } from "@/lib/config";
+import { createClient } from "@/lib/supabase/client";
 
 type DeckSummary = {
   slug: string;
@@ -47,6 +48,7 @@ export default function HomePage() {
   const [decks, setDecks] = useState<DeckSummary[]>([]);
   const [sessions, setSessions] = useState<LocalSession[]>([]);
   const [progress, setProgress] = useState<Record<string, DeckProgress>>({});
+  const [isAnonymous, setIsAnonymous] = useState(true);
 
   useEffect(() => {
     void fetch("/api/decks")
@@ -63,6 +65,11 @@ export default function HomePage() {
       .then((res) => res.json())
       .then((data: Record<string, DeckProgress>) => setProgress(data))
       .catch(() => setProgress({}));
+
+    const supabase = createClient();
+    void supabase.auth.getUser().then(({ data: { user } }) => {
+      setIsAnonymous(!user || user.is_anonymous === true);
+    });
   }, []);
 
   return (
@@ -110,8 +117,17 @@ export default function HomePage() {
       </section>
 
       <section className="card">
-        <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">稽古</p>
-        <h3 className="mb-4 text-lg font-semibold">Recent Sessions</h3>
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">稽古</p>
+            <h3 className="text-lg font-semibold">Recent Sessions</h3>
+          </div>
+          {isAnonymous && (
+            <Link href="/account" className="button-secondary text-xs">
+              Sign in to sync
+            </Link>
+          )}
+        </div>
         {sessions.length === 0 ? (
           <p className="text-sm text-ink/65">No sessions yet. Start a deck to begin tracking progress.</p>
         ) : (

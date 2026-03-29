@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthProvider } from "./providers";
+import { HeaderAuth } from "./header-auth";
 
 export const metadata: Metadata = {
   title: "Sumo Trainer",
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <span className="text-[11px] tracking-widest text-ink/35" aria-hidden="true">相撲</span>
                 <span className="text-3xl font-bold tracking-[0.12em] uppercase">Sumo Trainer</span>
               </Link>
+              <HeaderAuth />
             </div>
           </header>
           {children}

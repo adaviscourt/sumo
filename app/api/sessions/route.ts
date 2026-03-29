@@ -33,7 +33,8 @@ export async function POST(request: NextRequest) {
       deckSlug: body.deckSlug,
       score: body.score,
       asked: body.asked,
-      endedAt: new Date(body.endedAt)
+      endedAt: new Date(body.endedAt),
+      environment: process.env.VERCEL_ENV ?? null
     })
     .returning();
 

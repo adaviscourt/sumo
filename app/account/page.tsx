@@ -158,10 +158,11 @@ function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
       {/* Progress text */}
       <p className="text-xs text-ink/40">
         {toNext !== null
-          ? <>{toNext} more <abbr title="A qualifying session is any quiz where you score 70% or higher.">qualifying session{toNext !== 1 ? "s" : ""}</abbr> to reach <span className="font-medium text-ink/60">{nextRank?.name}</span></>
+          ? <>{toNext} more qualifying session{toNext !== 1 ? "s" : ""} to reach <span className="font-medium text-ink/60">{nextRank?.name}</span></>
           : <>横綱 — highest rank achieved</>
         }
       </p>
+      <p className="text-xs text-ink/25">A qualifying session is any quiz where you score 70% or higher.</p>
     </div>
   );
 }

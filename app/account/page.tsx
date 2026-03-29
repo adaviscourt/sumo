@@ -28,6 +28,7 @@ const DECK_NAMES: Record<string, string> = {
 
 const NAVY = "#27386e";
 const INK = "#1b1a17";
+const CLAY = "#b55233";
 
 function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
   const [animated, setAnimated] = useState(false);
@@ -47,13 +48,6 @@ function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
   const circumference = 2 * Math.PI * R;
   const dashOffset = circumference * (1 - (animated ? pct : 0));
 
-  // 16 tawara dots around the outer ring
-  const TAWARA_R = 91;
-  const tawara = Array.from({ length: 16 }, (_, i) => {
-    const a = (i / 16) * 2 * Math.PI;
-    return { x: 100 + TAWARA_R * Math.cos(a), y: 100 + TAWARA_R * Math.sin(a) };
-  });
-
   return (
     <div className="space-y-6">
       {/* Dohyō */}
@@ -66,13 +60,9 @@ function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
           role="img"
         >
           {/* Outer ring */}
-          <circle cx="100" cy="100" r="90" fill="none" stroke={INK} strokeWidth="1" opacity="0.08" />
-          {/* Tawara (straw bale) dots */}
-          {tawara.map((pt, i) => (
-            <circle key={i} cx={pt.x} cy={pt.y} r="2.2" fill={INK} opacity="0.13" />
-          ))}
+          <circle cx="100" cy="100" r="90" fill="none" stroke={INK} strokeWidth="1" opacity="0.10" />
           {/* Inner clay surface */}
-          <circle cx="100" cy="100" r="82" fill={INK} fillOpacity="0.02" />
+          <circle cx="100" cy="100" r="82" fill={CLAY} fillOpacity="0.07" />
           {/* Arc track */}
           <circle cx="100" cy="100" r={R} fill="none" stroke={INK} strokeWidth="4" opacity="0.07" />
           {/* Progress arc */}

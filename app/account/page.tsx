@@ -17,8 +17,7 @@ type Session = {
 };
 
 type OverallProgress = {
-  totalAnswered: number;
-  correctAnswered: number;
+  qualifyingSessions: number;
 };
 
 const DECK_NAMES: Record<string, string> = {
@@ -151,7 +150,7 @@ export default function AccountPage() {
           </div>
 
           {overall && (() => {
-            const { rank, progress, toNext } = calculateRank(overall.correctAnswered);
+            const { rank, progress, toNext } = calculateRank(overall.qualifyingSessions);
             const currentIndex = RANKS.findIndex((r) => r.name === rank.name);
             const nextRank = RANKS[currentIndex + 1];
             const rangeSize = nextRank ? nextRank.threshold - rank.threshold : 1;
@@ -177,7 +176,7 @@ export default function AccountPage() {
                   </div>
                   <p className="text-xs text-ink/40">
                     {toNext !== null
-                      ? <>{progress} / {rangeSize} correct answers toward {nextRank?.name}</>
+                      ? <>{progress} / {rangeSize} qualifying sessions toward {nextRank?.name}</>
                       : <>Yokozuna — highest rank achieved</>
                     }
                   </p>

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { eq, and, not, like } from "drizzle-orm";
+import { eq, and, not, like, sql } from "drizzle-orm";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { cardResults, sessions } from "@/lib/schema";
+import { QUALIFYING_ACCURACY } from "@/lib/rank";
 
 export async function GET() {
   const supabase = createClient();
@@ -35,20 +36,26 @@ export async function GET() {
   }
 
   const result: Record<string, { accuracy: number; totalAnswered: number }> = {};
-  let overallTotal = 0;
-  let overallCorrect = 0;
-
   for (const [slug, s] of Object.entries(stats)) {
     result[slug] = {
       accuracy: Math.round((s.correct / s.total) * 100),
       totalAnswered: s.total
     };
-    overallTotal += s.total;
-    overallCorrect += s.correct;
   }
+
+  const qualifyingRows = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(sessions)
+    .where(
+      and(
+        eq(sessions.userId, user.id),
+        sql`${sessions.score}::float / ${sessions.asked} >= ${QUALIFYING_ACCURACY}`
+      )
+    );
+  const qualifyingSessions = qualifyingRows[0]?.count ?? 0;
 
   return NextResponse.json({
     ...result,
-    _overall: { totalAnswered: overallTotal, correctAnswered: overallCorrect }
+    _overall: { qualifyingSessions }
   });
 }

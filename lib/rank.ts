@@ -13,41 +13,48 @@ export type RankName =
 export type Rank = {
   name: RankName;
   kanji: string;
-  /** Minimum score (correct answers) needed to hold this rank */
+  /** Cumulative qualifying sessions needed to hold this rank */
   threshold: number;
 };
 
-// Score = total correct answers across all decks.
-// Each rank requires more correct answers than the last.
+/**
+ * A session qualifies if score / asked >= QUALIFYING_ACCURACY.
+ * 70% maps to kachi-koshi (a winning record) — the real-sumo threshold
+ * for rank maintenance.
+ */
+export const QUALIFYING_ACCURACY = 0.7;
+
+// Thresholds are cumulative qualifying sessions (sessions with ≥ 70% accuracy).
+// At one session per day, Yokozuna takes roughly 3–4 months of consistent play.
 export const RANKS: Rank[] = [
-  { name: "Jonokuchi", kanji: "序ノ口", threshold: 0 },
-  { name: "Jonidan",   kanji: "序二段", threshold: 8 },
-  { name: "Sandanme",  kanji: "三段目",  threshold: 20 },
-  { name: "Makushita", kanji: "幕下",   threshold: 40 },
-  { name: "Juryo",     kanji: "十両",   threshold: 75 },
-  { name: "Maegashira",kanji: "前頭",   threshold: 130 },
-  { name: "Komusubi",  kanji: "小結",   threshold: 200 },
-  { name: "Sekiwake",  kanji: "関脇",   threshold: 300 },
-  { name: "Ozeki",     kanji: "大関",   threshold: 450 },
-  { name: "Yokozuna",  kanji: "横綱",   threshold: 650 },
+  { name: "Jonokuchi",  kanji: "序ノ口", threshold: 0 },
+  { name: "Jonidan",    kanji: "序二段", threshold: 2 },
+  { name: "Sandanme",   kanji: "三段目",  threshold: 5 },
+  { name: "Makushita",  kanji: "幕下",   threshold: 10 },
+  { name: "Juryo",      kanji: "十両",   threshold: 17 },
+  { name: "Maegashira", kanji: "前頭",   threshold: 26 },
+  { name: "Komusubi",   kanji: "小結",   threshold: 38 },
+  { name: "Sekiwake",   kanji: "関脇",   threshold: 54 },
+  { name: "Ozeki",      kanji: "大関",   threshold: 74 },
+  { name: "Yokozuna",   kanji: "横綱",   threshold: 100 },
 ];
 
 export type RankInfo = {
   rank: Rank;
-  /** Score within the current rank (score - rank.threshold) */
+  /** Qualifying sessions earned within the current rank */
   progress: number;
-  /** Points needed to reach the next rank (null at Yokozuna) */
+  /** Qualifying sessions still needed to reach the next rank (null at Yokozuna) */
   toNext: number | null;
 };
 
 /**
- * Calculate rank from total correct answers across all decks.
- * correctAnswered = totalAnswered * (accuracy / 100)
+ * Calculate rank from the number of qualifying sessions (sessions where
+ * accuracy >= QUALIFYING_ACCURACY).
  */
-export function calculateRank(correctAnswered: number): RankInfo {
+export function calculateRank(qualifyingSessions: number): RankInfo {
   let current = RANKS[0]!;
   for (const rank of RANKS) {
-    if (correctAnswered >= rank.threshold) {
+    if (qualifyingSessions >= rank.threshold) {
       current = rank;
     } else {
       break;
@@ -59,7 +66,7 @@ export function calculateRank(correctAnswered: number): RankInfo {
 
   return {
     rank: current,
-    progress: correctAnswered - current.threshold,
-    toNext: next ? next.threshold - correctAnswered : null,
+    progress: qualifyingSessions - current.threshold,
+    toNext: next ? next.threshold - qualifyingSessions : null,
   };
 }

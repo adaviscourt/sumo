@@ -28,8 +28,7 @@ type DeckProgress = {
 };
 
 type OverallProgress = {
-  totalAnswered: number;
-  correctAnswered: number;
+  qualifyingSessions: number;
 };
 
 type ProgressResponse = Record<string, DeckProgress> & { _overall?: OverallProgress };
@@ -137,8 +136,8 @@ export default function HomePage() {
           </div>
           {overall && !isAnonymous ? (
             <Link href="/account" className="flex flex-col items-end gap-0.5 text-ink/50 transition-colors hover:text-ink/80">
-              <span className="text-[10px] tracking-widest text-ink/30" aria-hidden="true">{calculateRank(overall.correctAnswered).rank.kanji}</span>
-              <span className="text-xs font-medium">{calculateRank(overall.correctAnswered).rank.name}</span>
+              <span className="text-[10px] tracking-widest text-ink/30" aria-hidden="true">{calculateRank(overall.qualifyingSessions).rank.kanji}</span>
+              <span className="text-xs font-medium">{calculateRank(overall.qualifyingSessions).rank.name}</span>
             </Link>
           ) : isAnonymous ? (
             <Link href="/account" className="button-secondary text-xs">

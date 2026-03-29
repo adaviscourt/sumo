@@ -162,6 +162,7 @@ function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
           : <>横綱 — highest rank achieved</>
         }
       </p>
+      <p className="text-xs text-ink/25">A qualifying session is any quiz where you score 70% or higher.</p>
     </div>
   );
 }

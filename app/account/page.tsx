@@ -26,6 +26,149 @@ const DECK_NAMES: Record<string, string> = {
   rikishi: "Rikishi Identification"
 };
 
+const NAVY = "#27386e";
+const INK = "#1b1a17";
+
+function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 80);
+    return () => clearTimeout(t);
+  }, []);
+
+  const { rank, progress, toNext } = calculateRank(qualifyingSessions);
+  const currentIndex = RANKS.findIndex((r) => r.name === rank.name);
+  const nextRank = RANKS[currentIndex + 1];
+  const rangeSize = nextRank ? nextRank.threshold - rank.threshold : 1;
+  const pct = nextRank ? progress / rangeSize : 1;
+
+  const R = 72;
+  const circumference = 2 * Math.PI * R;
+  const dashOffset = circumference * (1 - (animated ? pct : 0));
+
+  // 16 tawara dots around the outer ring
+  const TAWARA_R = 91;
+  const tawara = Array.from({ length: 16 }, (_, i) => {
+    const a = (i / 16) * 2 * Math.PI;
+    return { x: 100 + TAWARA_R * Math.cos(a), y: 100 + TAWARA_R * Math.sin(a) };
+  });
+
+  return (
+    <div className="space-y-6">
+      {/* Dohyō */}
+      <div className="flex justify-center">
+        <svg
+          viewBox="0 0 200 200"
+          width="220"
+          height="220"
+          aria-label={`Current rank: ${rank.name}`}
+          role="img"
+        >
+          {/* Outer ring */}
+          <circle cx="100" cy="100" r="90" fill="none" stroke={INK} strokeWidth="1" opacity="0.08" />
+          {/* Tawara (straw bale) dots */}
+          {tawara.map((pt, i) => (
+            <circle key={i} cx={pt.x} cy={pt.y} r="2.2" fill={INK} opacity="0.13" />
+          ))}
+          {/* Inner clay surface */}
+          <circle cx="100" cy="100" r="82" fill={INK} fillOpacity="0.02" />
+          {/* Arc track */}
+          <circle cx="100" cy="100" r={R} fill="none" stroke={INK} strokeWidth="4" opacity="0.07" />
+          {/* Progress arc */}
+          <circle
+            cx="100" cy="100" r={R}
+            fill="none"
+            stroke={NAVY}
+            strokeWidth="5"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={dashOffset}
+            transform="rotate(-90 100 100)"
+            style={{ transition: animated ? "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)" : "none" }}
+          />
+          {/* Shikiri-sen (starting lines) */}
+          <line x1="81" y1="104" x2="95" y2="104" stroke={INK} strokeWidth="1.5" opacity="0.18" strokeLinecap="round" />
+          <line x1="105" y1="104" x2="119" y2="104" stroke={INK} strokeWidth="1.5" opacity="0.18" strokeLinecap="round" />
+          {/* Rank kanji */}
+          <text
+            x="100" y="88"
+            textAnchor="middle"
+            fontSize="13"
+            fontFamily="Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif"
+            fill={INK}
+            opacity="0.28"
+          >
+            {rank.kanji}
+          </text>
+          {/* Rank name */}
+          <text
+            x="100" y="111"
+            textAnchor="middle"
+            fontSize="17"
+            fontWeight="700"
+            fontFamily="Avenir Next, Segoe UI, sans-serif"
+            fill={INK}
+            opacity="0.80"
+            letterSpacing="0.03em"
+          >
+            {rank.name}
+          </text>
+          {/* Session count */}
+          <text
+            x="100" y="127"
+            textAnchor="middle"
+            fontSize="10"
+            fontFamily="Avenir Next, Segoe UI, sans-serif"
+            fill={INK}
+            opacity="0.30"
+          >
+            {qualifyingSessions} qualifying session{qualifyingSessions !== 1 ? "s" : ""}
+          </text>
+        </svg>
+      </div>
+
+      {/* Rank pipeline */}
+      <div className="space-y-2">
+        <div className="flex items-center">
+          {RANKS.map((r, i) => (
+            <div key={r.name} className="flex flex-1 items-center">
+              {i > 0 && (
+                <div
+                  className="h-px flex-1"
+                  style={{ backgroundColor: i <= currentIndex ? `${NAVY}60` : `${INK}18` }}
+                />
+              )}
+              <div
+                title={`${r.name} · ${r.kanji}`}
+                style={
+                  i === currentIndex
+                    ? { width: 13, height: 13, borderRadius: "50%", backgroundColor: NAVY, boxShadow: `0 0 0 3px ${NAVY}22`, flexShrink: 0 }
+                    : i < currentIndex
+                    ? { width: 8, height: 8, borderRadius: "50%", backgroundColor: `${NAVY}70`, flexShrink: 0 }
+                    : { width: 8, height: 8, borderRadius: "50%", border: `1px solid ${INK}25`, flexShrink: 0 }
+                }
+              />
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-between text-[10px] text-ink/30">
+          <span>序ノ口</span>
+          <span>横綱</span>
+        </div>
+      </div>
+
+      {/* Progress text */}
+      <p className="text-xs text-ink/40">
+        {toNext !== null
+          ? <>{toNext} more qualifying session{toNext !== 1 ? "s" : ""} to reach <span className="font-medium text-ink/60">{nextRank?.name}</span></>
+          : <>横綱 — highest rank achieved</>
+        }
+      </p>
+    </div>
+  );
+}
+
 export default function AccountPage() {
   const [user, setUser] = useState<User | null>(null);
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -98,7 +241,7 @@ export default function AccountPage() {
     );
   }
 
-  const isAnonymous = !user || user.is_anonymous;
+  const isAnonymous = !user || user.is_anonymous === true;
 
   return (
     <div className="max-w-lg space-y-10">
@@ -133,7 +276,7 @@ export default function AccountPage() {
           </div>
         </section>
       ) : (
-        <section className="space-y-6">
+        <section className="space-y-8">
           <div className="flex items-center justify-between">
             <p className="text-sm text-ink/60">
               {user.user_metadata?.full_name as string | undefined
@@ -149,41 +292,13 @@ export default function AccountPage() {
             </button>
           </div>
 
-          {overall && (() => {
-            const { rank, progress, toNext } = calculateRank(overall.qualifyingSessions);
-            const currentIndex = RANKS.findIndex((r) => r.name === rank.name);
-            const nextRank = RANKS[currentIndex + 1];
-            const rangeSize = nextRank ? nextRank.threshold - rank.threshold : 1;
-            const pct = nextRank ? Math.min(100, Math.round((progress / rangeSize) * 100)) : 100;
-            return (
-              <div className="card space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-0.5">
-                    <p className="text-xs tracking-widest text-ink/30" aria-hidden="true">番付</p>
-                    <h2 className="font-semibold">Current Rank</h2>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-bold tracking-wide">{rank.name}</p>
-                    <p className="text-xs text-ink/40" aria-hidden="true">{rank.kanji}</p>
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink/10">
-                    <div
-                      className="h-full rounded-full bg-navy/60 transition-all"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-ink/40">
-                    {toNext !== null
-                      ? <>{progress} / {rangeSize} qualifying sessions toward {nextRank?.name}</>
-                      : <>Yokozuna — highest rank achieved</>
-                    }
-                  </p>
-                </div>
-              </div>
-            );
-          })()}
+          <div className="card space-y-1">
+            <div className="mb-4 space-y-0.5">
+              <p className="text-xs tracking-widest text-ink/30" aria-hidden="true">番付</p>
+              <h2 className="font-semibold">Current Rank</h2>
+            </div>
+            <DohyoRank qualifyingSessions={overall?.qualifyingSessions ?? 0} />
+          </div>
 
           <div className="card space-y-4">
             <p className="text-xs tracking-widest text-ink/30" aria-hidden="true">稽古</p>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import { calculateRank, RANKS } from "@/lib/rank";
 
 type Provider = "google" | "github";
 
@@ -15,6 +16,11 @@ type Session = {
   endedAt: string;
 };
 
+type OverallProgress = {
+  totalAnswered: number;
+  correctAnswered: number;
+};
+
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
   kimarite: "Kimarite",
@@ -24,6 +30,7 @@ const DECK_NAMES: Record<string, string> = {
 export default function AccountPage() {
   const [user, setUser] = useState<User | null>(null);
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [overall, setOverall] = useState<OverallProgress | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,6 +61,13 @@ export default function AccountPage() {
         .then((res) => res.json())
         .then((data: Session[]) => setSessions(data))
         .catch(() => setSessions([]));
+
+      void fetch("/api/progress")
+        .then((res) => res.json())
+        .then((data: Record<string, unknown> & { _overall?: OverallProgress }) => {
+          if (data._overall) setOverall(data._overall);
+        })
+        .catch(() => null);
     }
   }, [user]);
 
@@ -135,6 +149,42 @@ export default function AccountPage() {
               Sign out
             </button>
           </div>
+
+          {overall && (() => {
+            const { rank, progress, toNext } = calculateRank(overall.correctAnswered);
+            const currentIndex = RANKS.findIndex((r) => r.name === rank.name);
+            const nextRank = RANKS[currentIndex + 1];
+            const rangeSize = nextRank ? nextRank.threshold - rank.threshold : 1;
+            const pct = nextRank ? Math.min(100, Math.round((progress / rangeSize) * 100)) : 100;
+            return (
+              <div className="card space-y-4">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-0.5">
+                    <p className="text-xs tracking-widest text-ink/30" aria-hidden="true">番付</p>
+                    <h2 className="font-semibold">Current Rank</h2>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold tracking-wide">{rank.name}</p>
+                    <p className="text-xs text-ink/40" aria-hidden="true">{rank.kanji}</p>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink/10">
+                    <div
+                      className="h-full rounded-full bg-navy/60 transition-all"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-ink/40">
+                    {toNext !== null
+                      ? <>{progress} / {rangeSize} correct answers toward {nextRank?.name}</>
+                      : <>Yokozuna — highest rank achieved</>
+                    }
+                  </p>
+                </div>
+              </div>
+            );
+          })()}
 
           <div className="card space-y-4">
             <p className="text-xs tracking-widest text-ink/30" aria-hidden="true">稽古</p>

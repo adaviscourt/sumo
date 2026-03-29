@@ -35,12 +35,20 @@ export async function GET() {
   }
 
   const result: Record<string, { accuracy: number; totalAnswered: number }> = {};
+  let overallTotal = 0;
+  let overallCorrect = 0;
+
   for (const [slug, s] of Object.entries(stats)) {
     result[slug] = {
       accuracy: Math.round((s.correct / s.total) * 100),
       totalAnswered: s.total
     };
+    overallTotal += s.total;
+    overallCorrect += s.correct;
   }
 
-  return NextResponse.json(result);
+  return NextResponse.json({
+    ...result,
+    _overall: { totalAnswered: overallTotal, correctAnswered: overallCorrect }
+  });
 }

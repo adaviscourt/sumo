@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { eq, and, not, like } from "drizzle-orm";
+import { eq, and, not, like, sql } from "drizzle-orm";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { cardResults, sessions } from "@/lib/schema";
+import { QUALIFYING_ACCURACY } from "@/lib/rank";
 
 export async function GET() {
   const supabase = createClient();
@@ -42,5 +43,19 @@ export async function GET() {
     };
   }
 
-  return NextResponse.json(result);
+  const qualifyingRows = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(sessions)
+    .where(
+      and(
+        eq(sessions.userId, user.id),
+        sql`${sessions.score}::float / ${sessions.asked} >= ${QUALIFYING_ACCURACY}`
+      )
+    );
+  const qualifyingSessions = qualifyingRows[0]?.count ?? 0;
+
+  return NextResponse.json({
+    ...result,
+    _overall: { qualifyingSessions }
+  });
 }

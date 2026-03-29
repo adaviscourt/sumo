@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { QUESTIONS_PER_QUIZ } from "@/lib/config";
 import { createClient } from "@/lib/supabase/client";
+import { calculateRank } from "@/lib/rank";
 
 type DeckSummary = {
   slug: string;
@@ -25,6 +26,12 @@ type DeckProgress = {
   accuracy: number;
   totalAnswered: number;
 };
+
+type OverallProgress = {
+  qualifyingSessions: number;
+};
+
+type ProgressResponse = Record<string, DeckProgress> & { _overall?: OverallProgress };
 
 const DECK_EMOJI: Record<string, string> = {
   terms: "📘",
@@ -48,6 +55,7 @@ export default function HomePage() {
   const [decks, setDecks] = useState<DeckSummary[]>([]);
   const [sessions, setSessions] = useState<LocalSession[]>([]);
   const [progress, setProgress] = useState<Record<string, DeckProgress>>({});
+  const [overall, setOverall] = useState<OverallProgress | null>(null);
   const [isAnonymous, setIsAnonymous] = useState(true);
 
   useEffect(() => {
@@ -63,7 +71,11 @@ export default function HomePage() {
 
     void fetch("/api/progress")
       .then((res) => res.json())
-      .then((data: Record<string, DeckProgress>) => setProgress(data))
+      .then((data: ProgressResponse) => {
+        const { _overall, ...deckProgress } = data;
+        setProgress(deckProgress as Record<string, DeckProgress>);
+        if (_overall) setOverall(_overall);
+      })
       .catch(() => setProgress({}));
 
     const supabase = createClient();
@@ -122,11 +134,16 @@ export default function HomePage() {
             <p className="mb-1 text-xs tracking-widest text-ink/30" aria-hidden="true">稽古</p>
             <h3 className="text-lg font-semibold">Recent Sessions</h3>
           </div>
-          {isAnonymous && (
+          {overall && !isAnonymous ? (
+            <Link href="/account" className="flex flex-col items-end gap-0.5 text-ink/50 transition-colors hover:text-ink/80">
+              <span className="text-[10px] tracking-widest text-ink/30" aria-hidden="true">{calculateRank(overall.qualifyingSessions).rank.kanji}</span>
+              <span className="text-xs font-medium">{calculateRank(overall.qualifyingSessions).rank.name}</span>
+            </Link>
+          ) : isAnonymous ? (
             <Link href="/account" className="button-secondary text-xs">
               Sign in to sync
             </Link>
-          )}
+          ) : null}
         </div>
         {sessions.length === 0 ? (
           <p className="text-sm text-ink/65">No sessions yet. Start a deck to begin tracking progress.</p>

@@ -88,8 +88,8 @@ function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
             style={{ transition: animated ? "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)" : "none" }}
           />
           {/* Shikiri-sen (starting lines) */}
-          <line x1="81" y1="104" x2="95" y2="104" stroke={INK} strokeWidth="1.5" opacity="0.18" strokeLinecap="round" />
-          <line x1="105" y1="104" x2="119" y2="104" stroke={INK} strokeWidth="1.5" opacity="0.18" strokeLinecap="round" />
+          <line x1="81" y1="148" x2="95" y2="148" stroke={INK} strokeWidth="1.5" opacity="0.18" strokeLinecap="round" />
+          <line x1="105" y1="148" x2="119" y2="148" stroke={INK} strokeWidth="1.5" opacity="0.18" strokeLinecap="round" />
           {/* Rank kanji */}
           <text
             x="100" y="88"

@@ -68,7 +68,7 @@ export default function HomePage() {
 
     const supabase = createClient();
     void supabase.auth.getUser().then(({ data: { user } }) => {
-      setIsAnonymous(!user || user.is_anonymous);
+      setIsAnonymous(!user || user.is_anonymous === true);
     });
   }, []);
 

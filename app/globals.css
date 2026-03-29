@@ -27,6 +27,13 @@ body {
   @apply w-full rounded-lg border border-ink/20 bg-parchment px-4 py-3 text-left transition hover:border-navy hover:bg-navy/5;
 }
 
+abbr[title] {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  cursor: help;
+}
+
 @keyframes kachi-rise {
   from {
     opacity: 0;

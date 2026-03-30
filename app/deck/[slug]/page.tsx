@@ -6,6 +6,16 @@ import { useSearchParams } from "next/navigation";
 import { QUESTIONS_PER_QUIZ } from "@/lib/config";
 import { celebrationTier } from "@/lib/quiz";
 
+const PRONOUNCEABLE_DECKS = new Set(["terms", "kimarite"]);
+
+function speak(japanese: string) {
+  if (typeof window === "undefined" || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(japanese);
+  u.lang = "ja-JP";
+  window.speechSynthesis.speak(u);
+}
+
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
   kimarite: "Kimarite",
@@ -383,7 +393,22 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
                 className="mx-auto h-[360px] w-auto rounded-lg border border-ink/10 object-cover sm:h-[440px]"
               />
             ) : null}
-            <h2 className="text-xl font-medium">{card.prompt}</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-medium">{card.prompt}</h2>
+              {card.meta.japanese && PRONOUNCEABLE_DECKS.has(params.slug) && (
+                <button
+                  type="button"
+                  onClick={() => speak(card.meta.japanese!)}
+                  aria-label={`Hear pronunciation of ${card.prompt}`}
+                  className="shrink-0 text-ink/30 transition-colors hover:text-ink/60"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                  </svg>
+                </button>
+              )}
+            </div>
 
             {!feedback ? (
               <>

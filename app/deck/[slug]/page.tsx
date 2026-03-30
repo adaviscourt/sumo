@@ -13,6 +13,18 @@ function speak(japanese: string) {
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(japanese);
   u.lang = "ja-JP";
+
+  // Prefer enhanced/premium voices (more natural on Apple devices),
+  // then well-known natural Japanese voices, then any ja voice.
+  const jaVoices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith("ja"));
+  const preferred =
+    jaVoices.find(v => /enhanced|premium/i.test(v.name)) ??
+    jaVoices.find(v => /o-?ren/i.test(v.name)) ??
+    jaVoices.find(v => /otoya/i.test(v.name)) ??
+    jaVoices.find(v => /kyoko/i.test(v.name)) ??
+    jaVoices[0];
+  if (preferred) u.voice = preferred;
+
   window.speechSynthesis.speak(u);
 }
 

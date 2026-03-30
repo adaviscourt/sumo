@@ -98,6 +98,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const cardResultsRef = useRef<Array<{ cardId: string; correct: boolean; respondedAt: string }>>([]);
 
   const [showResults, setShowResults] = useState(devMode);
+  const [mastery, setMastery] = useState<{ mastered: number; learning: number; new: number; total: number } | null>(null);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = showResults;
@@ -139,6 +140,14 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     seenCardIdsRef.current = [];
     loadNextCard();
   }, [loadNextCard, devMode]);
+
+  useEffect(() => {
+    if (mode !== null) return;
+    void fetch(`/api/decks/${params.slug}/mastery`)
+      .then(r => r.json())
+      .then((data: { summary: { mastered: number; learning: number; new: number; total: number } }) => setMastery(data.summary))
+      .catch(() => null);
+  }, [mode, params.slug]);
 
   useEffect(() => {
     const tier = celebrationTier(correctCount, params.slug);
@@ -300,6 +309,13 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
           )}
           <h1 className="text-2xl font-semibold">{DECK_NAMES[params.slug] ?? params.slug}</h1>
         </div>
+        {mastery && (
+          <div className="flex items-center gap-4 text-xs text-ink/45">
+            <span><span className="font-medium text-pine">{mastery.mastered}</span> mastered</span>
+            <span><span className="font-medium text-ink/70">{mastery.learning}</span> learning</span>
+            <span><span className="font-medium text-ink/40">{mastery.new}</span> new</span>
+          </div>
+        )}
         <p className="text-sm text-ink/65">Choose a mode to begin your session.</p>
         <div className="grid gap-3 sm:grid-cols-2">
           <button

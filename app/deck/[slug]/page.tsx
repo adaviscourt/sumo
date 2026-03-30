@@ -8,24 +8,23 @@ import { celebrationTier } from "@/lib/quiz";
 
 const PRONOUNCEABLE_DECKS = new Set(["terms", "kimarite"]);
 
-function speak(japanese: string) {
-  if (typeof window === "undefined" || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(japanese);
-  u.lang = "ja-JP";
-
-  // Prefer enhanced/premium voices (more natural on Apple devices),
-  // then well-known natural Japanese voices, then any ja voice.
-  const jaVoices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith("ja"));
-  const preferred =
-    jaVoices.find(v => /enhanced|premium/i.test(v.name)) ??
-    jaVoices.find(v => /o-?ren/i.test(v.name)) ??
-    jaVoices.find(v => /otoya/i.test(v.name)) ??
-    jaVoices.find(v => /kyoko/i.test(v.name)) ??
-    jaVoices[0];
-  if (preferred) u.voice = preferred;
-
-  window.speechSynthesis.speak(u);
+function speak(audioPath: string, japanese: string) {
+  // Try static audio file first (Google Neural2 TTS), fall back to Web Speech API
+  const audio = new Audio(audioPath);
+  audio.play().catch(() => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(japanese);
+    u.lang = "ja-JP";
+    const jaVoices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith("ja"));
+    const preferred =
+      jaVoices.find(v => /enhanced|premium/i.test(v.name)) ??
+      jaVoices.find(v => /o-?ren/i.test(v.name)) ??
+      jaVoices.find(v => /otoya/i.test(v.name)) ??
+      jaVoices[0];
+    if (preferred) u.voice = preferred;
+    window.speechSynthesis.speak(u);
+  });
 }
 
 const DECK_NAMES: Record<string, string> = {
@@ -58,6 +57,7 @@ type CardPayload = {
   choices: Choice[];
   meta: {
     japanese?: string;
+    audioPath?: string;
     imagePath?: string;
     rank?: string;
     heya?: string;
@@ -407,10 +407,10 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
             ) : null}
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-medium">{card.prompt}</h2>
-              {card.meta.japanese && PRONOUNCEABLE_DECKS.has(params.slug) && (
+              {card.meta.audioPath && card.meta.japanese && PRONOUNCEABLE_DECKS.has(params.slug) && (
                 <button
                   type="button"
-                  onClick={() => speak(card.meta.japanese!)}
+                  onClick={() => speak(card.meta.audioPath!, card.meta.japanese!)}
                   aria-label={`Hear pronunciation of ${card.prompt}`}
                   className="shrink-0 text-ink/30 transition-colors hover:text-ink/60"
                 >

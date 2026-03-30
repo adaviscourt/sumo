@@ -59,6 +59,14 @@ function normalizeId(prefix: string, value: string): string {
   return `${prefix}:${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 }
 
+function termSlug(term: string): string {
+  return term.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function audioPath(deckSlug: string, term: string): string {
+  return `/audio/${deckSlug}/${termSlug(term)}.mp3`;
+}
+
 async function readJson<T>(path: string): Promise<T> {
   const raw = await readFile(path, "utf8");
   return JSON.parse(raw) as T;
@@ -142,6 +150,7 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
         choices,
         meta: {
           japanese: item.japanese,
+          audioPath: audioPath(deckSlug, item.term),
           sourceUrl: item.sourceUrl
         }
       };
@@ -208,6 +217,7 @@ export async function getDeckCardsHard(deckSlug: "terms" | "kimarite" | "rikishi
     choices: shuffle([...terms]),
     meta: {
       japanese: item.japanese,
+      audioPath: audioPath(deckSlug, item.term),
       sourceUrl: item.sourceUrl
     }
   }));

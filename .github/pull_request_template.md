@@ -4,7 +4,7 @@
 
 ## Checklist
 - [ ] Scope matches the linked issue
-- [ ] Architecture remains JSON-backed (no DB/Prisma)
+- [ ] Changes are consistent with architecture (JSON for deck content, Supabase for sessions/auth)
 - [ ] Changes are focused/minimal (no unrelated refactors)
 - [ ] `npm run test` passes
 - [ ] `npm run build` passes

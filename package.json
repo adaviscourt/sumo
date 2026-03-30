@@ -9,6 +9,7 @@
     "lint": "next lint",
     "test": "node --import tsx --test tests/*.test.ts",
     "import:rikishi": "node --import tsx scripts/import_rikishi.ts",
+    "generate:audio": "uv run scripts/generate_audio.py",
     "scrape:rikishi": "python scripts/scrape_rikishi.py",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"

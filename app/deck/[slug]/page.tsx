@@ -30,23 +30,32 @@ function speak(audioPath: string, japanese: string) {
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
   kimarite: "Kimarite",
-  rikishi: "Rikishi Identification"
+  rikishi: "Rikishi Identification",
+  yokozuna: "Yokozuna",
+  heya: "Heya"
 };
 
 const DECK_KANJI: Record<string, string> = {
   terms: "用語",
   kimarite: "決まり手",
-  rikishi: "力士"
+  rikishi: "力士",
+  yokozuna: "横綱",
+  heya: "部屋"
 };
 
-const HARD_MODE_DECKS = new Set(["terms", "kimarite", "rikishi"]);
+const HARD_MODE_DECKS = new Set(["terms", "kimarite", "rikishi", "yokozuna", "heya"]);
+const STREAK_MILESTONES = new Set([7, 30, 100]);
 
 const EASY_MODE_DESC: Record<string, string> = {
-  rikishi: "See the image — pick the rikishi's name from four choices"
+  rikishi: "See the image — pick the rikishi's name from four choices",
+  yokozuna: "See the yokozuna's name — pick their most notable achievement",
+  heya: "See the stable's name — pick the right description"
 };
 
 const HARD_MODE_DESC: Record<string, string> = {
-  rikishi: "See the image — type the rikishi's name"
+  rikishi: "See the image — type the rikishi's name",
+  yokozuna: "See the description — type the yokozuna's name",
+  heya: "See the description — type the stable's name"
 };
 
 type Choice = { id: string; label: string };
@@ -99,6 +108,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
 
   const [showResults, setShowResults] = useState(devMode);
   const [mastery, setMastery] = useState<{ mastered: number; learning: number; new: number; total: number } | null>(null);
+  const [streakMilestone, setStreakMilestone] = useState<number | null>(null);
 
   const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
   const done = showResults;
@@ -150,6 +160,15 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }, [mode, params.slug]);
 
   useEffect(() => {
+    if (!done || !streakMilestone) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const palette = ["#d4a017", "#27386e", "#b55233", "#1f5c4d", "#f8f1de"];
+    void import("canvas-confetti").then(({ default: confetti }) => {
+      void confetti({ particleCount: streakMilestone >= 30 ? 140 : 90, spread: 70, origin: { y: 0.5 }, colors: palette });
+    });
+  }, [done, streakMilestone]);
+
+  useEffect(() => {
     const tier = celebrationTier(correctCount, params.slug);
 
     if (!done || !tier) return;
@@ -187,7 +206,17 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         endedAt: new Date().toISOString(),
         cardResults: cardResultsRef.current
       })
-    });
+    }).then(() =>
+      fetch("/api/progress")
+        .then(r => r.json())
+        .then((data: { _overall?: { streak: number } }) => {
+          const streak = data._overall?.streak ?? 0;
+          if (STREAK_MILESTONES.has(streak)) {
+            setStreakMilestone(streak);
+          }
+        })
+        .catch(() => null)
+    );
   }, [asked, correctCount, done, params.slug]);
 
   const submitAnswer = useCallback(async () => {
@@ -370,6 +399,14 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
           <div className="border-t border-ink/10 pt-4 text-center">
             <p className="animate-kachi text-5xl leading-none text-gold" aria-hidden="true">勝ち越し</p>
             <p className="animate-kachi-delay mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold/70">Kachi-koshi</p>
+          </div>
+        )}
+        {streakMilestone && (
+          <div className="border-t border-ink/10 pt-4 text-center space-y-1">
+            <p className="text-sm font-semibold text-clay">{streakMilestone}-day streak</p>
+            <p className="text-xs text-ink/50">
+              {streakMilestone >= 100 ? "One hundred days. Unbreakable." : streakMilestone >= 30 ? "Thirty days of dedication." : "A full week on the dohyō."}
+            </p>
           </div>
         )}
         <div className="flex flex-wrap gap-3">

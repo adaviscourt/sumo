@@ -24,7 +24,9 @@ type OverallProgress = {
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
   kimarite: "Kimarite",
-  rikishi: "Rikishi Identification"
+  rikishi: "Rikishi Identification",
+  yokozuna: "Yokozuna",
+  heya: "Heya"
 };
 
 const NAVY = "#27386e";

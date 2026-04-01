@@ -73,7 +73,13 @@ async function readJson<T>(path: string): Promise<T> {
 }
 
 export async function getDeckSummary() {
-  const [terms, kimarite, rikishi] = await Promise.all([getTermSeed("terms"), getTermSeed("kimarite"), getRikishiCurrent()]);
+  const [terms, kimarite, rikishi, yokozuna, heya] = await Promise.all([
+    getTermSeed("terms"),
+    getTermSeed("kimarite"),
+    getRikishiCurrent(),
+    getTermSeed("yokozuna"),
+    getTermSeed("heya")
+  ]);
   return [
     {
       slug: "terms",
@@ -93,11 +99,23 @@ export async function getDeckSummary() {
       description: "Identify current top-division rikishi by photo and rank",
       cardCount: rikishi.rikishi.length,
       banzuke: bashoName(rikishi.fetchedAt)
+    },
+    {
+      slug: "yokozuna",
+      name: "Yokozuna",
+      description: "Famous grand champions and their legacies",
+      cardCount: yokozuna.length
+    },
+    {
+      slug: "heya",
+      name: "Heya",
+      description: "Sumo stables and their notable associations",
+      cardCount: heya.length
     }
   ] as const;
 }
 
-async function getTermSeed(kind: "terms" | "kimarite"): Promise<TermSeed[]> {
+async function getTermSeed(kind: "terms" | "kimarite" | "yokozuna" | "heya"): Promise<TermSeed[]> {
   return readJson<TermSeed[]>(join(ROOT, "data", "seed", `${kind}.json`));
 }
 
@@ -137,9 +155,10 @@ function buildDistractors(definitions: string[], correct: string): string[] {
 }
 
 export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
-  if (deckSlug === "terms" || deckSlug === "kimarite") {
+  if (deckSlug === "terms" || deckSlug === "kimarite" || deckSlug === "yokozuna" || deckSlug === "heya") {
     const seed = await getTermSeed(deckSlug);
     const definitions = seed.map((item) => item.definition);
+    const includeAudio = deckSlug === "terms" || deckSlug === "kimarite";
     return seed.map((item) => {
       const choices = shuffle([item.definition, ...buildDistractors(definitions, item.definition)]);
       return {
@@ -150,7 +169,7 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
         choices,
         meta: {
           japanese: item.japanese,
-          audioPath: audioPath(deckSlug, item.term),
+          ...(includeAudio && { audioPath: audioPath(deckSlug as string, item.term) }),
           sourceUrl: item.sourceUrl
         }
       };
@@ -184,7 +203,7 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
   });
 }
 
-export async function getDeckCardsHard(deckSlug: "terms" | "kimarite" | "rikishi"): Promise<QuizCard[]> {
+export async function getDeckCardsHard(deckSlug: "terms" | "kimarite" | "rikishi" | "yokozuna" | "heya"): Promise<QuizCard[]> {
   if (deckSlug === "rikishi") {
     const rikishi = await getRikishiCurrent();
     const names = rikishi.rikishi.map((row) => row.shikonaEn);
@@ -207,8 +226,9 @@ export async function getDeckCardsHard(deckSlug: "terms" | "kimarite" | "rikishi
     }));
   }
 
-  const seed = await getTermSeed(deckSlug);
+  const seed = await getTermSeed(deckSlug as "terms" | "kimarite" | "yokozuna" | "heya");
   const terms = seed.map((item) => item.term);
+  const includeAudio = deckSlug === "terms" || deckSlug === "kimarite";
   return seed.map((item) => ({
     id: normalizeId(`${deckSlug}-hard`, item.term),
     deckSlug,
@@ -217,21 +237,23 @@ export async function getDeckCardsHard(deckSlug: "terms" | "kimarite" | "rikishi
     choices: shuffle([...terms]),
     meta: {
       japanese: item.japanese,
-      audioPath: audioPath(deckSlug, item.term),
+      ...(includeAudio && { audioPath: audioPath(deckSlug as string, item.term) }),
       sourceUrl: item.sourceUrl
     }
   }));
 }
 
 export async function findCardById(cardId: string): Promise<QuizCard | null> {
-  if (cardId.startsWith("terms-hard:") || cardId.startsWith("kimarite-hard:")) {
-    const prefix = cardId.startsWith("terms-hard:") ? "terms" : "kimarite";
-    const cards = await getDeckCardsHard(prefix);
+  const hardPrefixes = ["terms-hard:", "kimarite-hard:", "yokozuna-hard:", "heya-hard:"] as const;
+  const hardMatch = hardPrefixes.find(prefix => cardId.startsWith(prefix));
+  if (hardMatch) {
+    const slug = hardMatch.replace("-hard:", "") as "terms" | "kimarite" | "yokozuna" | "heya";
+    const cards = await getDeckCardsHard(slug);
     const card = cards.find((entry) => entry.id === cardId);
     if (card) return card;
   }
 
-  const decks: DeckSlug[] = ["terms", "kimarite", "rikishi"];
+  const decks: DeckSlug[] = ["terms", "kimarite", "rikishi", "yokozuna", "heya"];
   for (const deck of decks) {
     const cards = await getDeckCards(deck);
     const card = cards.find((entry) => entry.id === cardId);

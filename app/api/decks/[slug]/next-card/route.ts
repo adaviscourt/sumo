@@ -51,12 +51,9 @@ export async function GET(request: Request, { params }: { params: { slug: string
 
   const mode = url.searchParams.get("mode");
 
-  let cards;
-  if (mode === "hard" && (deckSlug === "terms" || deckSlug === "kimarite" || deckSlug === "rikishi")) {
-    cards = await getDeckCardsHard(deckSlug);
-  } else {
-    cards = await getDeckCards(deckSlug);
-  }
+  const cards = mode === "hard"
+    ? await getDeckCardsHard(deckSlug)
+    : await getDeckCards(deckSlug);
 
   if (cards.length === 0) {
     return NextResponse.json({ error: "Deck not found or empty" }, { status: 404 });

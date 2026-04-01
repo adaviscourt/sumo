@@ -37,19 +37,25 @@ type ProgressResponse = Record<string, DeckProgress> & { _overall?: OverallProgr
 const DECK_EMOJI: Record<string, string> = {
   terms: "📘",
   kimarite: "💪",
-  rikishi: "🥋"
+  rikishi: "🥋",
+  yokozuna: "🏆",
+  heya: "🏯"
 };
 
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
   kimarite: "Kimarite",
-  rikishi: "Rikishi Identification"
+  rikishi: "Rikishi Identification",
+  yokozuna: "Yokozuna",
+  heya: "Heya"
 };
 
 const DECK_KANJI: Record<string, string> = {
   terms: "用語",
   kimarite: "決まり手",
-  rikishi: "力士"
+  rikishi: "力士",
+  yokozuna: "横綱",
+  heya: "部屋"
 };
 
 export default function HomePage() {

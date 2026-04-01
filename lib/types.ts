@@ -1,4 +1,4 @@
-export type DeckSlug = "terms" | "kimarite" | "rikishi";
+export type DeckSlug = "terms" | "kimarite" | "rikishi" | "yokozuna" | "heya";
 
 export type CardMeta = {
   japanese?: string;

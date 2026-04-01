@@ -29,6 +29,7 @@ type DeckProgress = {
 
 type OverallProgress = {
   qualifyingSessions: number;
+  streak: number;
 };
 
 type ProgressResponse = Record<string, DeckProgress> & { _overall?: OverallProgress };
@@ -36,19 +37,25 @@ type ProgressResponse = Record<string, DeckProgress> & { _overall?: OverallProgr
 const DECK_EMOJI: Record<string, string> = {
   terms: "📘",
   kimarite: "💪",
-  rikishi: "🥋"
+  rikishi: "🥋",
+  yokozuna: "🏆",
+  heya: "🏯"
 };
 
 const DECK_NAMES: Record<string, string> = {
   terms: "Sumo Terms",
   kimarite: "Kimarite",
-  rikishi: "Rikishi Identification"
+  rikishi: "Rikishi Identification",
+  yokozuna: "Yokozuna",
+  heya: "Heya"
 };
 
 const DECK_KANJI: Record<string, string> = {
   terms: "用語",
   kimarite: "決まり手",
-  rikishi: "力士"
+  rikishi: "力士",
+  yokozuna: "横綱",
+  heya: "部屋"
 };
 
 export default function HomePage() {
@@ -135,9 +142,17 @@ export default function HomePage() {
             <h3 className="text-lg font-semibold">Recent Sessions</h3>
           </div>
           {overall && !isAnonymous ? (
-            <Link href="/account" className="flex flex-col items-end gap-0.5 text-ink/50 transition-colors hover:text-ink/80">
-              <span className="text-[10px] tracking-widest text-ink/30" aria-hidden="true">{calculateRank(overall.qualifyingSessions).rank.kanji}</span>
-              <span className="text-xs font-medium">{calculateRank(overall.qualifyingSessions).rank.name}</span>
+            <Link href="/account" className="flex items-center gap-3 text-ink/50 transition-colors hover:text-ink/80">
+              {overall.streak > 0 && (
+                <span className="text-xs tabular-nums">
+                  <span className="font-semibold text-ink/70">{overall.streak}</span>
+                  <span className="text-ink/35">-day streak</span>
+                </span>
+              )}
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="text-[10px] tracking-widest text-ink/30" aria-hidden="true">{calculateRank(overall.qualifyingSessions).rank.kanji}</span>
+                <span className="text-xs font-medium">{calculateRank(overall.qualifyingSessions).rank.name}</span>
+              </div>
             </Link>
           ) : isAnonymous ? (
             <Link href="/account" className="button-secondary text-xs">

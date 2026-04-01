@@ -20,7 +20,7 @@ export function masteryScore(correctCount: number, wrongCount: number, streak: n
 }
 
 export function inferDeckSlug(slug: string): DeckSlug {
-  if (slug === "terms" || slug === "kimarite" || slug === "rikishi") {
+  if (slug === "terms" || slug === "kimarite" || slug === "rikishi" || slug === "yokozuna" || slug === "heya") {
     return slug;
   }
 

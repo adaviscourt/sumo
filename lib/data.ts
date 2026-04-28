@@ -51,8 +51,12 @@ const BASHO_BY_MONTH: Record<number, string> = {
 };
 
 function bashoName(fetchedAt: string): string {
-  const month = new Date(fetchedAt).getMonth() + 1;
-  return BASHO_BY_MONTH[month] ?? "Current Basho";
+  const date = new Date(fetchedAt);
+  const month = date.getMonth() + 1;
+  // Banzuke is published ~2 weeks before the next basho, so when fetched in an
+  // off-month (or December for Hatsu), roll forward to the upcoming basho.
+  const bashoMonth = BASHO_BY_MONTH[month] ? month : ((month % 12) + 1);
+  return BASHO_BY_MONTH[bashoMonth] ?? "Current Basho";
 }
 
 function normalizeId(prefix: string, value: string): string {
@@ -92,7 +96,8 @@ export async function getDeckSummary() {
       name: "Makuuchi Rikishi",
       description: "Identify current top-division rikishi by photo and rank",
       cardCount: rikishi.rikishi.length,
-      banzuke: bashoName(rikishi.fetchedAt)
+      banzuke: bashoName(rikishi.fetchedAt),
+      fetchedAt: rikishi.fetchedAt
     }
   ] as const;
 }

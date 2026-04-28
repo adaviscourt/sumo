@@ -12,7 +12,16 @@ type DeckSummary = {
   description: string;
   cardCount: number;
   banzuke?: string;
+  fetchedAt?: string;
 };
+
+const FRESH_BANZUKE_DAYS = 10;
+
+function isFreshlyUpdated(fetchedAt?: string): boolean {
+  if (!fetchedAt) return false;
+  const ageMs = Date.now() - new Date(fetchedAt).getTime();
+  return ageMs >= 0 && ageMs <= FRESH_BANZUKE_DAYS * 24 * 60 * 60 * 1000;
+}
 
 type LocalSession = {
   id: string;
@@ -90,7 +99,13 @@ export default function HomePage() {
         {decks.map((deck) => {
           const deckProgress = progress[deck.slug];
           return (
-            <article key={deck.slug} className="card flex flex-col gap-4">
+            <article key={deck.slug} className="card relative flex flex-col gap-4">
+              {isFreshlyUpdated(deck.fetchedAt) && (
+                <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full border border-gold/40 bg-gold/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-gold">
+                  <span aria-hidden="true">新</span>
+                  <span>New banzuke</span>
+                </span>
+              )}
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-ink/[0.05] text-2xl" aria-hidden="true">
                 {DECK_EMOJI[deck.slug] ?? "🃏"}
               </div>

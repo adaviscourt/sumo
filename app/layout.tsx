@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ActiveBashoBanner } from "./active-basho-banner";
 import { AuthProvider } from "./providers";
 import { HeaderAuth } from "./header-auth";
 
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-white">
         <AuthProvider>
         <main className="mx-auto min-h-screen w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+          <ActiveBashoBanner />
           <header className="mb-12 border-b border-ink/15 pb-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <Link href="/" className="flex flex-col gap-1">

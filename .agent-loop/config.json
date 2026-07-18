@@ -1,0 +1,46 @@
+{
+  "labels": {
+    "issueReady": "agent-ready",
+    "planning": "openspec-planning",
+    "reviewReady": "openspec-review-ready",
+    "applyReady": "openspec-apply-ready",
+    "implementing": "openspec-implementing",
+    "feedbackReady": "agent-feedback-ready",
+    "done": "agent-done",
+    "blocked": "agent-blocked"
+  },
+  "trust": {
+    "authorAllowlist": [
+      "adaviscourt"
+    ]
+  },
+  "feedback": {
+    "trigger": "@H-E-L-P-eR",
+    "debounceSeconds": 300,
+    "prLockStaleSeconds": 300
+  },
+  "paths": {
+    "stateDir": "~/.agent-loop/state/{repo_slug}",
+    "worktreeBase": "../{repo_dir}-worktrees"
+  },
+  "runtime": {
+    "harness": "codex",
+    "sandbox": "docker",
+    "sandboxAgent": "codex",
+    "model": ""
+  },
+  "harnesses": {
+    "codex": {
+      "skillsDir": ".agents/skills",
+      "agentsDir": ".agents/agents"
+    },
+    "claude": {
+      "skillsDir": ".claude/skills",
+      "agentsDir": ".claude/agents"
+    }
+  },
+  "git": {
+    "name": "H-E-L-P-eR",
+    "email": "296707581+H-E-L-P-eR@users.noreply.github.com"
+  }
+}

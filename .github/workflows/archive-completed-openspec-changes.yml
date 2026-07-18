@@ -1,0 +1,57 @@
+name: Archive Completed OpenSpec Changes
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      changes: ${{ steps.detect.outputs.changes }}
+      has_changes: ${{ steps.detect.outputs.has_changes }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Detect completed OpenSpec changes
+        id: detect
+        run: node scripts/archive-completed-openspec-changes.js
+
+  archive:
+    needs: detect
+    if: needs.detect.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        change: ${{ fromJson(needs.detect.outputs.changes) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install OpenSpec
+        run: npm install -g @fission-ai/openspec@latest
+
+      - name: Archive completed OpenSpec change
+        id: archive
+        run: node scripts/archive-completed-openspec-changes.js --archive "${{ matrix.change.name }}"
+
+      - name: Create archive pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: docs/openspec-sync-${{ matrix.change.name }}
+          delete-branch: true
+          title: ${{ steps.archive.outputs.pr_title }}
+          commit-message: ${{ steps.archive.outputs.pr_title }}
+          body: ${{ steps.archive.outputs.pr_body }}

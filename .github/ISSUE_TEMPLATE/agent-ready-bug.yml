@@ -1,0 +1,95 @@
+name: Agent-ready bug
+description: Report a bug for the OpenSpec agent loop to plan a fix.
+title: "[Bug]: "
+labels:
+  - agent-ready
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when the agent should create an OpenSpec planning PR for a bug fix.
+
+        The planner runs before the next human checkpoint, so include exact behavior, repro data, and boundaries.
+
+        After submitting, assign the issue to the GitHub user running the watcher if it is not assigned automatically.
+  - type: input
+    id: change-name
+    attributes:
+      label: Suggested OpenSpec change name
+      description: Optional kebab-case name. Leave blank if the title is enough.
+      placeholder: fix-login-timeout
+    validations:
+      required: false
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: What is happening now?
+      placeholder: Describe the failure, including exact errors when available.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen instead?
+      placeholder: Describe correct behavior and any known contract.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Give the shortest reliable path to reproduce.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Version, branch, OS, browser, deploy target, config, or data shape.
+      placeholder: Include only details that may affect the bug.
+    validations:
+      required: false
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact and frequency
+      description: Who is affected, how often, and how severe is it?
+      placeholder: Include user impact, business impact, or workaround.
+    validations:
+      required: false
+  - type: textarea
+    id: clues
+    attributes:
+      label: Logs, traces, screenshots, and suspected cause
+      description: Paste relevant snippets or links. Redact secrets.
+      placeholder: Include stack traces, request IDs, screenshots, or suspicious files/functions.
+    validations:
+      required: false
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Scope, constraints, and non-goals
+      description: Boundaries prevent the planner from inventing broad scope.
+      placeholder: Include what must not change, compatibility needs, rollout limits, or out-of-scope fixes.
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Concrete checks the eventual fix should satisfy.
+      placeholder: |
+        - Bug no longer reproduces when ...
+        - Regression test covers ...
+    validations:
+      required: true

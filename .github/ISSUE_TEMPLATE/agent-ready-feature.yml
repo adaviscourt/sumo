@@ -1,0 +1,80 @@
+name: Agent-ready feature
+description: Request a planned feature/change for the OpenSpec agent loop.
+title: "[Feature]: "
+labels:
+  - agent-ready
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when the agent should create an OpenSpec planning PR from the issue.
+
+        The planner runs before the next human checkpoint, so include enough context for it to choose the right scope.
+
+        After submitting, assign the issue to the GitHub user running the watcher if it is not assigned automatically.
+  - type: input
+    id: change-name
+    attributes:
+      label: Suggested OpenSpec change name
+      description: Optional kebab-case name. Leave blank if the title is enough.
+      placeholder: add-usage-limits
+    validations:
+      required: false
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user pain, workflow gap, or product need should this solve?
+      placeholder: Describe current state and why it matters.
+    validations:
+      required: true
+  - type: textarea
+    id: desired-outcome
+    attributes:
+      label: Desired outcome
+      description: What should be true after this change ships?
+      placeholder: Describe user-visible behavior and success criteria.
+    validations:
+      required: true
+  - type: textarea
+    id: users-flows
+    attributes:
+      label: Users and flows
+      description: Who uses this, and what flow should change?
+      placeholder: List primary users, entry points, and key steps.
+    validations:
+      required: false
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Scope, constraints, and non-goals
+      description: Boundaries prevent the planner from inventing broad scope.
+      placeholder: Include what must not change, compatibility needs, rollout limits, or out-of-scope ideas.
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Concrete checks the eventual implementation should satisfy.
+      placeholder: |
+        - Given ..., when ..., then ...
+        - ...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant context
+      description: Link docs, files, PRs, screenshots, API references, prior decisions, or examples.
+      placeholder: Paste links or notes the agent should read before planning.
+    validations:
+      required: false
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification ideas
+      description: Optional test commands, manual checks, or observability signals.
+      placeholder: Include known test areas or manual QA steps.
+    validations:
+      required: false

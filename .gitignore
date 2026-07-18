@@ -33,3 +33,11 @@ drizzle/
 
 # local scratch files
 *.ipynb
+
+# >>> OpenSpec agent loop >>>
+# Generated agent-loop payload and Codex mirrors. Commit config + GitHub automation only.
+.agent-loop/*
+!.agent-loop/config.json
+.agents/skills/
+.codex/agents/
+# <<< OpenSpec agent loop <<<

@@ -33,6 +33,9 @@ The app already uses official JSA data for rikishi and banzuke references, but t
   - Rationale: the requirement says "top of site", so all routes should get the same behavior without per-page duplication.
   - Alternative considered: homepage-only banner. Rejected because it does not satisfy site-wide top placement.
 
+- Use an inviting site-palette banner treatment.
+  - Rationale: a clay/red treatment can read as warning or error state; pine and gold align better with the existing brand palette for a helpful live-link prompt.
+
 ## Risks / Trade-offs
 
 - Schedule data can become stale. Mitigation: keep the schedule isolated in one typed module and include tests that make missing future coverage visible.

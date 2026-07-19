@@ -28,3 +28,10 @@ The system SHALL render the active basho banner from shared site chrome so it is
 #### Scenario: Non-home route during active tournament
 - **WHEN** the current Japan-local date is inside an active honbasho date range and the user visits a non-home route
 - **THEN** the official results banner appears above that route's normal content
+
+### Requirement: Inviting banner treatment
+The system SHALL style the active basho banner with an inviting treatment from the existing site palette and without warning-style red emphasis.
+
+#### Scenario: Active banner visual tone
+- **WHEN** the active basho banner is displayed
+- **THEN** the banner uses non-red site palette accents suitable for a helpful live-link prompt

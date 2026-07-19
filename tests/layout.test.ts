@@ -24,6 +24,16 @@ test("active basho banner renders official results link", () => {
   assert.match(markup, /rel="noopener noreferrer"/);
 });
 
+test("active basho banner uses inviting site palette without red emphasis", () => {
+  const markup = renderToStaticMarkup(
+    createElement(ActiveBashoBanner, { referenceDate: new Date("2026-07-18T03:00:00.000Z") })
+  );
+
+  assert.match(markup, /bg-pine\/10/);
+  assert.match(markup, /hover:text-pine/);
+  assert.doesNotMatch(markup, /clay/);
+});
+
 test("active basho banner does not render outside tournament dates", () => {
   const markup = renderToStaticMarkup(
     createElement(ActiveBashoBanner, { referenceDate: new Date("2026-02-01T03:00:00.000Z") })

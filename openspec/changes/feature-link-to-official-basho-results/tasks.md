@@ -10,6 +10,7 @@
 - [x] 2.2 Link the banner to `https://www.sumo.or.jp/EnHonbashoMain` with external-link safety attributes.
 - [x] 2.3 Ensure the banner appears above the normal header on all app routes and is absent outside active dates.
 - [x] 2.4 Use an inviting site-palette banner treatment that avoids warning-style red emphasis.
+- [x] 2.5 Align the banner treatment with existing border and rounded-corner conventions.
 
 ## 3. Verification
 

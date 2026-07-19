@@ -30,8 +30,8 @@ The system SHALL render the active basho banner from shared site chrome so it is
 - **THEN** the official results banner appears above that route's normal content
 
 ### Requirement: Inviting banner treatment
-The system SHALL style the active basho banner with an inviting treatment from the existing site palette and without warning-style red emphasis.
+The system SHALL style the active basho banner with an inviting treatment from the existing site palette, follow existing border and rounded-corner conventions, and avoid warning-style red emphasis.
 
 #### Scenario: Active banner visual tone
 - **WHEN** the active basho banner is displayed
-- **THEN** the banner uses non-red site palette accents suitable for a helpful live-link prompt
+- **THEN** the banner uses non-red site palette accents and existing border/radius styling suitable for a helpful live-link prompt

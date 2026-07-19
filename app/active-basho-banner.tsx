@@ -14,15 +14,15 @@ export function ActiveBashoBanner({ referenceDate }: { referenceDate?: Date }) {
   }
 
   return (
-    <aside className="mb-6 border-b border-pine/20 bg-pine/10 px-4 py-3 text-sm text-ink sm:-mx-6 sm:px-6">
+    <aside className="mb-6 overflow-hidden rounded-xl border border-ink/15 bg-parchment text-sm text-ink shadow-sm">
       <a
         href={activeBasho.resultsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-medium transition-colors hover:text-pine"
+        className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 py-3 font-medium transition-colors hover:bg-pine/5 hover:text-pine focus:outline-none focus-visible:ring-2 focus-visible:ring-pine/40"
       >
         <span>{activeBasho.name} live</span>
-        <span aria-hidden="true" className="text-gold">|</span>
+        <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gold" />
         <span>Official JSA results</span>
       </a>
     </aside>

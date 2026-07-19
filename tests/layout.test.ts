@@ -29,7 +29,10 @@ test("active basho banner uses inviting site palette without red emphasis", () =
     createElement(ActiveBashoBanner, { referenceDate: new Date("2026-07-18T03:00:00.000Z") })
   );
 
-  assert.match(markup, /bg-pine\/10/);
+  assert.match(markup, /rounded-xl/);
+  assert.match(markup, /border-ink\/15/);
+  assert.match(markup, /bg-parchment/);
+  assert.match(markup, /hover:bg-pine\/5/);
   assert.match(markup, /hover:text-pine/);
   assert.doesNotMatch(markup, /clay/);
 });

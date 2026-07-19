@@ -18,7 +18,8 @@ test("active basho banner renders official results link", () => {
     createElement(ActiveBashoBanner, { referenceDate: new Date("2026-07-18T03:00:00.000Z") })
   );
 
-  assert.match(markup, /Nagoya basho live/);
+  assert.match(markup, /Active Basho \(Nagoya basho\)/);
+  assert.match(markup, /Official JSA Results/);
   assert.match(markup, new RegExp(`href="${OFFICIAL_HONBASHO_RESULTS_URL}"`));
   assert.match(markup, /target="_blank"/);
   assert.match(markup, /rel="noopener noreferrer"/);

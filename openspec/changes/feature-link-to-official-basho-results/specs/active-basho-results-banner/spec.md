@@ -16,7 +16,7 @@ The system SHALL display an official results banner at the top of the site when 
 - **THEN** the site displays the official results banner
 
 ### Requirement: Official results navigation
-The system SHALL make the active basho banner link to the official Japan Sumo Association English honbasho results page and label it as `Active Basho ({name})` followed by the banner icon and `Official JSA Results`.
+The system SHALL make the active basho banner link to the official Japan Sumo Association English honbasho results page and label it as `Active Basho ({name})` followed by the banner icon and `Official JSA Results`, where `{name}` omits any trailing `basho` text to avoid duplication.
 
 #### Scenario: User opens official results
 - **WHEN** the active basho banner is displayed and the user activates it
@@ -24,7 +24,7 @@ The system SHALL make the active basho banner link to the official Japan Sumo As
 
 #### Scenario: Active banner label
 - **WHEN** the active basho banner is displayed for a named tournament
-- **THEN** the banner text identifies the tournament as `Active Basho ({name})` and includes `Official JSA Results`
+- **THEN** the banner text identifies the tournament as `Active Basho ({name})`, omits duplicate `basho` text inside the parentheses, and includes `Official JSA Results`
 
 ### Requirement: Site-wide placement
 The system SHALL render the active basho banner from shared site chrome so it is available at the top of every app route while active.

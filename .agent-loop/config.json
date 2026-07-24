@@ -29,6 +29,12 @@
     "sandboxAgent": "codex",
     "model": ""
   },
+  "sandbox": {
+    "extraAllowedDomains": [
+      "www.sumo.or.jp",
+      "sumo.or.jp"
+    ]
+  },
   "harnesses": {
     "codex": {
       "skillsDir": ".agents/skills",

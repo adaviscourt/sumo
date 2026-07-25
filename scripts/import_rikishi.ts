@@ -13,6 +13,7 @@ type RawRikishi = {
   imagePath?: string;
   profileUrl: string;
   snapshotDate: string;
+  signatureManeuver?: string;
 };
 
 type Snapshot = {

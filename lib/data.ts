@@ -1,6 +1,6 @@
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { DeckSlug } from "./types";
+import { CardBonusMeta, CardMeta, DeckSlug } from "./types";
 import { buildRankChoices, rankFamily, shuffle } from "./quiz";
 
 type TermSeed = {
@@ -22,6 +22,7 @@ type RikishiRow = {
   imagePath?: string;
   profileUrl: string;
   snapshotDate: string;
+  signatureManeuver?: string;
 };
 
 type RikishiCurrent = {
@@ -36,7 +37,7 @@ export type QuizCard = {
   prompt: string;
   answer: string;
   choices: string[];
-  meta: Record<string, string | string[] | undefined>;
+  meta: CardMeta;
 };
 
 const ROOT = process.cwd();
@@ -141,6 +142,76 @@ function buildDistractors(definitions: string[], correct: string): string[] {
   return shuffle(definitions.filter((item) => item !== correct)).slice(0, 3);
 }
 
+export function normalizeKimariteLabel(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+const SIGNATURE_MANEUVER_ALIASES: Record<string, string> = {
+  oshi: "oshidashi",
+  tsuki: "tsukidashi",
+  yori: "yorikiri"
+};
+
+function signatureManeuverCandidates(value: string): string[] {
+  return value
+    .split(/[,/;]+/)
+    .map((part) => normalizeKimariteLabel(part))
+    .filter(Boolean);
+}
+
+export function findKimariteForSignatureManeuver(value: string | undefined, kimarite: TermSeed[]): TermSeed | null {
+  if (!value) return null;
+
+  const byNormalized = new Map(kimarite.map((item) => [normalizeKimariteLabel(item.term), item]));
+  for (const candidate of signatureManeuverCandidates(value)) {
+    const direct = byNormalized.get(candidate);
+    if (direct) return direct;
+
+    const aliased = SIGNATURE_MANEUVER_ALIASES[candidate];
+    if (aliased) {
+      const match = byNormalized.get(aliased);
+      if (match) return match;
+    }
+  }
+
+  return null;
+}
+
+function buildSignatureManeuverBonus(value: string | undefined, kimarite: TermSeed[]): CardBonusMeta | null {
+  const match = findKimariteForSignatureManeuver(value, kimarite);
+  if (!match) return null;
+
+  const terms = kimarite.map((item) => item.term);
+  const distractors = shuffle(terms.filter((term) => term !== match.term)).slice(0, 3);
+  return {
+    id: "signature-maneuver",
+    prompt: "Which kimarite matches this rikishi's official signature maneuver?",
+    choices: shuffle([match.term, ...distractors]),
+    answer: match.term,
+    detail: {
+      term: match.term,
+      japanese: match.japanese,
+      summary: match.definition
+    }
+  };
+}
+
+export function buildRikishiBonuses(row: Pick<RikishiRow, "currentRank" | "signatureManeuver">, kimarite: TermSeed[]): CardBonusMeta[] {
+  const bonuses: CardBonusMeta[] = [
+    {
+      id: "rank-family",
+      prompt: "What is this rikishi's current rank family?",
+      choices: buildRankChoices(row.currentRank),
+      answer: rankFamily(row.currentRank)
+    }
+  ];
+
+  const signatureBonus = buildSignatureManeuverBonus(row.signatureManeuver, kimarite);
+  if (signatureBonus) bonuses.push(signatureBonus);
+
+  return bonuses;
+}
+
 export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
   if (deckSlug === "terms" || deckSlug === "kimarite") {
     const seed = await getTermSeed(deckSlug);
@@ -162,12 +233,13 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
     });
   }
 
-  const rikishi = await getRikishiCurrent();
+  const [rikishi, kimarite] = await Promise.all([getRikishiCurrent(), getTermSeed("kimarite")]);
   const names = rikishi.rikishi.map((row) => row.shikonaEn);
 
   return rikishi.rikishi.map((row) => {
     const distractors = shuffle(names.filter((name) => name !== row.shikonaEn)).slice(0, 3);
     const choices = shuffle([row.shikonaEn, ...distractors]);
+    const bonuses = buildRikishiBonuses(row, kimarite);
 
     return {
       id: `rikishi:${row.sumoAssociationId}`,
@@ -181,9 +253,11 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
         rankFamily: rankFamily(row.currentRank),
         heya: row.heya,
         profileUrl: row.profileUrl,
+        signatureManeuver: row.signatureManeuver,
         bonusPrompt: "What is this rikishi's current rank family?",
         bonusChoices: buildRankChoices(row.currentRank),
-        bonusAnswer: rankFamily(row.currentRank)
+        bonusAnswer: rankFamily(row.currentRank),
+        bonuses
       }
     };
   });
@@ -191,25 +265,30 @@ export async function getDeckCards(deckSlug: DeckSlug): Promise<QuizCard[]> {
 
 export async function getDeckCardsHard(deckSlug: "terms" | "kimarite" | "rikishi"): Promise<QuizCard[]> {
   if (deckSlug === "rikishi") {
-    const rikishi = await getRikishiCurrent();
+    const [rikishi, kimarite] = await Promise.all([getRikishiCurrent(), getTermSeed("kimarite")]);
     const names = rikishi.rikishi.map((row) => row.shikonaEn);
-    return rikishi.rikishi.map((row) => ({
-      id: `rikishi:${row.sumoAssociationId}`,
-      deckSlug: "rikishi",
-      prompt: "Who is this rikishi?",
-      answer: row.shikonaEn,
-      choices: shuffle([...names]),
-      meta: {
-        imagePath: row.imagePath,
-        rank: row.currentRank,
-        rankFamily: rankFamily(row.currentRank),
-        heya: row.heya,
-        profileUrl: row.profileUrl,
-        bonusPrompt: "What is this rikishi's current rank family?",
-        bonusChoices: buildRankChoices(row.currentRank),
-        bonusAnswer: rankFamily(row.currentRank)
-      }
-    }));
+    return rikishi.rikishi.map((row) => {
+      const bonuses = buildRikishiBonuses(row, kimarite);
+      return {
+        id: `rikishi:${row.sumoAssociationId}`,
+        deckSlug: "rikishi",
+        prompt: "Who is this rikishi?",
+        answer: row.shikonaEn,
+        choices: shuffle([...names]),
+        meta: {
+          imagePath: row.imagePath,
+          rank: row.currentRank,
+          rankFamily: rankFamily(row.currentRank),
+          heya: row.heya,
+          profileUrl: row.profileUrl,
+          signatureManeuver: row.signatureManeuver,
+          bonusPrompt: "What is this rikishi's current rank family?",
+          bonusChoices: buildRankChoices(row.currentRank),
+          bonusAnswer: rankFamily(row.currentRank),
+          bonuses
+        }
+      };
+    });
   }
 
   const seed = await getTermSeed(deckSlug);

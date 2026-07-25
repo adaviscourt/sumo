@@ -46,4 +46,6 @@ test("deck page source keeps independent ordered bonus progression", () => {
   assert.match(source, /setBonusIndex\(\(value\) => value \+ 1\)/);
   assert.ok(source.includes(":bonus:${currentBonus.id}"));
   assert.match(source, /result\.detail\.summary/);
+  assert.match(source, /Bonus answers/);
+  assert.match(source, /Correct \(\+1 point\).*result\.answer/);
 });

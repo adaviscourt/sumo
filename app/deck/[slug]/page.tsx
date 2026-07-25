@@ -63,6 +63,7 @@ type CardBonus = {
 };
 type BonusResult = {
   id: string;
+  prompt: string;
   correct: boolean;
   answer: string;
   detail?: CardBonus["detail"];
@@ -256,6 +257,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     const isCorrect = bonusSelected === currentBonus.answer;
     const result = {
       id: currentBonus.id,
+      prompt: currentBonus.prompt,
       correct: isCorrect,
       answer: currentBonus.answer,
       detail: currentBonus.detail
@@ -591,19 +593,25 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
                       </a>
                     </p>
                   ) : null}
-                  {bonusResults.map((result) => (
-                    <div key={result.id} className="space-y-1">
-                      <p className={result.correct ? "text-pine" : "text-clay"}>
-                        {result.correct ? "Bonus correct (+1 point)." : `Bonus incorrect. Correct answer: ${result.answer}`}
-                      </p>
-                      {result.detail ? (
-                        <div className="text-ink/70">
-                          <p>{result.detail.term}{result.detail.japanese ? ` · ${result.detail.japanese}` : ""}</p>
-                          {result.detail.summary ? <p>{result.detail.summary}</p> : null}
+                  {bonusResults.length > 0 ? (
+                    <div className="mt-3 space-y-3 border-t border-ink/10 pt-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-ink/45">Bonus answers</p>
+                      {bonusResults.map((result) => (
+                        <div key={result.id} className="space-y-1 rounded-lg border border-ink/10 bg-parchment/70 p-3">
+                          <p className="text-xs font-medium uppercase tracking-wide text-ink/45">{result.prompt}</p>
+                          <p className={result.correct ? "text-pine" : "text-clay"}>
+                            {result.correct ? `Correct (+1 point) — ${result.answer}` : `Incorrect — correct answer: ${result.answer}`}
+                          </p>
+                          {result.detail ? (
+                            <div className="text-ink/70">
+                              <p>{result.detail.term}{result.detail.japanese ? ` · ${result.detail.japanese}` : ""}</p>
+                              {result.detail.summary ? <p>{result.detail.summary}</p> : null}
+                            </div>
+                          ) : null}
                         </div>
-                      ) : null}
+                      ))}
                     </div>
-                  ))}
+                  ) : null}
                 </div>
                 <div className="flex items-center gap-4">
                   {isLastQuestion ? (

@@ -37,6 +37,10 @@ The system SHALL build the signature-maneuver bonus from official rikishi profil
 - **WHEN** a user submits a signature-maneuver bonus answer
 - **THEN** the system shows whether the bonus was correct and reveals the correct romanized kimarite term, Japanese characters, and summary text
 
+#### Scenario: Bonus feedback is grouped by question
+- **WHEN** a user completes the rikishi bonus sequence for a card
+- **THEN** the score summary associates each bonus result with its bonus question and correct answer
+
 #### Scenario: Missing signature maneuver content
 - **WHEN** a rikishi card lacks usable signature-maneuver data or the maneuver cannot be matched to kimarite deck content
 - **THEN** the system MUST NOT display an empty signature-maneuver bonus and MUST keep the rank-family bonus and main-card flow usable

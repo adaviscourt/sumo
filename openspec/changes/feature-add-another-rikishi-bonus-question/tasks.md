@@ -19,6 +19,7 @@
 - [x] 3.3 Allow signature maneuver attempts even when the rank-family bonus answer is incorrect.
 - [x] 3.4 Render signature maneuver feedback with correct term, Japanese characters, and summary text.
 - [x] 3.5 Preserve keyboard selection/submission behavior across both bonus questions.
+- [x] 3.6 Group completed bonus feedback by bonus question so score summary lines stay associated with their answers.
 
 ## 4. Scoring and Persistence
 

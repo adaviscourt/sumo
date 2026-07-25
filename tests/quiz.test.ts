@@ -47,6 +47,7 @@ test("celebrationTier returns kachi for rikishi scores 11–19", () => {
   assert.equal(celebrationTier(11, "rikishi"), "kachi");
   assert.equal(celebrationTier(15, "rikishi"), "kachi");
   assert.equal(celebrationTier(19, "rikishi"), "kachi");
+  assert.equal(celebrationTier(29, "rikishi"), "kachi");
 });
 
 test("celebrationTier does not return kachi above 10 on non-rikishi decks", () => {
@@ -54,10 +55,11 @@ test("celebrationTier does not return kachi above 10 on non-rikishi decks", () =
   assert.equal(celebrationTier(15, "kimarite"), null);
 });
 
-test("celebrationTier returns zensho only for rikishi at score 20", () => {
-  assert.equal(celebrationTier(20, "rikishi"), "zensho");
-  assert.equal(celebrationTier(20, "terms"), null);
-  assert.equal(celebrationTier(20, "kimarite"), null);
+test("celebrationTier returns zensho only for rikishi at expanded perfect score", () => {
+  assert.equal(celebrationTier(20, "rikishi"), "kachi");
+  assert.equal(celebrationTier(30, "rikishi"), "zensho");
+  assert.equal(celebrationTier(30, "terms"), null);
+  assert.equal(celebrationTier(30, "kimarite"), null);
 });
 
 test("selectNextCard falls back to full deck when all cards are excluded", () => {

@@ -64,7 +64,7 @@ export function shuffle<T>(items: T[]): T[] {
 }
 
 export function celebrationTier(correctCount: number, deckSlug: string): "zensho" | "kachi" | null {
-  if (deckSlug === "rikishi" && correctCount === 20) return "zensho";
+  if (deckSlug === "rikishi" && correctCount === 30) return "zensho";
   if (correctCount === 10 || (deckSlug === "rikishi" && correctCount > 10)) return "kachi";
   return null;
 }

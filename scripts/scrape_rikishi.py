@@ -46,6 +46,7 @@ class RikishiRow:
   imagePath: Optional[str]
   profileUrl: str
   snapshotDate: str
+  signatureManeuver: Optional[str]
 
 
 def session() -> requests.Session:
@@ -259,6 +260,15 @@ def text_or_none(node) -> Optional[str]:
   return text or None
 
 
+def find_profile_field(fields: Dict[str, str], labels: Tuple[str, ...]) -> Optional[str]:
+  for label in labels:
+    value = fields.get(label)
+    if value:
+      return value
+
+  return None
+
+
 def parse_profile(
   s: requests.Session, profile_url: str, snapshot_iso: str, allow_image_download: bool = False
 ) -> RikishiRow:
@@ -288,6 +298,16 @@ def parse_profile(
   birth_date = fields.get("date of birth")
   height_cm = to_int(fields.get("height", ""))
   weight_kg = to_int(fields.get("weight", ""))
+  signature_maneuver = find_profile_field(
+    fields,
+    (
+      "signature maneuver",
+      "signature manoeuvre",
+      "favorite technique",
+      "favourite technique",
+      "preferred technique",
+    ),
+  )
 
   image_url = None
   if allow_image_download:
@@ -312,6 +332,7 @@ def parse_profile(
     imagePath=image_path,
     profileUrl=profile_url,
     snapshotDate=snapshot_iso,
+    signatureManeuver=signature_maneuver,
   )
 
 
@@ -425,6 +446,7 @@ def build_row_from_banzuke(raw: dict, snapshot_iso: str, profile_url: str) -> Ri
     imagePath=None,
     profileUrl=profile_url,
     snapshotDate=snapshot_iso,
+    signatureManeuver=None,
   )
 
 
@@ -444,6 +466,7 @@ def merge_enrichment(base: RikishiRow, parsed: RikishiRow) -> RikishiRow:
     imagePath=parsed.imagePath or base.imagePath,
     profileUrl=base.profileUrl,
     snapshotDate=base.snapshotDate,
+    signatureManeuver=parsed.signatureManeuver or base.signatureManeuver,
   )
 
 
@@ -501,6 +524,7 @@ def main() -> None:
           imagePath=None,
           profileUrl=build_profile_url(rid),
           snapshotDate=snapshot_iso,
+          signatureManeuver=None,
         )
 
       # Optional enrichment from profile page. Never allow it to degrade base quality.

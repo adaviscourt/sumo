@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-30T23:08:58.460017+00:00",
+  "fetchedAt": "2026-07-25T06:34:17.449651+00:00",
   "source": "https://www.sumo.or.jp/EnSumoDataRikishi/search/",
   "rikishi": [
     {
@@ -13,7 +13,8 @@
       "currentRank": "Yokozuna East",
       "imagePath": "/images/rikishi/3842.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3842/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori, nage"
     },
     {
       "sumoAssociationId": "4227",
@@ -26,7 +27,8 @@
       "currentRank": "Yokozuna West",
       "imagePath": "/images/rikishi/4227.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4227/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi, migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "3622",
@@ -39,7 +41,8 @@
       "currentRank": "Ozeki East",
       "imagePath": "/images/rikishi/3622.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3622/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "hidari-yotsu, yori, nage"
     },
     {
       "sumoAssociationId": "3661",
@@ -52,7 +55,8 @@
       "currentRank": "Ozeki West",
       "imagePath": "/images/rikishi/3661.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3661/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori, oshi"
     },
     {
       "sumoAssociationId": "4055",
@@ -65,7 +69,8 @@
       "currentRank": "Sekiwake East",
       "imagePath": "/images/rikishi/4055.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4055/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "3840",
@@ -78,7 +83,8 @@
       "currentRank": "Sekiwake West",
       "imagePath": "/images/rikishi/3840.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3840/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "3761",
@@ -91,7 +97,8 @@
       "currentRank": "Sekiwake East",
       "imagePath": "/images/rikishi/3761.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3761/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4230",
@@ -104,7 +111,8 @@
       "currentRank": "Sekiwake West",
       "imagePath": "/images/rikishi/4230.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4230/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4279",
@@ -117,7 +125,8 @@
       "currentRank": "Komusubi East",
       "imagePath": "/images/rikishi/4279.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4279/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "3844",
@@ -130,7 +139,8 @@
       "currentRank": "Komusubi West",
       "imagePath": "/images/rikishi/3844.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3844/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "4191",
@@ -143,7 +153,8 @@
       "currentRank": "Maegashira #1 East",
       "imagePath": "/images/rikishi/4191.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4191/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi"
     },
     {
       "sumoAssociationId": "3265",
@@ -156,7 +167,8 @@
       "currentRank": "Maegashira #1 West",
       "imagePath": "/images/rikishi/3265.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3265/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi"
     },
     {
       "sumoAssociationId": "4079",
@@ -169,7 +181,8 @@
       "currentRank": "Maegashira #2 East",
       "imagePath": "/images/rikishi/4079.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4079/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "3711",
@@ -182,7 +195,8 @@
       "currentRank": "Maegashira #2 West",
       "imagePath": "/images/rikishi/3711.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3711/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "hidari-yotsu, yori"
     },
     {
       "sumoAssociationId": "3705",
@@ -195,7 +209,8 @@
       "currentRank": "Maegashira #3 East",
       "imagePath": "/images/rikishi/3705.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3705/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi, migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4187",
@@ -208,7 +223,8 @@
       "currentRank": "Maegashira #3 West",
       "imagePath": "/images/rikishi/4187.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4187/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi, hidari-yotsu, yori"
     },
     {
       "sumoAssociationId": "3376",
@@ -221,7 +237,8 @@
       "currentRank": "Maegashira #4 East",
       "imagePath": "/images/rikishi/3376.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3376/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "3753",
@@ -234,7 +251,8 @@
       "currentRank": "Maegashira #4 West",
       "imagePath": "/images/rikishi/3753.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3753/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "3616",
@@ -247,7 +265,8 @@
       "currentRank": "Maegashira #5 East",
       "imagePath": "/images/rikishi/3616.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3616/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi, ashitori"
     },
     {
       "sumoAssociationId": "4108",
@@ -260,7 +279,8 @@
       "currentRank": "Maegashira #5 West",
       "imagePath": "/images/rikishi/4108.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4108/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi, inashi"
     },
     {
       "sumoAssociationId": "3521",
@@ -273,7 +293,8 @@
       "currentRank": "Maegashira #6 East",
       "imagePath": "/images/rikishi/3521.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3521/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4093",
@@ -286,7 +307,8 @@
       "currentRank": "Maegashira #6 West",
       "imagePath": "/images/rikishi/4093.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4093/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4120",
@@ -299,7 +321,8 @@
       "currentRank": "Maegashira #7 East",
       "imagePath": "/images/rikishi/4120.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4120/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "2775",
@@ -312,7 +335,8 @@
       "currentRank": "Maegashira #7 West",
       "imagePath": "/images/rikishi/2775.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/2775/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "3371",
@@ -325,7 +349,8 @@
       "currentRank": "Maegashira #8 East",
       "imagePath": "/images/rikishi/3371.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3371/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "hidari-yotsu, yori"
     },
     {
       "sumoAssociationId": "3907",
@@ -338,7 +363,8 @@
       "currentRank": "Maegashira #8 West",
       "imagePath": "/images/rikishi/3907.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3907/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4336",
@@ -351,7 +377,8 @@
       "currentRank": "Maegashira #9 East",
       "imagePath": "/images/rikishi/4336.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4336/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi"
     },
     {
       "sumoAssociationId": "3594",
@@ -364,7 +391,8 @@
       "currentRank": "Maegashira #9 West",
       "imagePath": "/images/rikishi/3594.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3594/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi"
     },
     {
       "sumoAssociationId": "3682",
@@ -377,7 +405,8 @@
       "currentRank": "Maegashira #10 East",
       "imagePath": "/images/rikishi/3682.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3682/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi, migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "3207",
@@ -390,7 +419,8 @@
       "currentRank": "Maegashira #10 West",
       "imagePath": "/images/rikishi/3207.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3207/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi, hidari-yotsu, yori"
     },
     {
       "sumoAssociationId": "4121",
@@ -403,7 +433,8 @@
       "currentRank": "Maegashira #11 East",
       "imagePath": "/images/rikishi/4121.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4121/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "3620",
@@ -416,7 +447,8 @@
       "currentRank": "Maegashira #11 West",
       "imagePath": "/images/rikishi/3620.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3620/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "4175",
@@ -429,7 +461,8 @@
       "currentRank": "Maegashira #12 East",
       "imagePath": "/images/rikishi/4175.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4175/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "3485",
@@ -442,7 +475,8 @@
       "currentRank": "Maegashira #12 West",
       "imagePath": "/images/rikishi/3485.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3485/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "3742",
@@ -455,7 +489,8 @@
       "currentRank": "Maegashira #13 East",
       "imagePath": "/images/rikishi/3742.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3742/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "hidari-yotsu, yori"
     },
     {
       "sumoAssociationId": "4171",
@@ -468,7 +503,8 @@
       "currentRank": "Maegashira #13 West",
       "imagePath": "/images/rikishi/4171.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4171/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "4112",
@@ -481,7 +517,8 @@
       "currentRank": "Maegashira #14 East",
       "imagePath": "/images/rikishi/4112.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4112/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi"
     },
     {
       "sumoAssociationId": "3990",
@@ -494,7 +531,8 @@
       "currentRank": "Maegashira #14 West",
       "imagePath": "/images/rikishi/3990.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3990/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi"
     },
     {
       "sumoAssociationId": "4231",
@@ -507,7 +545,8 @@
       "currentRank": "Maegashira #15 East",
       "imagePath": "/images/rikishi/4231.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4231/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4287",
@@ -520,7 +559,8 @@
       "currentRank": "Maegashira #15 West",
       "imagePath": "/images/rikishi/4287.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4287/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "tsuki, oshi, hidari-yotsu, yori"
     },
     {
       "sumoAssociationId": "4116",
@@ -533,7 +573,8 @@
       "currentRank": "Maegashira #16 East",
       "imagePath": "/images/rikishi/4116.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4116/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi, migi-yotsu, yori"
     },
     {
       "sumoAssociationId": "4101",
@@ -546,7 +587,8 @@
       "currentRank": "Maegashira #16 West",
       "imagePath": "/images/rikishi/4101.jpg",
       "profileUrl": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4101/",
-      "snapshotDate": "2026-06-30T23:08:58.460017+00:00"
+      "snapshotDate": "2026-07-25T06:34:17.449651+00:00",
+      "signatureManeuver": "oshi, migi-yotsu, yori"
     }
   ]
 }

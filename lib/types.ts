@@ -1,5 +1,17 @@
 export type DeckSlug = "terms" | "kimarite" | "rikishi";
 
+export type CardBonusMeta = {
+  id: string;
+  prompt: string;
+  choices: string[];
+  answer: string;
+  detail?: {
+    term: string;
+    japanese?: string;
+    summary?: string;
+  };
+};
+
 export type CardMeta = {
   japanese?: string;
   romanized?: string;
@@ -11,6 +23,7 @@ export type CardMeta = {
   bonusPrompt?: string;
   bonusChoices?: string[];
   bonusAnswer?: string;
+  bonuses?: CardBonusMeta[];
 };
 
 export type NextCardPayload = {

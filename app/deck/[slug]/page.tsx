@@ -50,6 +50,24 @@ const HARD_MODE_DESC: Record<string, string> = {
 };
 
 type Choice = { id: string; label: string };
+type CardBonus = {
+  id: string;
+  prompt: string;
+  choices: string[];
+  answer: string;
+  detail?: {
+    term: string;
+    japanese?: string;
+    summary?: string;
+  };
+};
+type BonusResult = {
+  id: string;
+  prompt: string;
+  correct: boolean;
+  answer: string;
+  detail?: CardBonus["detail"];
+};
 type CardPayload = {
   cardId: string;
   deckSlug: string;
@@ -65,6 +83,7 @@ type CardPayload = {
     bonusPrompt?: string;
     bonusChoices?: string[];
     bonusAnswer?: string;
+    bonuses?: CardBonus[];
   };
 };
 
@@ -77,7 +96,8 @@ type AnswerResponse = {
 export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
   const devMode = searchParams.has("dev");
-  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? 20 : params.slug === "rikishi" ? 11 : 10) : 0;
+  const devScore = devMode ? (searchParams.get("dev") === "zensho" ? (params.slug === "rikishi" ? 30 : 10) : params.slug === "rikishi" ? 11 : 10) : 0;
+  const devPossiblePoints = devMode ? (params.slug === "rikishi" ? 30 : QUESTIONS_PER_QUIZ) : 0;
 
   const supportsHardMode = HARD_MODE_DECKS.has(params.slug);
   const [mode, setMode] = useState<"easy" | "hard" | null>(devMode ? "easy" : supportsHardMode ? null : "easy");
@@ -87,10 +107,11 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<AnswerResponse | null>(null);
   const [bonusSelected, setBonusSelected] = useState<string | null>(null);
-  const [bonusResolved, setBonusResolved] = useState(false);
-  const [bonusCorrect, setBonusCorrect] = useState(false);
+  const [bonusIndex, setBonusIndex] = useState(0);
+  const [bonusResults, setBonusResults] = useState<BonusResult[]>([]);
   const [asked, setAsked] = useState(devMode ? QUESTIONS_PER_QUIZ : 0);
   const [correctCount, setCorrectCount] = useState(devScore);
+  const [possiblePoints, setPossiblePoints] = useState(devPossiblePoints);
   const [loadError, setLoadError] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -99,9 +120,24 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
 
   const [showResults, setShowResults] = useState(devMode);
 
-  const bonusPending = Boolean(feedback?.bonusEligible && !bonusResolved);
+  const cardBonuses = useMemo(() => {
+    if (!card) return [];
+    if (card.meta.bonuses?.length) return card.meta.bonuses;
+    if (card.meta.bonusPrompt && card.meta.bonusChoices && card.meta.bonusAnswer) {
+      return [{
+        id: "rank-family",
+        prompt: card.meta.bonusPrompt,
+        choices: card.meta.bonusChoices,
+        answer: card.meta.bonusAnswer
+      }];
+    }
+    return [];
+  }, [card]);
+  const currentBonus = cardBonuses[bonusIndex] ?? null;
+  const bonusPending = Boolean(feedback?.bonusEligible && currentBonus);
   const done = showResults;
   const isLastQuestion = asked >= QUESTIONS_PER_QUIZ && !bonusPending;
+  const resultMaxPoints = params.slug === "rikishi" ? possiblePoints : asked;
 
   const loadNextCard = useCallback(async () => {
     if (!mode) return;
@@ -110,8 +146,8 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     setSelected(null);
     setFeedback(null);
     setBonusSelected(null);
-    setBonusResolved(false);
-    setBonusCorrect(false);
+    setBonusIndex(0);
+    setBonusResults([]);
     setInputValue("");
     setShowSuggestions(false);
 
@@ -174,12 +210,12 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       body: JSON.stringify({
         deckSlug: params.slug,
         score: correctCount,
-        asked,
+        asked: resultMaxPoints,
         endedAt: new Date().toISOString(),
         cardResults: cardResultsRef.current
       })
     });
-  }, [asked, correctCount, done, params.slug]);
+  }, [correctCount, done, params.slug, resultMaxPoints]);
 
   const submitAnswer = useCallback(async () => {
     if (!card || !selected) {
@@ -203,6 +239,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
     setFeedback(payload);
     setShowSuggestions(false);
     setAsked((value) => value + 1);
+    setPossiblePoints((value) => value + (card.deckSlug === "rikishi" ? 1 + cardBonuses.length : 1));
     if (payload.correct) {
       setCorrectCount((value) => value + 1);
     }
@@ -210,30 +247,39 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
       ...cardResultsRef.current,
       { cardId: card.cardId, correct: payload.correct, respondedAt: new Date().toISOString() }
     ];
-  }, [card, selected]);
+  }, [card, cardBonuses.length, selected]);
 
   const submitBonus = useCallback(() => {
-    if (!feedback?.bonusEligible || !card?.meta.bonusAnswer || !bonusSelected || bonusResolved) {
+    if (!feedback?.bonusEligible || !card || !currentBonus || !bonusSelected) {
       return;
     }
 
-    const isCorrect = bonusSelected === card.meta.bonusAnswer;
-    setBonusResolved(true);
-    setBonusCorrect(isCorrect);
+    const isCorrect = bonusSelected === currentBonus.answer;
+    const result = {
+      id: currentBonus.id,
+      prompt: currentBonus.prompt,
+      correct: isCorrect,
+      answer: currentBonus.answer,
+      detail: currentBonus.detail
+    };
+    setBonusResults((value) => [...value, result]);
+    setBonusIndex((value) => value + 1);
+    setBonusSelected(null);
     if (isCorrect) {
       setCorrectCount((value) => value + 1);
     }
     cardResultsRef.current = [
       ...cardResultsRef.current,
-      { cardId: `${card.cardId}:bonus`, correct: isCorrect, respondedAt: new Date().toISOString() }
+      { cardId: `${card.cardId}:bonus:${currentBonus.id}`, correct: isCorrect, respondedAt: new Date().toISOString() }
     ];
-  }, [bonusResolved, bonusSelected, card?.meta.bonusAnswer, feedback?.bonusEligible]);
+  }, [bonusSelected, card, currentBonus, feedback?.bonusEligible]);
 
   const handlePlayAgain = useCallback(() => {
     seenCardIdsRef.current = [];
     cardResultsRef.current = [];
     setAsked(0);
     setCorrectCount(0);
+    setPossiblePoints(0);
     setShowResults(false);
     if (supportsHardMode) {
       setMode(null);
@@ -262,9 +308,9 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         }
       } else if (bonusPending) {
         // Bonus phase: 1–4 select a bonus choice, Enter submits bonus
-        if (idx !== -1 && card.meta.bonusChoices?.[idx]) {
-          setBonusSelected(card.meta.bonusChoices[idx]);
-        } else if (e.key === "Enter" && bonusSelected && !bonusResolved) {
+        if (idx !== -1 && currentBonus?.choices[idx]) {
+          setBonusSelected(currentBonus.choices[idx]);
+        } else if (e.key === "Enter" && bonusSelected) {
           submitBonus();
         }
       } else if (e.key === "Enter" && !isInputFocused) {
@@ -279,7 +325,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, bonusResolved, submitAnswer, submitBonus, loadNextCard, mode, asked, setShowResults]);
+  }, [loading, loadError, card, feedback, selected, bonusPending, bonusSelected, currentBonus, submitAnswer, submitBonus, loadNextCard, mode, asked, setShowResults]);
 
   const filteredSuggestions = useMemo(() => {
     if (!card || mode !== "hard" || !inputValue || selected) return [];
@@ -324,7 +370,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
   }
 
   if (done) {
-    const pct = asked > 0 ? Math.round((correctCount / asked) * 100) : 0;
+    const pct = resultMaxPoints > 0 ? Math.round((correctCount / resultMaxPoints) * 100) : 0;
     const message =
       pct === 100 ? "Perfect run!" :
       pct >= 80  ? "Strong session." :
@@ -342,7 +388,7 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
         <h1 className="text-2xl font-semibold">Session Complete</h1>
         <div className="space-y-1">
           <p className={`text-3xl font-semibold ${scoreColor}`}>{pct}%</p>
-          <p className="text-ink/70">{correctCount} / {asked} correct — {message}</p>
+          <p className="text-ink/70">{correctCount} / {resultMaxPoints} correct — {message}</p>
         </div>
         {tier === "zensho" && (
           <div className="border-t border-ink/10 pt-4 text-center">
@@ -501,16 +547,16 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
                   {mode === "hard" && selected && <span className="text-xs text-ink/40">Enter to submit</span>}
                 </div>
               </>
-            ) : bonusPending && card.meta.bonusPrompt && card.meta.bonusChoices ? (
+            ) : bonusPending && currentBonus ? (
               <>
                 <div className="rounded-lg border border-ink/15 bg-ink/5 px-4 py-3 text-sm">
                   <p className="text-pine">Correct — {feedback.correctAnswer}</p>
                 </div>
                 <div className="space-y-3">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gold">Bonus question</p>
-                  <p className="font-medium">{card.meta.bonusPrompt}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gold">Bonus question {bonusIndex + 1} / {cardBonuses.length}</p>
+                  <p className="font-medium">{currentBonus.prompt}</p>
                   <div className="grid gap-2">
-                    {card.meta.bonusChoices.map((choice) => (
+                    {currentBonus.choices.map((choice) => (
                       <button
                         key={choice}
                         type="button"
@@ -547,12 +593,24 @@ export default function DeckPlayPage({ params }: { params: { slug: string } }) {
                       </a>
                     </p>
                   ) : null}
-                  {bonusResolved ? (
-                    <p className={bonusCorrect ? "text-pine" : "text-clay"}>
-                      {bonusCorrect
-                        ? "Bonus correct (+1 point)."
-                        : `Bonus incorrect. Correct rank family: ${card.meta.bonusAnswer}`}
-                    </p>
+                  {bonusResults.length > 0 ? (
+                    <div className="mt-3 space-y-3 border-t border-ink/10 pt-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-ink/45">Bonus answers</p>
+                      {bonusResults.map((result) => (
+                        <div key={result.id} className="space-y-1 rounded-lg border border-ink/10 bg-parchment/70 p-3">
+                          <p className="text-xs font-medium uppercase tracking-wide text-ink/45">{result.prompt}</p>
+                          <p className={result.correct ? "text-pine" : "text-clay"}>
+                            {result.correct ? `Correct (+1 point) — ${result.answer}` : `Incorrect — correct answer: ${result.answer}`}
+                          </p>
+                          {result.detail ? (
+                            <div className="text-ink/70">
+                              <p>{result.detail.term}{result.detail.japanese ? ` · ${result.detail.japanese}` : ""}</p>
+                              {result.detail.summary ? <p>{result.detail.summary}</p> : null}
+                            </div>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
                   ) : null}
                 </div>
                 <div className="flex items-center gap-4">

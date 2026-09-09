@@ -19,7 +19,7 @@ Analyze changes between two versions of `data/rikishi/makuuchi-current.json` and
    - Parse `rikishi` arrays.
    - Key records by `sumoAssociationId`, not array position or name.
    - For repeatable comparison, save snapshots to temporary JSON files and run:
-     `python3 .agents/skills/banzuke-summary/compare_banzuke.py OLD.json NEW.json`
+     `python3 scripts/compare_banzuke.py OLD.json NEW.json`
    - Treat script output as verification data; prose still follows rules below.
 
 3. Compute membership changes.

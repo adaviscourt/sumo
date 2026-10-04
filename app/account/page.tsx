@@ -18,6 +18,7 @@ type Session = {
 
 type OverallProgress = {
   qualifyingSessions: number;
+  streak: number;
 };
 
 const DECK_NAMES: Record<string, string> = {
@@ -30,7 +31,7 @@ const NAVY = "#27386e";
 const INK = "#1b1a17";
 const CLAY = "#b55233";
 
-function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
+function DohyoRank({ qualifyingSessions, streak }: { qualifyingSessions: number; streak: number }) {
   const [animated, setAnimated] = useState(false);
 
   useEffect(() => {
@@ -153,6 +154,15 @@ function DohyoRank({ qualifyingSessions }: { qualifyingSessions: number }) {
         }
       </p>
       <p className="text-xs text-ink/25">A qualifying session is any quiz where you score 70% or higher.</p>
+
+      {streak > 0 && (
+        <div className="border-t border-ink/8 pt-4">
+          <p className="text-sm">
+            <span className="font-semibold tabular-nums">{streak}</span>
+            <span className="text-ink/50">-day streak</span>
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -285,7 +295,7 @@ export default function AccountPage() {
               <p className="text-xs tracking-widest text-ink/30" aria-hidden="true">番付</p>
               <h2 className="font-semibold">Current Rank</h2>
             </div>
-            <DohyoRank qualifyingSessions={overall?.qualifyingSessions ?? 0} />
+            <DohyoRank qualifyingSessions={overall?.qualifyingSessions ?? 0} streak={overall?.streak ?? 0} />
           </div>
 
           <div className="card space-y-4">
